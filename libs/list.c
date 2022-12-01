@@ -5,7 +5,10 @@
 
 
 List *List_init() {
-  List *list = malloc(sizeof(List));
+  List *list = (List *) malloc(sizeof(List));
+  assert(list != null);
+  list->head = list->tail = null;
+  list->length = 0;
   return list;
 }
 

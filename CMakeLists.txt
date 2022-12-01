@@ -3,4 +3,4 @@ project(c_data_structure C)
 
 set(CMAKE_C_STANDARD 99)
 
-add_executable(c_data_structure main.c libs/libs.h libs/list.c)
+add_executable(c_data_structure libs/main.c libs/libs.h libs/list.c)
