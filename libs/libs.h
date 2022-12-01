@@ -48,8 +48,8 @@ void List_addFirst(List *list, void *item);
 
 void List_addLast(List *list, void *item);
 
-void List_removeFirst(List *list);
+void *List_removeFirst(List *list);
 
-void List_removeLast(List *list);
+void *List_removeLast(List *list);
 
 #endif //C_DATA_STRUCTURE_LIBS_H

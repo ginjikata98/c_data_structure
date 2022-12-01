@@ -62,9 +62,12 @@ void List_addLast(List *list, void *item) {
   list->length++;
 }
 
-void List_removeFirst(List *list) {
+void *List_removeFirst(List *list) {
   assert(list != null);
   ListNode *nodeToFree = list->head;
+  if (List_isEmpty(list)) {
+    return null;
+  }
 
   if (list->head == list->tail) {
     list->head = list->tail = null;
@@ -73,15 +76,17 @@ void List_removeFirst(List *list) {
     list->head->prev = null;
   }
   list->length--;
-//  if (nodeToFree != null) {
-//    free(nodeToFree->item);
-//  }
+  void *returnItem = nodeToFree->item;
   free(nodeToFree);
+  return returnItem;
 }
 
-void List_removeLast(List *list) {
+void *List_removeLast(List *list) {
   assert(list != null);
   ListNode *nodeToFree = list->tail;
+  if (List_isEmpty(list)) {
+    return null;
+  }
 
   if (list->head == list->tail) {
     list->head = list->tail = null;
@@ -90,6 +95,7 @@ void List_removeLast(List *list) {
     list->tail->next = null;
   }
   list->length--;
-//  free(nodeToFree->item);
+  void *returnItem = nodeToFree->item;
   free(nodeToFree);
+  return returnItem;
 }
