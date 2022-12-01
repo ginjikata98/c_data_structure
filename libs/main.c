@@ -3,12 +3,19 @@
 #include "libs.h"
 
 
+void print(const void *e) {
+  printf("%d\n", *((int *) e));
+}
+
 int main(void) {
-  int x = 30;
 
-  List *a = List_init();
+  u32 a = 10;
 
+  List *list = List_init();
+  List_addFirst(list, &a);
+  List_addLast(list, &a);
 
+  List_print(list, print);
   return 0;
 
 }

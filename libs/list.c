@@ -12,6 +12,52 @@ List *List_init() {
   return list;
 }
 
-void List_push(List *list, void *item) {
+bool List_isEmpty(List *list) {
+  assert(list != null);
+  return list->length == 0;
+}
 
+void List_print(List *list, void(*printFun)(const void *)) {
+  assert(list != null && printFun != null);
+  ListNode *currentNode = list->head;
+  while (currentNode != null) {
+    printFun(currentNode->item);
+    currentNode = currentNode->next;
+  }
+}
+
+void List_addFirst(List *list, void *item) {
+  assert(list != null && item != null);
+  ListNode *newNode = (ListNode *) malloc(sizeof(ListNode));
+  assert(newNode != null);
+  newNode->item = item;
+  newNode->next = list->head;
+  newNode->prev = null;
+
+  if (List_isEmpty(list)) {
+    list->tail = newNode;
+  } else {
+    list->head->prev = newNode;
+  }
+
+  list->head = newNode;
+  list->length++;
+}
+
+void List_addLast(List *list, void *item) {
+  assert(list != null && item != null);
+  ListNode *newNode = (ListNode *) malloc(sizeof(ListNode));
+  assert(newNode != null);
+  newNode->item = item;
+  newNode->next = null;
+  newNode->prev = list->tail;
+
+  if (List_isEmpty(list)) {
+    list->head = newNode;
+  } else {
+    list->tail->next = newNode;
+  }
+
+  list->tail = newNode;
+  list->length++;
 }

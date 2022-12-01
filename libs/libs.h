@@ -8,6 +8,7 @@
 #include <stdlib.h>
 #include <stddef.h>
 #include <assert.h>
+#include <stdbool.h>
 
 #define null NULL
 
@@ -39,6 +40,12 @@ typedef struct List {
 
 List *List_init();
 
-void List_push(List *list, void *item);
+bool List_isEmpty(List *list);
+
+void List_print(List *list, void(*printFun)(const void *));
+
+void List_addFirst(List *list, void *item);
+
+void List_addLast(List *list, void *item);
 
 #endif //C_DATA_STRUCTURE_LIBS_H
