@@ -26,30 +26,15 @@ typedef uint8_t byte;
 
 typedef char *String;
 
-
-typedef struct ListNode {
-  void *item;
-  struct ListNode *next;
-  struct ListNode *prev;
-} ListNode;
-
-typedef struct List {
-  ListNode *head, *tail;
-  u32 length;
-} List;
+typedef struct Node Node;
+typedef struct List List;
 
 List *List_init();
-
 bool List_isEmpty(List *list);
-
 void List_print(List *list, void(*printFun)(const void *));
-
 void List_addFirst(List *list, void *item);
-
 void List_addLast(List *list, void *item);
-
 void *List_removeFirst(List *list);
-
 void *List_removeLast(List *list);
 
 #endif //C_DATA_STRUCTURE_LIBS_H

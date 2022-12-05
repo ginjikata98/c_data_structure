@@ -4,6 +4,17 @@
 #include "libs.h"
 
 
+struct Node {
+  void *item;
+  struct Node *next;
+  struct Node *prev;
+};
+
+struct List {
+  Node *head, *tail;
+  u32 length;
+};
+
 List *List_init() {
   List *list = (List *) malloc(sizeof(List));
   assert(list != null);
@@ -19,7 +30,7 @@ bool List_isEmpty(List *list) {
 
 void List_print(List *list, void(*printFun)(const void *)) {
   assert(list != null && printFun != null);
-  ListNode *currentNode = list->head;
+  Node *currentNode = list->head;
   while (currentNode != null) {
     printFun(currentNode->item);
     currentNode = currentNode->next;
@@ -28,7 +39,7 @@ void List_print(List *list, void(*printFun)(const void *)) {
 
 void List_addFirst(List *list, void *item) {
   assert(list != null && item != null);
-  ListNode *newNode = (ListNode *) malloc(sizeof(ListNode));
+  Node *newNode = (Node *) malloc(sizeof(Node));
   assert(newNode != null);
   newNode->item = item;
   newNode->next = list->head;
@@ -46,7 +57,7 @@ void List_addFirst(List *list, void *item) {
 
 void List_addLast(List *list, void *item) {
   assert(list != null && item != null);
-  ListNode *newNode = (ListNode *) malloc(sizeof(ListNode));
+  Node *newNode = (Node *) malloc(sizeof(Node));
   assert(newNode != null);
   newNode->item = item;
   newNode->next = null;
@@ -64,7 +75,7 @@ void List_addLast(List *list, void *item) {
 
 void *List_removeFirst(List *list) {
   assert(list != null);
-  ListNode *nodeToFree = list->head;
+  Node *nodeToFree = list->head;
   if (List_isEmpty(list)) {
     return null;
   }
@@ -83,7 +94,7 @@ void *List_removeFirst(List *list) {
 
 void *List_removeLast(List *list) {
   assert(list != null);
-  ListNode *nodeToFree = list->tail;
+  Node *nodeToFree = list->tail;
   if (List_isEmpty(list)) {
     return null;
   }
