@@ -2,24 +2,16 @@
 #include <stdlib.h>
 #include "libs.h"
 
-
-void print(const void *e) {
-  printf("%d\n", *((u32 *) e));
+f64 square(f64 x) {
+  return x * x * x;
 }
 
-u32 *generateIntPointerDLLT(u32 integer) {
-  u32 *newInt = (u32 *) malloc(sizeof(u32));
-  *newInt = integer;
-  return newInt;
+f64 grad(f64 (*f)(f64), f64 x) {
+  return (f(x + 1e-6) - f(x - 1e-6)) / (2e-6);
 }
 
 int main(void) {
-  List *list = List_init();
-  for (u32 i = 0; i < 10; ++i) {
-    List_addLast(list, generateIntPointerDLLT(i));
-  }
-
-  List_print(list, print);
+  printf("derivative of f(x) = x2 at 4 = %f", grad(square, 4));
   return 0;
 
 }
