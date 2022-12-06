@@ -58,10 +58,18 @@ if ((v)->size == (v)->capacity) { \
 
 #define Vec_at(v, i) (v)->items[(i)]
 
+#define Vec_sort(v, cmp) (qsort((v)->items, (v)->size, sizeof(*(v)->items), cmp))
+
+#define Vec_pop(v) assert((v)->size > 0); (v)->size--
+
+#define Vec_deleteAt(v, i) assert(i >= 0 && i < (v)->capacity); (v)->items[i] = (v)->items[--(v)->size]
 
 Vec(u32);
+Vec(u64);
 Vec(i64);
+Vec(i32);
+Vec(f32);
+Vec(f64);
 Vec(String);
-
 
 #endif //C_DATA_STRUCTURE_LIBS_H

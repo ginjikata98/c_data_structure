@@ -20,11 +20,17 @@ f64 grad(f64 (*f)(f64), f64 x) {
 int main(void) {
   Vec_u32 v;
   Vec_init(&v, 16);
-  for (u32 i = 0; i < 1e2; ++i) {
+  for (u32 i = 0; i < 10; ++i) {
     Vec_add(&v, i);
   }
 
-  for (u32 i = 0; i < 1e2; ++i) {
+  Vec_pop(&v);
+  Vec_pop(&v);
+
+  Vec_deleteAt(&v, 0);
+  Vec_deleteAt(&v, 0);
+
+  for (u32 i = 0; i < v.size; ++i) {
     printf("%d\n", Vec_at(&v, i));
   }
 
