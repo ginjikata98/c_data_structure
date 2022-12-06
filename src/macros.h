@@ -82,15 +82,38 @@ typedef char *String;
 typedef struct Node Node;
 typedef struct List List;
 
-List *List_init();
-bool List_isEmpty(List *list);
-void List_clear(List *list);
-void List_destroy(List *list);
-void List_print(List *list, void(*printFun)(const void *));
-void List_addFirst(List *list, void *item);
-void List_addLast(List *list, void *item);
-void *List_removeFirst(List *list);
-void *List_removeLast(List *list);
+//List *List_init();
+//bool List_isEmpty(List *list);
+//void List_clear(List *list);
+//void List_destroy(List *list);
+//void List_print(List *list, void(*printFun)(const void *));
+//void List_addFirst(List *list, void *item);
+//void List_addLast(List *list, void *item);
+//void *List_removeFirst(List *list);
+//void *List_removeLast(List *list);
+
+#define NODE(T) typedef struct {T *item; struct PASTE(Node_, T) *next; struct PASTE(Node_, T) *prev;} PASTE(Node_, T)
+#define LIST(T) NODE(T); typedef struct {PASTE(Node_, T) *head, *tail; u32 size;} PASTE(List_, T)
+
+#define List_init(l) memset((l), 0, sizeof(*(l)))
+#define Node_init(value, T) calloc(sizeof(T))
+
+//#define List_addFirst(l, e) \
+//Node *newNode = (Node *) malloc(sizeof(Node));\
+//newNode->item = item;\
+//newNode->next = list->head;\
+//newNode->prev = null;\
+//
+//if (List_isEmpty(list)) {
+//  list->tail = newNode;
+//} else {
+//  list->head->prev = newNode;
+//}
+//
+//list->head = newNode;
+//list->length++;
+
+LIST(f64);
 
 #define VEC(T) typedef struct { u32 size; u32 capacity; T *items;  } PASTE(Vec_, T)
 

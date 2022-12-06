@@ -22,23 +22,12 @@ typedef struct NDArray {
 
 
 int main(void) {
-  Vec_u32 v;
-  VEC_INIT(&v, 16);
-  for (u32 i = 0; i < 10; ++i) {
-    VEC_ADD(&v, i);
-  }
+  List_f64 a;
+  List_init(&a);
 
-  VEC_POP(&v);
-  VEC_POP(&v);
+  Node_f64 n;
+  Node_init(n, Node_f64);
 
-  VEC_DELETE_AT(&v, 0);
-  VEC_DELETE_AT(&v, 0);
-
-  for (u32 i = 0; i < v.size; ++i) {
-    printf("%d\n", VEC_AT(&v, i));
-  }
-
-  VEC_DESTROY(&v);
 
   return 0;
 }
