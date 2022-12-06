@@ -1,7 +1,3 @@
-//
-// Created by DUNG.VM on 25/11/2022.
-//
-
 #ifndef C_DATA_STRUCTURE_LIBS_H
 #define C_DATA_STRUCTURE_LIBS_H
 
@@ -34,6 +30,8 @@ typedef struct List List;
 
 List *List_init();
 bool List_isEmpty(List *list);
+void List_clear(List *list);
+void List_destroy(List *list);
 void List_print(List *list, void(*printFun)(const void *));
 void List_addFirst(List *list, void *item);
 void List_addLast(List *list, void *item);

@@ -1,6 +1,3 @@
-//
-// Created by DUNG.VM on 25/11/2022.
-//
 #include "libs.h"
 
 
@@ -26,6 +23,14 @@ List *List_init() {
 bool List_isEmpty(List *list) {
   assert(list != null);
   return list->length == 0;
+}
+
+void List_clear(List *list) {
+
+}
+
+void List_destroy(List *list) {
+
 }
 
 void List_print(List *list, void(*printFun)(const void *)) {
