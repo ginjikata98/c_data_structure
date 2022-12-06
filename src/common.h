@@ -38,4 +38,19 @@ void List_addLast(List *list, void *item);
 void *List_removeFirst(List *list);
 void *List_removeLast(List *list);
 
+#define Vec(T) typedef struct { u32 size; T *items;  } Vec_##T
+
+#define Vec_init(v, cap) \
+memset((v), 0, sizeof(*(v))); \
+(v)->items = calloc((cap), sizeof((v)->items[0])) \
+
+#define Vec_add(v, e) \
+(v)->items[(v)->size++] = e
+
+
+Vec(u32);
+Vec(i64);
+Vec(String);
+
+
 #endif //C_DATA_STRUCTURE_LIBS_H

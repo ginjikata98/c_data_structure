@@ -1,6 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "libs.h"
+#include "common.h"
 #include <tensorflow/c/c_api.h>
 
 f64 square(f64 x) {
@@ -18,15 +18,12 @@ f64 grad(f64 (*f)(f64), f64 x) {
 #define TOGGLEBIT(x,p)  ((x)^(1<<(p)))
 
 int main(void) {
-
-  u32 a = BIT(10);
-  printf("%d\n", a);
-  a = SETBIT(a, 11);
-  printf("%d\n", a);
-
-  printf("derivative of f(x) = x2 at 4 = %f", grad(square, 4));
-//  printf("Hello from TensorFlow C library version %s\n", TF_Version());
-
+  Vec_u32 v;
+  Vec_init(&v, 3);
+  Vec_add(&v, 10);
+  Vec_add(&v, 10);
+  Vec_add(&v, 10);
+  Vec_add(&v, 10);
 
 
   return 0;
