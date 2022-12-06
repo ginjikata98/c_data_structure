@@ -46,6 +46,8 @@ memset((v), 0, sizeof(*(v))); \
 (v)->items = calloc((cap), sizeof((v)->items[0]));       \
 assert((v)->items != null)
 
+#define Vec_destroy(v) free((v)->items); (v)->items=null
+
 #define Vec_add(v, e) \
 if ((v)->size == (v)->capacity) { \
   (v)->items = realloc((v)->items, (v)->capacity * 2 * sizeof((v)->items[0])); \

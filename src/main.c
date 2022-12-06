@@ -24,6 +24,7 @@ int main(void) {
     Vec_add(&v, i);
   }
 
+  Vec_destroy(&v);
 
   return 0;
 
