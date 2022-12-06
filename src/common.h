@@ -56,6 +56,8 @@ if ((v)->size == (v)->capacity) { \
 }                      \
 (v)->items[(v)->size++] = e
 
+#define Vec_at(v, i) (v)->items[(i)]
+
 
 Vec(u32);
 Vec(i64);

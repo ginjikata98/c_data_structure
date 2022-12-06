@@ -12,20 +12,22 @@ f64 grad(f64 (*f)(f64), f64 x) {
 }
 
 #define BIT(x)          (1<<(x))
-#define SETBIT(x,p)     ((x)|(1<<(p)))
-#define CLEARBIT(x,p)   ((x)&(~(1<<(p))))
-#define GETBIT(x,p)     (((x)>>(p))&1)
-#define TOGGLEBIT(x,p)  ((x)^(1<<(p)))
+#define SETBIT(x, p)     ((x)|(1<<(p)))
+#define CLEARBIT(x, p)   ((x)&(~(1<<(p))))
+#define GETBIT(x, p)     (((x)>>(p))&1)
+#define TOGGLEBIT(x, p)  ((x)^(1<<(p)))
 
 int main(void) {
   Vec_u32 v;
   Vec_init(&v, 16);
-  for (u32 i = 0; i < 1e6; ++i) {
+  for (u32 i = 0; i < 1e2; ++i) {
     Vec_add(&v, i);
   }
 
+  for (u32 i = 0; i < 1e2; ++i) {
+    printf("%d\n", Vec_at(&v, i));
+  }
+
   Vec_destroy(&v);
-
   return 0;
-
 }
