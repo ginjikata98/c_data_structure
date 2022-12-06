@@ -38,13 +38,20 @@ void List_addLast(List *list, void *item);
 void *List_removeFirst(List *list);
 void *List_removeLast(List *list);
 
-#define Vec(T) typedef struct { u32 size; T *items;  } Vec_##T
+#define Vec(T) typedef struct { u32 size; u32 capacity; T *items;  } Vec_##T
 
 #define Vec_init(v, cap) \
 memset((v), 0, sizeof(*(v))); \
-(v)->items = calloc((cap), sizeof((v)->items[0])) \
+(v)->capacity = (cap) == 0 ? 16 : (cap);                         \
+(v)->items = calloc((cap), sizeof((v)->items[0]));       \
+assert((v)->items != null)
 
 #define Vec_add(v, e) \
+if ((v)->size == (v)->capacity) { \
+  (v)->items = realloc((v)->items, (v)->capacity * 2 * sizeof((v)->items[0])); \
+  assert((v)->items != null);\
+  (v)->capacity *= 2; \
+}                      \
 (v)->items[(v)->size++] = e
 
 

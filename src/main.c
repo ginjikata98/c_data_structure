@@ -19,11 +19,10 @@ f64 grad(f64 (*f)(f64), f64 x) {
 
 int main(void) {
   Vec_u32 v;
-  Vec_init(&v, 3);
-  Vec_add(&v, 10);
-  Vec_add(&v, 10);
-  Vec_add(&v, 10);
-  Vec_add(&v, 10);
+  Vec_init(&v, 16);
+  for (u32 i = 0; i < 1e6; ++i) {
+    Vec_add(&v, i);
+  }
 
 
   return 0;
