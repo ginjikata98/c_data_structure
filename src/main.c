@@ -28,16 +28,17 @@ void NoOpDeallocator(void *data, size_t a, void *b) {}
 void tf() {
   printf("Hello from TensorFlow C library version %s\n", TF_Version());
 
-  TF_Graph *Graph = TF_NewGraph();
-  TF_Status *Status = TF_NewStatus();
-  TF_SessionOptions *SessionOpts = TF_NewSessionOptions();
+  TF_Graph *graph = TF_NewGraph();
+  TF_Status *status = TF_NewStatus();
+  TF_SessionOptions *sessionOpts = TF_NewSessionOptions();
   TF_Buffer *RunOpts = NULL;
+  TF_Session *session = TF_NewSession(graph, sessionOpts, status);
 
   i64 dims[] = {1, 1};
   f32 data[] = {1, 2, 3, 4};
-  int ndata = sizeof(data);
+  int dataSize = sizeof(data);
 
-  TF_Tensor *t = TF_NewTensor(TF_FLOAT, dims, 2, data, ndata, &NoOpDeallocator, 0);
+  TF_Tensor *t = TF_NewTensor(TF_FLOAT, dims, 2, data, dataSize, &NoOpDeallocator, 0);
   ASSERT(t != null);
 
 }
