@@ -8,6 +8,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
+#include <stdlib.h>
+#include <math.h>
+
 
 #define null NULL
 
@@ -27,6 +31,10 @@ typedef double f64;
 typedef uint8_t byte;
 
 typedef char *String;
+
+int rand_int(int min, int max);
+float rand_normal();
+float rand_uniform(float min, float max);
 
 #define BIT(x)          (1<<(x))
 #define BIT_SET(x, p)     ((x)|(1<<(p)))
@@ -151,5 +159,45 @@ VEC(i32);
 VEC(f32);
 VEC(f64);
 VEC(String);
+
+int rand_int(int min, int max) {
+  if (max < min) {
+    int s = min;
+    min = max;
+    max = s;
+  }
+  int r = (rand() % (max - min + 1)) + min;
+  return r;
+}
+
+// From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
+float rand_normal() {
+  static int haveSpare = 0;
+  static double rand1, rand2;
+
+  if (haveSpare) {
+    haveSpare = 0;
+    return sqrt(rand1) * sin(rand2);
+  }
+
+  haveSpare = 1;
+
+  rand1 = rand() / ((double) RAND_MAX);
+  if (rand1 < 1e-100) { rand1 = 1e-100; }
+  rand1 = -2 * log(rand1);
+  rand2 = (rand() / ((double) RAND_MAX)) * PI * 2;
+
+  return sqrt(rand1) * cos(rand2);
+}
+
+float rand_uniform(float min, float max) {
+  if (max < min) {
+    float swap = min;
+    min = max;
+    max = swap;
+  }
+  return ((float) rand() / RAND_MAX * (max - min)) + min;
+}
+
 
 #endif //C_DATA_STRUCTURE_LIBS_H
