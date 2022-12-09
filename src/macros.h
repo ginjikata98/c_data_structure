@@ -5,6 +5,9 @@
 #include <stddef.h>
 #include <assert.h>
 #include <stdbool.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define null NULL
 
@@ -92,18 +95,18 @@ typedef struct List List;
 //void *List_removeFirst(List *list);
 //void *List_removeLast(List *list);
 
-#define NODE(T) typedef struct {T *item; struct PASTE(Node_, T) *next; struct PASTE(Node_, T) *prev;} PASTE(Node_, T)
+#define NODE(T) typedef struct {T item; struct PASTE(Node_, T) *next; struct PASTE(Node_, T) *prev;} PASTE(Node_, T)
 #define LIST(T) NODE(T); typedef struct {PASTE(Node_, T) *head, *tail; u32 size;} PASTE(List_, T)
 
 #define List_init(l) memset((l), 0, sizeof(*(l)))
 #define Node_init(value, T) calloc(sizeof(T))
 
-//#define List_addFirst(l, e) \
-//Node *newNode = (Node *) malloc(sizeof(Node));\
-//newNode->item = item;\
-//newNode->next = list->head;\
-//newNode->prev = null;\
-//
+#define List_addFirst(l, e) \
+Node *newNode = (Node *) malloc(sizeof(Node));\
+newNode->item = item;\
+newNode->next = list->head;\
+newNode->prev = null;\
+
 //if (List_isEmpty(list)) {
 //  list->tail = newNode;
 //} else {
