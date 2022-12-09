@@ -29,7 +29,7 @@ NDArray *NDArray_init(f32 *data, u32 nd, u32 *dimensions) {
       array->strides[i] = 1;
       continue;
     }
-    array->strides[i] = array->strides[i + 1] * dimensions[nd - i - 1];
+    array->strides[i] = array->strides[i + 1] * dimensions[i + 1];
   }
 
   return array;

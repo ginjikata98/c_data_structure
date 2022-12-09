@@ -17,13 +17,13 @@ int main(void) {
 //  printf("%f\n", rand_uniform(1.f, 100.f));
 //  printf("%f\n", rand_normal());
 
-  f32 data[] = {1, 2, 3, 4, 5, 6};
-  u32 nd = 2;
-  u32 dims[] = {2, 3};
+  f32 data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+  u32 nd = 3;
+  u32 dims[] = {2, 3, 2};
   NDArray *array = NDArray_init(data, nd, dims);
 
-  u32 access[] = {1, 2};
-  printf("%f", NDArray_get(array, access));
+  u32 access[] = {0, 1, 0};
+  printf("%f", *NDArray_get(array, access));
 
 
   return 0;
