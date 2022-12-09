@@ -12,7 +12,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-
 #define null NULL
 
 typedef uint8_t u8;
@@ -32,9 +31,6 @@ typedef uint8_t byte;
 
 typedef char *String;
 
-int rand_int(int min, int max);
-float rand_normal();
-float rand_uniform(float min, float max);
 
 #define BIT(x)          (1<<(x))
 #define BIT_SET(x, p)     ((x)|(1<<(p)))
@@ -90,42 +86,6 @@ float rand_uniform(float min, float max);
 #endif
 
 
-typedef struct Node Node;
-typedef struct List List;
-
-//List *List_init();
-//bool List_isEmpty(List *list);
-//void List_clear(List *list);
-//void List_destroy(List *list);
-//void List_print(List *list, void(*printFun)(const void *));
-//void List_addFirst(List *list, void *item);
-//void List_addLast(List *list, void *item);
-//void *List_removeFirst(List *list);
-//void *List_removeLast(List *list);
-
-#define NODE(T) typedef struct {T item; struct PASTE(Node_, T) *next; struct PASTE(Node_, T) *prev;} PASTE(Node_, T)
-#define LIST(T) NODE(T); typedef struct {PASTE(Node_, T) *head, *tail; u32 size;} PASTE(List_, T)
-
-#define List_init(l) memset((l), 0, sizeof(*(l)))
-#define Node_init(value, T) calloc(sizeof(T))
-
-#define List_addFirst(l, e) \
-Node *newNode = (Node *) malloc(sizeof(Node));\
-newNode->item = item;\
-newNode->next = list->head;\
-newNode->prev = null;\
-
-//if (List_isEmpty(list)) {
-//  list->tail = newNode;
-//} else {
-//  list->head->prev = newNode;
-//}
-//
-//list->head = newNode;
-//list->length++;
-
-LIST(f64);
-
 #define VEC(T) typedef struct { u32 size; u32 capacity; T *items;  } PASTE(Vec_, T)
 
 #define VEC_INIT(v, cap) \
@@ -159,45 +119,6 @@ VEC(i32);
 VEC(f32);
 VEC(f64);
 VEC(String);
-
-int rand_int(int min, int max) {
-  if (max < min) {
-    int s = min;
-    min = max;
-    max = s;
-  }
-  int r = (rand() % (max - min + 1)) + min;
-  return r;
-}
-
-// From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-float rand_normal() {
-  static int haveSpare = 0;
-  static double rand1, rand2;
-
-  if (haveSpare) {
-    haveSpare = 0;
-    return sqrt(rand1) * sin(rand2);
-  }
-
-  haveSpare = 1;
-
-  rand1 = rand() / ((double) RAND_MAX);
-  if (rand1 < 1e-100) { rand1 = 1e-100; }
-  rand1 = -2 * log(rand1);
-  rand2 = (rand() / ((double) RAND_MAX)) * PI * 2;
-
-  return sqrt(rand1) * cos(rand2);
-}
-
-float rand_uniform(float min, float max) {
-  if (max < min) {
-    float swap = min;
-    min = max;
-    max = swap;
-  }
-  return ((float) rand() / RAND_MAX * (max - min)) + min;
-}
 
 
 #endif //C_DATA_STRUCTURE_LIBS_H
