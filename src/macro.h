@@ -79,6 +79,8 @@ typedef char *VmString;
                             exit(-1);}
 #endif
 
+#define VMFor(i, len) for (VmU32 i = 0; i < len; i++)
+
 
 
 #endif //MAIN_MACRO_H

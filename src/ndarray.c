@@ -35,15 +35,40 @@ VmNDArray *vmNDArrayNew(VmF32 *data, VmU32 nd, VmU32 *dimensions) {
   return array;
 }
 
+VmNDArray *vmNDArrayOnes(VmU32 nd, VmU32 *dimensions) {
+  VmU32 size = 0;
+  VMFor(i, nd) {
+    size += dimensions[i];
+  }
 
-VmF32 *vmNDArrayGet(VmNDArray *obj, VmU32 const *ind) {
-  VmU32 n = obj->nd;
-  VmU32 *strides = obj->strides;
-  VmF32 *ptr = obj->data;
+  VmF32 *data = VMMalloc(data, size * sizeof(VmF32));
+
+  VMFor(i, size) {
+    data[i] = 1;
+  }
+
+  return vmNDArrayNew(data, nd, dimensions);
+
+}
+
+
+VmF32 vmNDArrayGet(VmNDArray *arr, VmU32 *ind) {
+  VmU32 n = arr->nd;
+  VmU32 *strides = arr->strides;
+  VmF32 *ptr = arr->data;
 
   while (n--) {
     ptr += (*strides++) * (*ind++);
   }
 
-  return ptr;
+  return *ptr;
+}
+
+void vmNDArrayPrint(VmNDArray *arr) {
+  VMFor(i, arr->nd) {
+    VMFor(j, arr->dimensions[i]) {
+
+
+    }
+  }
 }
