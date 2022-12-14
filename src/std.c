@@ -6,9 +6,9 @@
 
 
 VMVecDef(VmU32, VecU32);
-VMVec(VmU64, VecU64);
-VMVec(VmI64, VecI64);
-VMVec(VmI32, VecI32);
-VMVec(VmF32, VecF32);
-VMVec(VmF64, VecF64);
-VMVec(VmString, VecString);
+VMVecDef(VmU64, VecU64);
+VMVecDef(VmI64, VecI64);
+VMVecDef(VmI32, VecI32);
+VMVecDef(VmF32, VecF32);
+VMVecDef(VmF64, VecF64);
+VMVecDef(VmString, VecString);

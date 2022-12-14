@@ -34,8 +34,20 @@ typedef char *VmString;
 #define FN_PREFIX vm
 #define STRUCT_PREFIX Vm
 
-#define FN_NAME(name) VMPaste(FN_PREFIX, name)
-#define STRUCT_NAME(name) VMPaste(STRUCT_PREFIX, name)
+#define FN_NAME_(name) VMPaste(FN_PREFIX, name)
+#define FN_NAME(name) FN_NAME_(name)
+
+#define STRUCT_NAME_(name) VMPaste(STRUCT_PREFIX, name)
+#define STRUCT_NAME(name) STRUCT_NAME_(name)
+
+#define VMMalloc_(v, s) malloc(s); assert(v != null)
+#define VMMalloc(v, s) VMMalloc_(v, s)
+
+#define VMFree_(p) if (p != null) { free(p); p = null; }
+#define VMFree(p) VMFree_(p)
+
+#define VMCalloc_(v, l, s) calloc(l, s); assert(v != null)
+#define VMCalloc(v, l, s) VMCalloc_(v, l, s)
 
 #define VMPi 3.151592654
 #define VMBit(x)          (1<<(x))
@@ -71,12 +83,10 @@ STRUCT_NAME(name) *VMPaste(FN_NAME(name), New) (VmU32 cap);\
 
 #define VMVecDef(T, name) struct VMPaste(Vm, name) { VmU32 size; VmU32 capacity; T *items;  }; \
 STRUCT_NAME(name) *VMPaste(FN_NAME(name), New) (VmU32 cap) {\
-STRUCT_NAME(name) *a = malloc(sizeof(STRUCT_NAME(name)));\
-assert(a != null);\
+STRUCT_NAME(name) *a = VMMalloc(a, sizeof(STRUCT_NAME(name)));\
 a->capacity = cap > 0 ? cap : 16;\
 a->size = 0;\
-a->items = calloc(a->capacity, sizeof(STRUCT_NAME(name)));\
-assert(a->items != null);\
+a->items = VMCalloc(a->items, a->capacity, sizeof(STRUCT_NAME(name)));\
 return a;\
 }
 
