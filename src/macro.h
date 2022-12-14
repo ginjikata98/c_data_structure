@@ -1,7 +1,6 @@
 #ifndef MAIN_MACRO_H
 #define MAIN_MACRO_H
 
-
 #include <stdlib.h>
 #include <stddef.h>
 #include <assert.h>
@@ -43,6 +42,9 @@ typedef char *VmString;
 
 #define VMMalloc_(v, s) malloc(s); assert(v != null)
 #define VMMalloc(v, s) VMMalloc_(v, s)
+
+#define VMRealloc_(v, s) realloc(v, s); assert(v != null)
+#define VMRealloc(v, s) VMRealloc_(v, s)
 
 #define VMFree_(p) if (p != null) { free(p); p = null; }
 #define VMFree(p) VMFree_(p)

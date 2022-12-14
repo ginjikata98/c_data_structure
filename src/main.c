@@ -30,11 +30,11 @@ int main(void) {
     vmVecU32Push(a, vmRandU32(1, 100));
   }
 
-  printf("size %ld\n", sizeof(&a));
-  printf("at 2 %d\n", *vmVecU32At(a, 2));
-  vmVecU32DelAt(a, 5);
-  printf("pop %d\n", *vmVecU32Pop(a));
 //  vmVecU32Sort(a);
+  for (int i = 0; i < vmVecU32Size(a); ++i) {
+    printf("%d,", *vmVecU32At(a, i));
+  }
+
   vmVecU32Free(a);
 
   return 0;
