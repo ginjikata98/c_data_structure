@@ -60,13 +60,19 @@ typedef char *VmString;
 #endif
 
 
-#define VMVec(T) typedef struct { VmU32 size; VmU32 capacity; T *items;  } VMPaste(Vec_, T)
+#define VMVec(T, name) typedef struct VMPaste(Vm, name) VMPaste(Vm, name); \
+VMPaste(Vm, name) *VMPaste(VMPaste(vm, name), New) (VmU32 cap);\
 
-#define VMVecNew(v, cap) \
-memset((v), 0, sizeof(*(v))); \
-(v)->capacity = (cap) == 0 ? 16 : (cap);                         \
-(v)->items = calloc((cap), sizeof((v)->items[0]));       \
-VMAssert((v)->items != null)
+#define VMVecDef(T, name) struct VMPaste(Vm, name) { VmU32 size; VmU32 capacity; T *items;  }; \
+VMPaste(Vm, name) *VMPaste(VMPaste(vm, name), New) (VmU32 cap) {\
+VMPaste(Vm, name) *a = malloc(sizeof(VMPaste(Vm, name)));\
+assert(a != null);\
+a->capacity = cap > 0 ? cap : 16;\
+a->size = 0;\
+a->items = calloc(a->capacity, sizeof(VMPaste(Vm, name)));\
+assert(a->items != null);\
+return a;\
+}
 
 #define VMVecFree(v) free((v)->items); (v)->items=null
 
@@ -86,13 +92,13 @@ if ((v)->size == (v)->capacity) { \
 
 #define VMVecDelAt(v, i) VMAssert(i >= 0 && i < (v)->capacity); (v)->items[i] = (v)->items[--(v)->size]
 
-VMVec(VmU32);
-VMVec(VmU64);
-VMVec(VmI64);
-VMVec(VmI32);
-VMVec(VmF32);
-VMVec(VmF64);
-VMVec(VmString);
+VMVec(VmU32, VecU32);
+//VMVec(VmU64, VecU64);
+//VMVec(VmI64, VecI64);
+//VMVec(VmI32, VecI32);
+//VMVec(VmF32, VecF32);
+//VMVec(VmF64, VecF64);
+//VMVec(VmString, VecString);
 
 
 #endif //C_DATA_STRUCTURE_LIBS_H
