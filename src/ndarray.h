@@ -1,12 +1,12 @@
 #ifndef MAIN_NDARRAY_H
 #define MAIN_NDARRAY_H
 
-#include "macros.h"
+#include "std.h"
 
-typedef struct NDArray NDArray;
+typedef struct VmNDArray VmNDArray;
 
-NDArray *NDArray_init(f32 *data, u32 nd, u32 *dimensions);
-f32 *NDArray_get(NDArray *obj, u32 const *ind);
+VmNDArray *vmNpInit(VmF32 *data, VmU32 nd, VmU32 *dimensions);
+VmF32 *vmNpGet(VmNDArray *obj, VmU32 const *ind);
 
 
 #endif //MAIN_NDARRAY_H

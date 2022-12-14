@@ -5,11 +5,11 @@
 #ifndef MAIN_UTILS_H
 #define MAIN_UTILS_H
 
-#include "macros.h"
+#include "std.h"
 
 
-u32 rand_u32(u32 min, u32 max);
-f32 rand_normal();
-f32 rand_uniform(f32 min, f32 max);
+VmU32 rand_u32(VmU32 min, VmU32 max);
+VmF32 rand_normal();
+VmF32 rand_uniform(VmF32 min, VmF32 max);
 
 #endif //MAIN_UTILS_H

@@ -14,23 +14,22 @@
 
 #define null NULL
 
-typedef uint8_t u8;
-typedef uint16_t u16;
-typedef uint32_t u32;
-typedef uint64_t u64;
+typedef uint8_t VmU8;
+typedef uint16_t VmU16;
+typedef uint32_t VmU32;
+typedef uint64_t VmU64;
 
-typedef int8_t i8;
-typedef int16_t i16;
-typedef int32_t i32;
-typedef int64_t i64;
+typedef int8_t VmI8;
+typedef int16_t VmI16;
+typedef int32_t VmI32;
+typedef int64_t VmI64;
 
-typedef float f32;
-typedef double f64;
+typedef float VmF32;
+typedef double VmF64;
 
-typedef uint8_t byte;
+typedef uint8_t VmByte;
 
-typedef char *String;
-
+typedef char *VmString;
 
 #define BIT(x)          (1<<(x))
 #define BIT_SET(x, p)     ((x)|(1<<(p)))
@@ -86,7 +85,7 @@ typedef char *String;
 #endif
 
 
-#define VEC(T) typedef struct { u32 size; u32 capacity; T *items;  } PASTE(Vec_, T)
+#define VEC(T) typedef struct { VmU32 size; VmU32 capacity; T *items;  } PASTE(Vec_, T)
 
 #define VEC_INIT(v, cap) \
 memset((v), 0, sizeof(*(v))); \
@@ -112,13 +111,13 @@ if ((v)->size == (v)->capacity) { \
 
 #define VEC_DELETE_AT(v, i) ASSERT(i >= 0 && i < (v)->capacity); (v)->items[i] = (v)->items[--(v)->size]
 
-VEC(u32);
-VEC(u64);
-VEC(i64);
-VEC(i32);
-VEC(f32);
-VEC(f64);
-VEC(String);
+VEC(VmU32);
+VEC(VmU64);
+VEC(VmI64);
+VEC(VmI32);
+VEC(VmF32);
+VEC(VmF64);
+VEC(VmString);
 
 
 #endif //C_DATA_STRUCTURE_LIBS_H

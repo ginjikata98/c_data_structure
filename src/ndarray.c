@@ -4,25 +4,25 @@
 
 #include "ndarray.h"
 
-struct NDArray {
-  f32 *data;
-  u32 nd;
-  u32 *dimensions;
-  u32 *strides;
-  u32 size;
+struct VmNDArray {
+  VmF32 *data;
+  VmU32 nd;
+  VmU32 *dimensions;
+  VmU32 *strides;
+  VmU32 size;
 };
 
-NDArray *NDArray_init(f32 *data, u32 nd, u32 *dimensions) {
+VmNDArray *vmNpInit(VmF32 *data, VmU32 nd, VmU32 *dimensions) {
   assert(nd > 0);
 
-  NDArray *array = malloc(sizeof(NDArray));
+  VmNDArray *array = malloc(sizeof(VmNDArray));
   array->data = data;
   array->nd = nd;
   array->dimensions = dimensions;
-  array->strides = malloc(sizeof(f32) * nd);
+  array->strides = malloc(sizeof(VmF32) * nd);
   array->size = 1;
 
-  for (i32 i = nd - 1; i >= 0; i--) {
+  for (VmI32 i = nd - 1; i >= 0; i--) {
     assert(dimensions[i] > 0);
     array->size *= dimensions[i];
     if (i == nd - 1) {
@@ -36,10 +36,10 @@ NDArray *NDArray_init(f32 *data, u32 nd, u32 *dimensions) {
 }
 
 
-f32 *NDArray_get(NDArray *obj, u32 const *ind) {
-  u32 n = obj->nd;
-  u32 *strides = obj->strides;
-  f32 *ptr = obj->data;
+VmF32 *vmNpGet(VmNDArray *obj, VmU32 const *ind) {
+  VmU32 n = obj->nd;
+  VmU32 *strides = obj->strides;
+  VmF32 *ptr = obj->data;
 
   while (n--) {
     ptr += (*strides++) * (*ind++);
