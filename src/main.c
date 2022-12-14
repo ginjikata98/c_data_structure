@@ -26,11 +26,15 @@ int main(void) {
 
   VmVecU32 *a = vmVecU32New(16);
 
-  printf("%ld", sizeof(&a));
-  printf("%d", *vmVecU32At(a, 2));
+  for (int i = 0; i < 100; ++i) {
+    vmVecU32Push(a, vmRandU32(1, 100));
+  }
 
-
-
+  printf("size %ld\n", sizeof(&a));
+  printf("at 2 %d\n", *vmVecU32At(a, 2));
+  vmVecU32DelAt(a, 5);
+  printf("pop %d\n", *vmVecU32Pop(a));
+//  vmVecU32Sort(a);
   vmVecU32Free(a);
 
   return 0;
