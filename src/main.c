@@ -13,9 +13,9 @@ typedef struct {
 
 int main(void) {
 //  srand(time(null));
-//  printf("%d\n", rand_u32(1, 100));
-//  printf("%f\n", rand_uniform(1.f, 100.f));
-//  printf("%f\n", rand_normal());
+//  printf("%d\n", vmRandU32(1, 100));
+//  printf("%f\n", vmRandUniform(1.f, 100.f));
+//  printf("%f\n", vmRandNormal());
 
   VmF32 data[] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
   VmU32 nd = 3;

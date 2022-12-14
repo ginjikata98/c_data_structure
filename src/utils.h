@@ -8,8 +8,8 @@
 #include "std.h"
 
 
-VmU32 rand_u32(VmU32 min, VmU32 max);
-VmF32 rand_normal();
-VmF32 rand_uniform(VmF32 min, VmF32 max);
+VmU32 vmRandU32(VmU32 min, VmU32 max);
+VmF32 vmRandNormal();
+VmF32 vmRandUniform(VmF32 min, VmF32 max);
 
 #endif //MAIN_UTILS_H

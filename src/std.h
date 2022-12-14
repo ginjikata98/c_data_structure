@@ -31,51 +31,24 @@ typedef uint8_t VmByte;
 
 typedef char *VmString;
 
-#define BIT(x)          (1<<(x))
-#define BIT_SET(x, p)     ((x)|(1<<(p)))
-#define BIT_CLEAR(x, p)   ((x)&(~(1<<(p))))
-#define BIT_AT(x, p)     (((x)>>(p))&1)
-#define BIT_TOGGLE(x, p)  ((x)^(1<<(p)))
+#define VMBit(x)          (1<<(x))
+#define VMBitSet(x, p)     ((x)|(1<<(p)))
+#define VMBitClear(x, p)   ((x)&(~(1<<(p))))
+#define VMBitAt(x, p)     (((x)>>(p))&1)
+#define VMBitToggle(x, p)  ((x)^(1<<(p)))
 
-#define STR_(s)             #s
-#define STR(s)              STR_(s)
-#define CAT(str1, str2)      (str1 "" str2)
-#define PASTE_(a, b)         a##b
-#define PASTE(a, b)          PASTE_(a,b)
-#define PRINT_TOKEN(token)  printf(#token " is %d", token)
+#define VMStr_(s)             #s
+#define VMStr(s)              VMStr_(s)
+#define VMCat(str1, str2)      (str1 "" str2)
+#define VMPaste_(a, b)         a##b
+#define VMPaste(a, b)          VMPaste_(a,b)
 
-#define PI                  3.141592654
-#define RAD2DEG(x)          ((x)/PI*180)
-#define DEG2RAD(x)          ((x)*PI/180)
-#define ALIGNB(x, align)    (((x) + ((align) - 1)) & ~((align) - 1))
-#define ALIGN(x, align)     ((((x) + ((align) - 1)) / (align)) * (align))
-#define FLOORB(x, align)    ((x) & ~((align) - 1))
-#define FLOOR(x, align)     (((x) / (align)) * (align))
-#define CEILB(x, align)     ALIGNB(x, align)
-#define CEIL(x, align)      ALIGN(x, align)
-#define CLIP(x, min, max)   (((x) < (min)) ? (min) : (((x) > (max)) ? (max) : (x)))
-#define UCLIP(x, max)       (((x) > (max)) ? (max) : (x))
-#define LCLIP(x, min)       (((x) < (min)) ? (min) : (x))
-#define MIN(x, y)           (((x) < (y)) ?  (x) : (y))
-#define MAX(x, y)           (((x) > (y)) ?  (x) : (y))
-#define ABS(x)              (((x) <  0) ? -(x) : (x))
-#define DIFF(a, b)           ABS((a)-(b))
-#define IS_NAN(x)            ((x) != (x))
-#define IMPLIES(x, y)       (!(x) || (y))
-#define SWAP(a, b)          do { a ^= b; b ^= a; a ^= b; } while ( 0 )
-#define SORT(a, b)          do { if ((a) > (b)) SWAP((a), (b)); } while (0)
-#define COMPARE(x, y)       (((x) > (y)) - ((x) < (y)))
-#define SIGN(x)             COMPARE(x, 0)
-#define IS_ODD(num)       ((num) & 1)
-#define IS_EVEN(num)      (!IS_ODD( (num) ))
-#define IS_BETWEEN(n, L, H)   ((unsigned char)((n) >= (L) && (n) <= (H)))
-
-#define LOG(x, fmt, ...)    if(x){printf("%s:%d: " fmt "\n",__FILE__, __LINE__,__VA_ARGS__);}
-#define TRY(x, s)            if(!(x)){printf("%s:%d:%s",__FILE__, __LINE__,s);}
+#define VMLog(x, fmt, ...)    if(x){printf("%s:%d: " fmt "\n",__FILE__, __LINE__,__VA_ARGS__);}
+#define VMTry(x, s)            if(!(x)){printf("%s:%d:%s",__FILE__, __LINE__,s);}
 #ifndef DEBUG
-#define ASSERT(n)
+#define VMAssert(n)
 #else
-#define ASSERT(n)           if(!(n)) { \
+#define VMAssert(n)           if(!(n)) { \
                             printf("%s - Failed ",#n); \
                             printf("On %s ",__DATE__); \
                             printf("At %s ",__TIME__); \
@@ -85,39 +58,39 @@ typedef char *VmString;
 #endif
 
 
-#define VEC(T) typedef struct { VmU32 size; VmU32 capacity; T *items;  } PASTE(Vec_, T)
+#define VMVec(T) typedef struct { VmU32 size; VmU32 capacity; T *items;  } VMPaste(Vec_, T)
 
-#define VEC_INIT(v, cap) \
+#define VMVecNew(v, cap) \
 memset((v), 0, sizeof(*(v))); \
 (v)->capacity = (cap) == 0 ? 16 : (cap);                         \
 (v)->items = calloc((cap), sizeof((v)->items[0]));       \
-ASSERT((v)->items != null)
+VMAssert((v)->items != null)
 
-#define VEC_DESTROY(v) free((v)->items); (v)->items=null
+#define VMVecFree(v) free((v)->items); (v)->items=null
 
-#define VEC_ADD(v, e) \
+#define VMVecAdd(v, e) \
 if ((v)->size == (v)->capacity) { \
   (v)->items = realloc((v)->items, (v)->capacity * 2 * sizeof((v)->items[0])); \
-  ASSERT((v)->items != null);\
+  VMAssert((v)->items != null);\
   (v)->capacity *= 2; \
 }                      \
 (v)->items[(v)->size++] = e
 
-#define VEC_AT(v, i) (v)->items[(i)]
+#define VMVecAt(v, i) (v)->items[(i)]
 
-#define VEC_SORT(v, cmp) (qsort((v)->items, (v)->size, sizeof(*(v)->items), cmp))
+#define VMVecSort(v, cmp) (qsort((v)->items, (v)->size, sizeof(*(v)->items), cmp))
 
-#define VEC_POP(v) ASSERT((v)->size > 0); (v)->size--
+#define VMVecPop(v) VMAssert((v)->size > 0); (v)->size--
 
-#define VEC_DELETE_AT(v, i) ASSERT(i >= 0 && i < (v)->capacity); (v)->items[i] = (v)->items[--(v)->size]
+#define VMVecDelAt(v, i) VMAssert(i >= 0 && i < (v)->capacity); (v)->items[i] = (v)->items[--(v)->size]
 
-VEC(VmU32);
-VEC(VmU64);
-VEC(VmI64);
-VEC(VmI32);
-VEC(VmF32);
-VEC(VmF64);
-VEC(VmString);
+VMVec(VmU32);
+VMVec(VmU64);
+VMVec(VmI64);
+VMVec(VmI32);
+VMVec(VmF32);
+VMVec(VmF64);
+VMVec(VmString);
 
 
 #endif //C_DATA_STRUCTURE_LIBS_H

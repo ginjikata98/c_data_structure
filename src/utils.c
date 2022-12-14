@@ -1,7 +1,7 @@
 #include "utils.h"
 
 
-VmU32 rand_u32(VmU32 min, VmU32 max) {
+VmU32 vmRandU32(VmU32 min, VmU32 max) {
   if (max < min) {
     VmU32 s = min;
     min = max;
@@ -12,7 +12,7 @@ VmU32 rand_u32(VmU32 min, VmU32 max) {
 }
 
 // From http://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform
-VmF32 rand_normal() {
+VmF32 vmRandNormal() {
   static VmU32 haveSpare = 0;
   static VmF64 rand1, rand2;
 
@@ -31,7 +31,7 @@ VmF32 rand_normal() {
   return sqrt(rand1) * cos(rand2);
 }
 
-VmF32 rand_uniform(VmF32 min, VmF32 max) {
+VmF32 vmRandUniform(VmF32 min, VmF32 max) {
   if (max < min) {
     VmF32 swap = min;
     min = max;
