@@ -12,7 +12,7 @@ struct VmNDArray {
   VmU32 size;
 };
 
-VmNDArray *vmNpInit(VmF32 *data, VmU32 nd, VmU32 *dimensions) {
+VmNDArray *vmNDArrayNew(VmF32 *data, VmU32 nd, VmU32 *dimensions) {
   assert(nd > 0);
 
   VmNDArray *array = malloc(sizeof(VmNDArray));
@@ -36,7 +36,7 @@ VmNDArray *vmNpInit(VmF32 *data, VmU32 nd, VmU32 *dimensions) {
 }
 
 
-VmF32 *vmNpGet(VmNDArray *obj, VmU32 const *ind) {
+VmF32 *vmNDArrayGet(VmNDArray *obj, VmU32 const *ind) {
   VmU32 n = obj->nd;
   VmU32 *strides = obj->strides;
   VmF32 *ptr = obj->data;

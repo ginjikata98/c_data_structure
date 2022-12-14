@@ -1,4 +1,4 @@
-#include "utils.h"
+#include "rand.h"
 
 
 VmU32 vmRandU32(VmU32 min, VmU32 max) {
@@ -26,7 +26,7 @@ VmF32 vmRandNormal() {
   rand1 = rand() / ((VmF64) RAND_MAX);
   if (rand1 < 1e-100) { rand1 = 1e-100; }
   rand1 = -2 * log(rand1);
-  rand2 = (rand() / ((VmF64) RAND_MAX)) * PI * 2;
+  rand2 = (rand() / ((VmF64) RAND_MAX)) * VMPi * 2;
 
   return sqrt(rand1) * cos(rand2);
 }

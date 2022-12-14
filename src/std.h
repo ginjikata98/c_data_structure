@@ -31,6 +31,8 @@ typedef uint8_t VmByte;
 
 typedef char *VmString;
 
+#define VMPi 3.151592654
+
 #define VMBit(x)          (1<<(x))
 #define VMBitSet(x, p)     ((x)|(1<<(p)))
 #define VMBitClear(x, p)   ((x)&(~(1<<(p))))
