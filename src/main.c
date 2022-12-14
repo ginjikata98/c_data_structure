@@ -1,14 +1,14 @@
 #define DEBUG
 
 #include "std.h"
-//#include "ndarray.h"
-//#include "rand.h"
-//
-//typedef struct {
-//  VmU32 kArm;
-//  VmF32 epsilon;
-//
-//} Bandit;
+#include "ndarray.h"
+#include "rand.h"
+
+typedef struct {
+  VmU32 kArm;
+  VmF32 epsilon;
+
+} Bandit;
 
 
 int main(void) {

@@ -31,8 +31,13 @@ typedef uint8_t VmByte;
 
 typedef char *VmString;
 
-#define VMPi 3.151592654
+#define FN_PREFIX vm
+#define STRUCT_PREFIX Vm
 
+#define FN_NAME(name) VMPaste(FN_PREFIX, name)
+#define STRUCT_NAME(name) VMPaste(STRUCT_PREFIX, name)
+
+#define VMPi 3.151592654
 #define VMBit(x)          (1<<(x))
 #define VMBitSet(x, p)     ((x)|(1<<(p)))
 #define VMBitClear(x, p)   ((x)&(~(1<<(p))))
@@ -60,16 +65,17 @@ typedef char *VmString;
 #endif
 
 
-#define VMVec(T, name) typedef struct VMPaste(Vm, name) VMPaste(Vm, name); \
-VMPaste(Vm, name) *VMPaste(VMPaste(vm, name), New) (VmU32 cap);\
+
+#define VMVec(T, name) typedef struct STRUCT_NAME(name) STRUCT_NAME(name); \
+STRUCT_NAME(name) *VMPaste(FN_NAME(name), New) (VmU32 cap);\
 
 #define VMVecDef(T, name) struct VMPaste(Vm, name) { VmU32 size; VmU32 capacity; T *items;  }; \
-VMPaste(Vm, name) *VMPaste(VMPaste(vm, name), New) (VmU32 cap) {\
-VMPaste(Vm, name) *a = malloc(sizeof(VMPaste(Vm, name)));\
+STRUCT_NAME(name) *VMPaste(FN_NAME(name), New) (VmU32 cap) {\
+STRUCT_NAME(name) *a = malloc(sizeof(STRUCT_NAME(name)));\
 assert(a != null);\
 a->capacity = cap > 0 ? cap : 16;\
 a->size = 0;\
-a->items = calloc(a->capacity, sizeof(VMPaste(Vm, name)));\
+a->items = calloc(a->capacity, sizeof(STRUCT_NAME(name)));\
 assert(a->items != null);\
 return a;\
 }
@@ -93,12 +99,11 @@ if ((v)->size == (v)->capacity) { \
 #define VMVecDelAt(v, i) VMAssert(i >= 0 && i < (v)->capacity); (v)->items[i] = (v)->items[--(v)->size]
 
 VMVec(VmU32, VecU32);
-//VMVec(VmU64, VecU64);
-//VMVec(VmI64, VecI64);
-//VMVec(VmI32, VecI32);
-//VMVec(VmF32, VecF32);
-//VMVec(VmF64, VecF64);
-//VMVec(VmString, VecString);
-
+VMVec(VmU64, VecU64);
+VMVec(VmI64, VecI64);
+VMVec(VmI32, VecI32);
+VMVec(VmF32, VecF32);
+VMVec(VmF64, VecF64);
+VMVec(VmString, VecString);
 
 #endif //C_DATA_STRUCTURE_LIBS_H
