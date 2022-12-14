@@ -5,10 +5,10 @@
 
 typedef struct VmNDArray VmNDArray;
 
-VmNDArray *vmNDArrayNew(VmF32 *data, VmU32 nd, VmU32 *dimensions);
+VmNDArray *vmNDArrayNew(VmF64 *data, VmU32 nd, VmU32 *dimensions);
 VmNDArray *vmNDArrayOnes(VmU32 nd, VmU32 *dimensions);
 void vmNDArrayPrint(VmNDArray *arr);
-VmF32 vmNDArrayGet(VmNDArray *arr, VmU32 *ind);
+VmF64 vmNDArrayGet(VmNDArray *arr, VmU32 *ind);
 
 
 #endif //MAIN_NDARRAY_H

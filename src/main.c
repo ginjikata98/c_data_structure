@@ -16,7 +16,7 @@ int main(void) {
   VmU32 dim[] = {2, 2, 2};
   VmNDArray *a = vmNDArrayOnes(3, dim);
 
-  VmU32 access[] = {0, 1, 1};
+  VmU32 access[] = {1, 1, 1};
   printf("%f", vmNDArrayGet(a, access));
 
   vmNDArrayPrint(a);

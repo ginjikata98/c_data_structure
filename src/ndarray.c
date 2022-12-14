@@ -5,21 +5,21 @@
 #include "ndarray.h"
 
 struct VmNDArray {
-  VmF32 *data;
-  VmU32 nd;
-  VmU32 *dimensions;
-  VmU32 *strides;
-  VmU32 size;
+    VmF64 *data;
+    VmU32 ndims;
+    VmU32 *shapes;
+    VmU32 *strides;
+    VmU32 size;
 };
 
-VmNDArray *vmNDArrayNew(VmF32 *data, VmU32 nd, VmU32 *dimensions) {
+VmNDArray *vmNDArrayNew(VmF64 *data, VmU32 nd, VmU32 *dimensions) {
   assert(nd > 0);
 
   VmNDArray *array = malloc(sizeof(VmNDArray));
   array->data = data;
-  array->nd = nd;
-  array->dimensions = dimensions;
-  array->strides = malloc(sizeof(VmF32) * nd);
+  array->ndims = nd;
+  array->shapes = dimensions;
+  array->strides = malloc(sizeof(VmF64) * nd);
   array->size = 1;
 
   for (VmI32 i = nd - 1; i >= 0; i--) {
@@ -36,28 +36,27 @@ VmNDArray *vmNDArrayNew(VmF32 *data, VmU32 nd, VmU32 *dimensions) {
 }
 
 VmNDArray *vmNDArrayOnes(VmU32 nd, VmU32 *dimensions) {
-  VmU32 size = 0;
+  VmU32 size = 1;
   VMFor(i, nd) {
-    size += dimensions[i];
+    size *= dimensions[i];
   }
 
-  VmF32 *data = VMMalloc(data, size * sizeof(VmF32));
+  VmF64 *data = VMMalloc(data, size * sizeof(VmF64));
 
   VMFor(i, size) {
     data[i] = 1;
   }
 
   return vmNDArrayNew(data, nd, dimensions);
-
 }
 
 
-VmF32 vmNDArrayGet(VmNDArray *arr, VmU32 *ind) {
-  VmU32 n = arr->nd;
+VmF64 vmNDArrayGet(VmNDArray *arr, VmU32 *ind) {
+  VmU32 n = arr->ndims;
   VmU32 *strides = arr->strides;
-  VmF32 *ptr = arr->data;
+  VmF64 *ptr = arr->data;
 
-  while (n--) {
+  VMFor(i, n) {
     ptr += (*strides++) * (*ind++);
   }
 
@@ -65,8 +64,8 @@ VmF32 vmNDArrayGet(VmNDArray *arr, VmU32 *ind) {
 }
 
 void vmNDArrayPrint(VmNDArray *arr) {
-  VMFor(i, arr->nd) {
-    VMFor(j, arr->dimensions[i]) {
+  VMFor(i, arr->ndims) {
+    VMFor(j, arr->shapes[i]) {
 
 
     }
