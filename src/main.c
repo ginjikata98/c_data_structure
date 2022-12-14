@@ -27,6 +27,9 @@ int main(void) {
   VmVecU32 *a = vmVecU32New(16);
 
   printf("%ld", sizeof(&a));
+  printf("%d", *vmVecU32At(a, 2));
+
+
 
   vmVecU32Free(a);
 
