@@ -80,6 +80,7 @@ typedef char *VmString;
 
 #define VMVec(T, name) typedef struct STRUCT_NAME(name) STRUCT_NAME(name); \
 STRUCT_NAME(name) *VMPaste(FN_NAME(name), New) (VmU32 cap);\
+void VMPaste(FN_NAME(name), Free) (STRUCT_NAME(name) *v);\
 
 #define VMVecDef(T, name) struct VMPaste(Vm, name) { VmU32 size; VmU32 capacity; T *items;  }; \
 STRUCT_NAME(name) *VMPaste(FN_NAME(name), New) (VmU32 cap) {\
@@ -88,9 +89,11 @@ a->capacity = cap > 0 ? cap : 16;\
 a->size = 0;\
 a->items = VMCalloc(a->items, a->capacity, sizeof(STRUCT_NAME(name)));\
 return a;\
-}
-
-#define VMVecFree(v) free((v)->items); (v)->items=null
+}                                                                                              \
+void VMPaste(FN_NAME(name), Free) (STRUCT_NAME(name) *v) {                                                         \
+VMFree((v)->items);\
+VMFree((v));\
+}\
 
 #define VMVecAdd(v, e) \
 if ((v)->size == (v)->capacity) { \
