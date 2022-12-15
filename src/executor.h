@@ -11,7 +11,7 @@ typedef pthread_cond_t sCondition;
 typedef struct sExecutor sExecutor;
 typedef void (*sRunnable)(void *arg);
 
-sExecutor *vmExecutorNewFixed(size size);
+sExecutor *vmExecutorNewFixed(size numThreads);
 void vmExecutorFree(sExecutor *);
 bool vmExecutorRun(sExecutor *, sRunnable, void *arg);
 void vmExecutorWait(sExecutor *);

@@ -109,13 +109,13 @@ static void *vmExecutorWorkerLoop(void *arg) {
 }
 
 
-sExecutor *vmExecutorNewFixed(size size) {
-  if (size == 0) {
-    size = DEFAULT_THREAD;
+sExecutor *vmExecutorNewFixed(size numThreads) {
+  if (numThreads == 0) {
+    numThreads = DEFAULT_THREAD;
   }
 
   sExecutor *executor = calloc(1, sizeof(*executor));
-  executor->threadCount = size;
+  executor->threadCount = numThreads;
 
   pthread_mutex_init(&(executor->lock), null);
   pthread_cond_init(&(executor->workerLoopSignal), null);
@@ -126,7 +126,7 @@ sExecutor *vmExecutorNewFixed(size size) {
   executor->running = true;
 
   sThread thread;
-  mFor(i, size) {
+  mFor(i, numThreads) {
     pthread_create(&thread, null, vmExecutorWorkerLoop, executor);
     pthread_detach(thread);
   }
