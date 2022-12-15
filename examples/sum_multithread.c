@@ -5,14 +5,14 @@
 #include "rand.h"
 #include "executor.h"
 
-static const size_t numThreads = 8;
-static const size_t numItems = 100;
+static const size numThreads = 8;
+static const size numItems = 10;
 
 void task(void *arg) {
-  int *val = arg;
-  int old = *val;
+  i32 *val = arg;
+  i32 old = *val;
 
-  VMFor(i, 1e9) {
+  mFor(i, 1e9) {
     *val += 1;
   }
 
@@ -20,22 +20,22 @@ void task(void *arg) {
 }
 
 int main(void) {
-  VmExecutor *executor = vmExecutorNewFixed(numThreads);
-  VmU32 *vals = VMCalloc(vals, numItems, sizeof(*vals));
+  sExecutor *executor = vmExecutorNewFixed(numThreads);
+  u32 *vals = mCalloc(vals, numItems, sizeof(*vals));
 
-  VMFor(i, numItems) {
+  mFor(i, numItems) {
     vals[i] = i;
     vmExecutorRun(executor, task, vals + i);
   }
 
   vmExecutorWait(executor);
 
-  VMFor(i, numItems) {
+  mFor(i, numItems) {
     printf("after %d\n", vals[i]);
   }
 
   printf("freeing\n");
-  VMFree(vals);
+  mFree(vals);
   vmExecutorFree(executor);
   return 0;
 }

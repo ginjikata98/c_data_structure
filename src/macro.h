@@ -16,70 +16,65 @@
 
 #define null NULL
 
-typedef uint8_t VmU8;
-typedef uint16_t VmU16;
-typedef uint32_t VmU32;
-typedef uint64_t VmU64;
+typedef uint8_t u8;
+typedef uint16_t u16;
+typedef uint32_t u32;
+typedef uint64_t u64;
 
-typedef int8_t VmI8;
-typedef int16_t VmI16;
-typedef int32_t VmI32;
-typedef int64_t VmI64;
+typedef int8_t i8;
+typedef int16_t i16;
+typedef int32_t i32;
+typedef int64_t i64;
 
-typedef float VmF32;
-typedef double VmF64;
+typedef float f32;
+typedef double f64;
 
-typedef uint8_t VmByte;
+typedef uint8_t byte;
 
-typedef char *VmString;
+typedef char *string;
 
-typedef size_t VmSize;
+typedef size_t size;
 
-typedef uint8_t VmBool;
-#define VmTrue 0x1
-#define VmFalse 0x0
+#define FN_PREFIX f
+#define STRUCT_PREFIX s
 
+#define mFnName_(name) mPaste(FN_PREFIX, name)
+#define mFnName(name) mFnName_(name)
 
-#define FN_PREFIX vm
-#define STRUCT_PREFIX Vm
+#define mStructName_(name) mPaste(STRUCT_PREFIX, name)
+#define mStructName(name) mStructName_(name)
 
-#define FN_NAME_(name) VMPaste(FN_PREFIX, name)
-#define FN_NAME(name) FN_NAME_(name)
+#define mMalloc_(v, s) malloc(s); assert(v != null)
+#define mMalloc(v, s) mMalloc_(v, s)
 
-#define STRUCT_NAME_(name) VMPaste(STRUCT_PREFIX, name)
-#define STRUCT_NAME(name) STRUCT_NAME_(name)
+#define mRealloc_(v, s) realloc(v, s); assert(v != null)
+#define mRealloc(v, s) mRealloc_(v, s)
 
-#define VMMalloc_(v, s) malloc(s); assert(v != null)
-#define VMMalloc(v, s) VMMalloc_(v, s)
+#define mFree_(p) if (p != null) { free(p); p = null; }
+#define mFree(p) mFree_(p)
 
-#define VMRealloc_(v, s) realloc(v, s); assert(v != null)
-#define VMRealloc(v, s) VMRealloc_(v, s)
+#define mCalloc_(v, l, s) calloc(l, s); assert(v != null)
+#define mCalloc(v, l, s) mCalloc_(v, l, s)
 
-#define VMFree_(p) if (p != null) { free(p); p = null; }
-#define VMFree(p) VMFree_(p)
+#define mPi 3.151592654
+#define mBit(x)          (1<<(x))
+#define mBitSet(x, p)     ((x)|(1<<(p)))
+#define mBitClear(x, p)   ((x)&(~(1<<(p))))
+#define mBitAt(x, p)     (((x)>>(p))&1)
+#define mBitToggle(x, p)  ((x)^(1<<(p)))
 
-#define VMCalloc_(v, l, s) calloc(l, s); assert(v != null)
-#define VMCalloc(v, l, s) VMCalloc_(v, l, s)
+#define mStr_(s)             #s
+#define mStr(s)              mStr_(s)
+#define mCat(str1, str2)      (str1 "" str2)
+#define mPaste_(a, b)         a##b
+#define mPaste(a, b)          mPaste_(a,b)
 
-#define VMPi 3.151592654
-#define VMBit(x)          (1<<(x))
-#define VMBitSet(x, p)     ((x)|(1<<(p)))
-#define VMBitClear(x, p)   ((x)&(~(1<<(p))))
-#define VMBitAt(x, p)     (((x)>>(p))&1)
-#define VMBitToggle(x, p)  ((x)^(1<<(p)))
-
-#define VMStr_(s)             #s
-#define VMStr(s)              VMStr_(s)
-#define VMCat(str1, str2)      (str1 "" str2)
-#define VMPaste_(a, b)         a##b
-#define VMPaste(a, b)          VMPaste_(a,b)
-
-#define VMLog(x, fmt, ...)    if(x){printf("%s:%d: " fmt "\n",__FILE__, __LINE__,__VA_ARGS__);}
-#define VMTry(x, s)            if(!(x)){printf("%s:%d:%s",__FILE__, __LINE__,s);}
+#define mLog(x, fmt, ...)    if(x){printf("%s:%d: " fmt "\n",__FILE__, __LINE__,__VA_ARGS__);}
+#define mTry(x, s)            if(!(x)){printf("%s:%d:%s",__FILE__, __LINE__,s);}
 #ifndef DEBUG
-#define VMAssert(n)
+#define mAssert(n)
 #else
-#define VMAssert(n)           if(!(n)) { \
+#define mAssert(n)           if(!(n)) { \
                             printf("%s - Failed ",#n); \
                             printf("On %s ",__DATE__); \
                             printf("At %s ",__TIME__); \
@@ -88,7 +83,8 @@ typedef uint8_t VmBool;
                             exit(-1);}
 #endif
 
-#define VMFor(i, len) for (VmU64 i = 0; i < len; i++)
+#define mFor(i, len) for (u64 i = 0; i < len; i++)
+#define loop for (;;)
 
 
 #endif //MAIN_MACRO_H

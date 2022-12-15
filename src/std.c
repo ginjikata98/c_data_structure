@@ -1,14 +1,10 @@
-//
-// Created by DUNG.VM on 14/12/2022.
-//
-
 #include "std.h"
 
 
-VMVecDef(VmU32, VecU32);
-VMVecDef(VmU64, VecU64);
-VMVecDef(VmI64, VecI64);
-VMVecDef(VmI32, VecI32);
-VMVecDef(VmF32, VecF32);
-VMVecDef(VmF64, VecF64);
-VMVecDef(VmString, VecString);
+mVecDef(u32, VecU32);
+mVecDef(u64, VecU64);
+mVecDef(i64, VecI64);
+mVecDef(i32, VecI32);
+mVecDef(f32, VecF32);
+mVecDef(f64, VecF64);
+mVecDef(string, VecString);

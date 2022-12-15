@@ -5,15 +5,15 @@
 #include "pthread.h"
 #define DEFAULT_THREAD 8
 
-typedef pthread_t VmThread;
-typedef pthread_mutex_t VmMutex;
-typedef pthread_cond_t VmCondition;
-typedef struct VmExecutor VmExecutor;
-typedef void (*VmRunnable)(void *arg);
+typedef pthread_t sThread;
+typedef pthread_mutex_t sMutex;
+typedef pthread_cond_t sCondition;
+typedef struct sExecutor sExecutor;
+typedef void (*sRunnable)(void *arg);
 
-VmExecutor *vmExecutorNewFixed(VmSize size);
-void vmExecutorFree(VmExecutor *);
-VmBool vmExecutorRun(VmExecutor *, VmRunnable, void *arg);
-void vmExecutorWait(VmExecutor *);
+sExecutor *vmExecutorNewFixed(size size);
+void vmExecutorFree(sExecutor *);
+bool vmExecutorRun(sExecutor *, sRunnable, void *arg);
+void vmExecutorWait(sExecutor *);
 
 #endif //MAIN_EXECUTOR_H

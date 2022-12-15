@@ -11,8 +11,8 @@ int main(void) {
   clock_t t;
   t = clock();
 
-  VmU64 sum = 0;
-  VMFor(i, 1e10) {
+  u64 sum = 0;
+  mFor(i, 1e9) {
     sum += i;
   }
 

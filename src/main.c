@@ -4,21 +4,38 @@
 #include "ndarray.h"
 #include "rand.h"
 #include "executor.h"
-#include <time.h>
 
+static const size numThreads = 8;
+static const size numItems = 10;
 
-int main(void) {
-  clock_t t;
-  t = clock();
+void task(void *arg) {
+  i32 *val = arg;
+  i32 old = *val;
 
-  VmU64 sum = 0;
-  VMFor(i, 1e10) {
-    sum += i;
+  mFor(i, 1e9) {
+    *val += 1;
   }
 
-  t = clock() - t;
-  double time_taken = ((double) t) / CLOCKS_PER_SEC;
-  printf("took %f seconds to execute \n", time_taken);
+  printf("tid=%p, old=%d, val=%d\n", pthread_self(), old, *val);
+}
 
+int main(void) {
+  sExecutor *executor = vmExecutorNewFixed(numThreads);
+  u32 *vals = mCalloc(vals, numItems, sizeof(*vals));
+
+  mFor(i, numItems) {
+    vals[i] = i;
+    vmExecutorRun(executor, task, vals + i);
+  }
+
+  vmExecutorWait(executor);
+
+  mFor(i, numItems) {
+    printf("after %d\n", vals[i]);
+  }
+
+  printf("freeing\n");
+  mFree(vals);
+  vmExecutorFree(executor);
   return 0;
 }
