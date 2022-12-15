@@ -31,6 +31,10 @@ typedef uint8_t VmByte;
 
 typedef char *VmString;
 
+typedef uint8_t VmBool;
+#define VmTrue 1;
+#define VmFalse 0;
+
 #define FN_PREFIX vm
 #define STRUCT_PREFIX Vm
 

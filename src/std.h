@@ -12,6 +12,7 @@ void VMPaste(FN_NAME(name), Sort) (STRUCT_NAME(name) *v);\
 T *VMPaste(FN_NAME(name), Pop) (STRUCT_NAME(name) *v);\
 void VMPaste(FN_NAME(name), Push) (STRUCT_NAME(name) *v, T t);\
 VmU32 VMPaste(FN_NAME(name), Size) (STRUCT_NAME(name) *v);\
+VmBool VMPaste(FN_NAME(name), IsEmpty) (STRUCT_NAME(name) *v);\
 
 #define VMVecDef(T, name) struct VMPaste(Vm, name) { VmU32 size; VmU32 capacity; T *items;  }; \
 STRUCT_NAME(name) *VMPaste(FN_NAME(name), New) (VmU32 cap) {\
@@ -47,6 +48,9 @@ v->items[v->size++] = t;                                                        
 }                                                                                              \
 VmU32 VMPaste(FN_NAME(name), Size) (STRUCT_NAME(name) *v){                                     \
 return v->size;                                                                                               \
+}                                                                                              \
+VmBool VMPaste(FN_NAME(name), IsEmpty) (STRUCT_NAME(name) *v) {                                \
+return v->size == 0;                                                                                               \
 }
 
 VMVec(VmU32, VecU32);
