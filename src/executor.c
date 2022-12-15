@@ -10,10 +10,10 @@ typedef struct VmWork VmWork;
 struct VmExecutor {
   VmWork *workFirst;
   VmWork *workLast;
-  VmMutex workMutex;
-  VmCondition hasWork;
-  VmCondition isWorking;
-  VmSize workingCount;
+  VmMutex lock;
+  VmCondition workerLoopSignal;
+  VmCondition waitLoopSignal;
+  VmSize workCount;
   VmSize threadCount;
   VmBool running;
 };
@@ -56,15 +56,31 @@ static VmWork *vmExecutorGetWork(VmExecutor *executor) {
   return work;
 }
 
-static void *vmExecutorWorkerRun(void *arg) {
+static void vmExecutorLock(VmExecutor *executor) {
+  pthread_mutex_lock(&(executor->lock));
+}
+
+static void vmExecutorUnlock(VmExecutor *executor) {
+  pthread_mutex_unlock(&(executor->lock));
+}
+
+static void vmExecutorNotifyWorkerLoop(VmExecutor *executor) {
+  pthread_cond_broadcast(&(executor->workerLoopSignal));
+}
+
+static void vmExecutorNotifyWaitLoop(VmExecutor *executor) {
+  pthread_cond_signal(&(executor->waitLoopSignal));
+}
+
+static void *vmExecutorWorkerLoop(void *arg) {
   VmExecutor *executor = arg;
   VmWork *work;
 
   while (VmTrue) {
-    pthread_mutex_lock(&(executor->workMutex));
+    vmExecutorLock(executor);
 
     while (executor->workFirst == null && executor->running) {
-      pthread_cond_wait(&(executor->hasWork), &(executor->workMutex));
+      pthread_cond_wait(&(executor->workerLoopSignal), &(executor->lock));
     }
 
     if (!executor->running) {
@@ -72,40 +88,40 @@ static void *vmExecutorWorkerRun(void *arg) {
     }
 
     work = vmExecutorGetWork(executor);
-    executor->workingCount++;
-    pthread_mutex_unlock(&(executor->workMutex));
+    executor->workCount++;
+    vmExecutorUnlock(executor);
 
     if (work != null) {
       work->runnable(work->arg);
       vmWorkFree(work);
     }
 
-    pthread_mutex_lock(&(executor->workMutex));
-    executor->workingCount--;
-    if (executor->running && executor->workingCount == 0 && executor->workFirst == null) {
-      pthread_cond_signal(&(executor->isWorking));
+    vmExecutorLock(executor);
+    executor->workCount--;
+    if (executor->running && executor->workCount == 0 && executor->workFirst == null) {
+      vmExecutorNotifyWaitLoop(executor);
     }
-    pthread_mutex_unlock(&(executor->workMutex));
+    vmExecutorUnlock(executor);
   }
 
   executor->threadCount--;
-  pthread_cond_signal(&(executor->isWorking));
-  pthread_mutex_unlock(&(executor->workMutex));
+  vmExecutorNotifyWaitLoop(executor);
+  vmExecutorUnlock(executor);
   return null;
 }
 
 
 VmExecutor *vmExecutorNewFixed(VmSize size) {
   if (size == 0) {
-    size = 4;
+    size = DEFAULT_THREAD;
   }
 
   VmExecutor *executor = calloc(1, sizeof(*executor));
   executor->threadCount = size;
 
-  pthread_mutex_init(&(executor->workMutex), null);
-  pthread_cond_init(&(executor->hasWork), null);
-  pthread_cond_init(&(executor->isWorking), null);
+  pthread_mutex_init(&(executor->lock), null);
+  pthread_cond_init(&(executor->workerLoopSignal), null);
+  pthread_cond_init(&(executor->waitLoopSignal), null);
 
   executor->workFirst = null;
   executor->workLast = null;
@@ -113,7 +129,7 @@ VmExecutor *vmExecutorNewFixed(VmSize size) {
 
   VmThread thread;
   VMFor(i, size) {
-    pthread_create(&thread, null, vmExecutorWorkerRun, executor);
+    pthread_create(&thread, null, vmExecutorWorkerLoop, executor);
     pthread_detach(thread);
   }
 
@@ -128,7 +144,7 @@ void vmExecutorFree(VmExecutor *executor) {
   VmWork *work;
   VmWork *work2;
 
-  pthread_mutex_lock(&(executor->workMutex));
+  vmExecutorLock(executor);
   work = executor->workFirst;
   while (work != null) {
     work2 = work->next;
@@ -136,14 +152,14 @@ void vmExecutorFree(VmExecutor *executor) {
     work = work2;
   }
   executor->running = VmFalse;
-  pthread_cond_broadcast(&(executor->hasWork));
-  pthread_mutex_unlock(&(executor->workMutex));
+  vmExecutorNotifyWorkerLoop(executor);
+  vmExecutorUnlock(executor);
 
   vmExecutorWait(executor);
 
-  pthread_mutex_destroy(&(executor->workMutex));
-  pthread_cond_destroy(&(executor->hasWork));
-  pthread_cond_destroy(&(executor->isWorking));
+  pthread_mutex_destroy(&(executor->lock));
+  pthread_cond_destroy(&(executor->workerLoopSignal));
+  pthread_cond_destroy(&(executor->waitLoopSignal));
 
   VMFree(executor);
 }
@@ -158,7 +174,7 @@ VmBool vmExecutorRun(VmExecutor *executor, VmRunnable runnable, void *arg) {
     return VmFalse;
   }
 
-  pthread_mutex_lock(&(executor->workMutex));
+  vmExecutorLock(executor);
   if (executor->workFirst == null) {
     executor->workFirst = work;
     executor->workLast = executor->workFirst;
@@ -167,8 +183,8 @@ VmBool vmExecutorRun(VmExecutor *executor, VmRunnable runnable, void *arg) {
     executor->workLast = work;
   }
 
-  pthread_cond_broadcast(&(executor->hasWork));
-  pthread_mutex_unlock(&(executor->workMutex));
+  vmExecutorNotifyWorkerLoop(executor);
+  vmExecutorUnlock(executor);
 
   return VmTrue;
 }
@@ -178,15 +194,16 @@ void vmExecutorWait(VmExecutor *executor) {
     return;
   }
 
-  pthread_mutex_lock(&(executor->workMutex));
+  vmExecutorLock(executor);
   while (VmTrue) {
-    if ((executor->running && executor->workingCount != 0) || (!executor->running && executor->threadCount != 0)) {
+    printf("%d %zu %zu\n", executor->running, executor->workCount, executor->threadCount);
+    if ((executor->running && executor->workCount != 0) || (!executor->running && executor->threadCount != 0)) {
       printf("waiting\n");
-      pthread_cond_wait(&(executor->isWorking), &(executor->workMutex));
+      pthread_cond_wait(&(executor->waitLoopSignal), &(executor->lock));
       printf("wake up\n");
     } else {
       break;
     }
   }
-  pthread_mutex_unlock(&(executor->workMutex));
+  vmExecutorUnlock(executor);
 }

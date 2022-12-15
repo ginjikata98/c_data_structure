@@ -3,6 +3,7 @@
 
 #include "macro.h"
 #include "pthread.h"
+#define DEFAULT_THREAD 8
 
 typedef pthread_t VmThread;
 typedef pthread_mutex_t VmMutex;

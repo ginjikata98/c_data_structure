@@ -42,6 +42,7 @@ int main(void) {
     printf("after %d\n", vals[i]);
   }
 
+  printf("freeing\n");
   VMFree(vals);
   vmExecutorFree(executor);
   return 0;
