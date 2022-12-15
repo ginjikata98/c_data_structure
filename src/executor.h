@@ -10,7 +10,7 @@ typedef pthread_cond_t VmCondition;
 typedef struct VmExecutor VmExecutor;
 typedef void (*VmRunnable)(void *arg);
 
-VmExecutor *vmExecutorNewFixed(VmU32 size);
+VmExecutor *vmExecutorNewFixed(VmSize size);
 void vmExecutorFree(VmExecutor *);
 VmBool vmExecutorRun(VmExecutor *, VmRunnable, void *arg);
 void vmExecutorWait(VmExecutor *);

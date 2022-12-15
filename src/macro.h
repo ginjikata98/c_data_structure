@@ -11,6 +11,8 @@
 #include <time.h>
 #include <stdlib.h>
 #include <math.h>
+#include <unistd.h>
+#include <stdarg.h>
 
 #define null NULL
 
@@ -31,9 +33,12 @@ typedef uint8_t VmByte;
 
 typedef char *VmString;
 
+typedef size_t VmSize;
+
 typedef uint8_t VmBool;
-#define VmTrue 1
-#define VmFalse 0
+#define VmTrue 0x1
+#define VmFalse 0x0
+
 
 #define FN_PREFIX vm
 #define STRUCT_PREFIX Vm
