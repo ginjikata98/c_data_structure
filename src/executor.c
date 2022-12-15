@@ -74,7 +74,6 @@ static void vmExecutorNotifyWaitLoop(VmExecutor *executor) {
 
 static void *vmExecutorWorkerLoop(void *arg) {
   VmExecutor *executor = arg;
-  VmWork *work;
 
   while (VmTrue) {
     vmExecutorLock(executor);
@@ -87,8 +86,7 @@ static void *vmExecutorWorkerLoop(void *arg) {
       break;
     }
 
-    work = vmExecutorGetWork(executor);
-    executor->workCount++;
+    VmWork *work = vmExecutorGetWork(executor);
     vmExecutorUnlock(executor);
 
     if (work != null) {
@@ -182,6 +180,7 @@ VmBool vmExecutorRun(VmExecutor *executor, VmRunnable runnable, void *arg) {
     executor->workLast->next = work;
     executor->workLast = work;
   }
+  executor->workCount++;
 
   vmExecutorNotifyWorkerLoop(executor);
   vmExecutorUnlock(executor);
@@ -196,11 +195,8 @@ void vmExecutorWait(VmExecutor *executor) {
 
   vmExecutorLock(executor);
   while (VmTrue) {
-    printf("%d %zu %zu\n", executor->running, executor->workCount, executor->threadCount);
     if ((executor->running && executor->workCount != 0) || (!executor->running && executor->threadCount != 0)) {
-      printf("waiting\n");
       pthread_cond_wait(&(executor->waitLoopSignal), &(executor->lock));
-      printf("wake up\n");
     } else {
       break;
     }

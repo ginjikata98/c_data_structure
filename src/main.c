@@ -11,12 +11,16 @@ typedef struct {
 } Bandit;
 
 static const size_t numThreads = 8;
-static const size_t numItems = 10;
+static const size_t numItems = 100;
 
 void task(void *arg) {
   int *val = arg;
   int old = *val;
-  *val += 1000;
+
+  VMFor(i, 1e9) {
+    *val += 1;
+  }
+
   printf("tid=%p, old=%d, val=%d\n", pthread_self(), old, *val);
 }
 
