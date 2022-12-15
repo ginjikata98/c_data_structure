@@ -14,8 +14,9 @@ typedef struct {
 
 
 void *run(void *arg) {
-  sleep(1);
-  printf("THREAD: Running thread with arg\n");
+  sleep(vmRandU32(1, 10));
+  VmU32 i = *(VmU64 *) arg;
+  printf("THREAD %d: running!\n", i);
   return null;
 }
 
@@ -30,12 +31,19 @@ int main(void) {
 
   vmNDArrayPrint(a);
 
-  pthread_t thread_id;
+  pthread_t tasks[10];
   printf("Before Thread\n");
-  pthread_create(&thread_id, null, run, null);
-  pthread_join(thread_id, null);
-  printf("After Thread\n");
 
+  VMFor(i, 10) {
+    pthread_create(&tasks[i], null, run, &i);
+  }
+
+  VMFor(i, 10) {
+    pthread_join(tasks[i], null);
+    printf("done %d thread\n", i);
+  }
+
+  printf("After Thread\n");
 
   return 0;
 }
