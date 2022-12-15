@@ -5,9 +5,9 @@
 
 int main(void) {
 
-  sArray *a = fArrayOnes(2, mShape(2, 2));
+  sArray *a = fArrayArrange(1, 12);
 
-  printf("%f\n", fArrayGet(a, mShape(1, 0)));
+  fArrayPrint(a);
 
   return 0;
 }

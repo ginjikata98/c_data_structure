@@ -9,6 +9,9 @@ typedef struct sArray sArray;
 
 sArray *fArrayNew(f64 *data, size nd, size *dimensions);
 sArray *fArrayOnes(size nd, size *dimensions);
+sArray *fArrayZeros(size nd, size *dimensions);
+sArray *fArrayArrange(i32 start, i32 end);
+void *fArrayReshape(size nd, size *dimensions);
 void fArrayPrint(sArray *arr);
 f64 fArrayGet(sArray *arr, size *ind);
 

@@ -5,11 +5,11 @@
 #include "ndarray.h"
 
 struct sArray {
-    f64 *data;
-    size ndims;
-    size *shapes;
-    size *strides;
-    size size;
+  f64 *data;
+  size ndims;
+  size *shapes;
+  size *strides;
+  size size;
 };
 
 sArray *fArrayNew(f64 *data, size nd, size *dimensions) {
@@ -50,6 +50,33 @@ sArray *fArrayOnes(size nd, size *dimensions) {
   return fArrayNew(data, nd, dimensions);
 }
 
+sArray *fArrayZeros(size nd, size *dimensions) {
+  size size = 1;
+  mFor(i, nd) {
+    size *= dimensions[i];
+  }
+
+  f64 *data = mCalloc(data, size, sizeof(f64));
+
+  return fArrayNew(data, nd, dimensions);
+}
+
+sArray *fArrayArrange(i32 start, i32 end) {
+  assert(end > start);
+  size len = end-start;
+
+  f64 *data = malloc(len * sizeof(*data));
+  for (u32 i = start; i < end; ++i) {
+    data[i - start] = i;
+  }
+
+  return fArrayNew(data, 2, mShape(1, len));
+}
+
+void *fArrayReshape(size nd, size *dimensions) {
+
+}
+
 
 f64 fArrayGet(sArray *arr, size *ind) {
   size n = arr->ndims;
@@ -63,11 +90,24 @@ f64 fArrayGet(sArray *arr, size *ind) {
   return *ptr;
 }
 
-void fArrayPrint(sArray *arr) {
-  mFor(i, arr->ndims) {
-    mFor(j, arr->shapes[i]) {
-
-
+static void print_(sArray *arr, size accumulatedIdx, size idx) {
+  if (idx == arr->ndims - 1) {
+    mFor(i, arr->shapes[idx]) {
+      printf(" %.4f ", arr->data[accumulatedIdx + i]);
     }
+    return;
   }
+
+  mFor(i, arr->shapes[idx]) {
+    accumulatedIdx += i * arr->strides[idx];
+    printf("[");
+    print_(arr, accumulatedIdx, idx + 1);
+    printf("]");
+  }
+}
+
+void fArrayPrint(sArray *arr) {
+  printf("[");
+  print_(arr, 0, 0);
+  printf("]");
 }
