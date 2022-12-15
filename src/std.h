@@ -4,18 +4,18 @@
 #include "macro.h"
 
 #define mVec(T, name) typedef struct mStructName(name) mStructName(name); \
-mStructName(name) *mPaste(mFnName(name), New) (u32 cap);\
+mStructName(name) *mPaste(mFnName(name), New) (size cap);\
 void mPaste(mFnName(name), Free) (mStructName(name) *v);\
-T *mPaste(mFnName(name), At) (mStructName(name) *v, u32 i);\
-void mPaste(mFnName(name), DelAt) (mStructName(name) *v, u32 i);\
+T *mPaste(mFnName(name), At) (mStructName(name) *v, size i);\
+void mPaste(mFnName(name), DelAt) (mStructName(name) *v, size i);\
 void mPaste(mFnName(name), Sort) (mStructName(name) *v);\
 T *mPaste(mFnName(name), Pop) (mStructName(name) *v);\
 void mPaste(mFnName(name), Push) (mStructName(name) *v, T t);\
-u32 mPaste(mFnName(name), Size) (mStructName(name) *v);\
+size mPaste(mFnName(name), Size) (mStructName(name) *v);\
 bool mPaste(mFnName(name), IsEmpty) (mStructName(name) *v);\
 
-#define mVecDef(T, name) struct mStructName(name) { u32 size; u32 capacity; T *items;  }; \
-mStructName(name) *mPaste(mFnName(name), New) (u32 cap) {\
+#define mVecDef(T, name) struct mStructName(name) { size size; size capacity; T *items;  }; \
+mStructName(name) *mPaste(mFnName(name), New) (size cap) {\
 mStructName(name) *a = mMalloc(a, sizeof(mStructName(name)));\
 a->capacity = cap > 0 ? cap : 16;\
 a->size = 0;\
@@ -26,11 +26,11 @@ void mPaste(mFnName(name), Free) (mStructName(name) *v) {                       
 mFree(v->items);\
 mFree(v);\
 }                                                                                              \
-T *mPaste(mFnName(name), At) (mStructName(name) *v, u32 i) {                                 \
+T *mPaste(mFnName(name), At) (mStructName(name) *v, size i) {                                 \
 assert(i >= 0 && i < v->size);                                                                                               \
 return &(v->items[i])       ;                                                                                        \
 }\
-void mPaste(mFnName(name), DelAt) (mStructName(name) *v, u32 i) {                           \
+void mPaste(mFnName(name), DelAt) (mStructName(name) *v, size i) {                           \
 assert(i >= 0 && i < v->size); v->items[i] = v->items[--v->size];                                                                                               \
 }                                                                                              \
 T *mPaste(mFnName(name), Pop) (mStructName(name) *v) {                                        \
@@ -46,7 +46,7 @@ if (v->size == v->capacity) { \
 }                      \
 v->items[v->size++] = t;                                                                                               \
 }                                                                                              \
-u32 mPaste(mFnName(name), Size) (mStructName(name) *v){                                     \
+size mPaste(mFnName(name), Size) (mStructName(name) *v){                                     \
 return v->size;                                                                                               \
 }                                                                                              \
 bool mPaste(mFnName(name), IsEmpty) (mStructName(name) *v) {                                \

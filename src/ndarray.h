@@ -3,12 +3,14 @@
 
 #include "std.h"
 
-typedef struct VmNDArray VmNDArray;
+typedef struct sArray sArray;
 
-VmNDArray *vmNDArrayNew(f64 *data, u32 nd, u32 *dimensions);
-VmNDArray *vmNDArrayOnes(u32 nd, u32 *dimensions);
-void vmNDArrayPrint(VmNDArray *arr);
-f64 vmNDArrayGet(VmNDArray *arr, u32 *ind);
+#define mShape(...) (size[]) {__VA_ARGS__}
+
+sArray *fArrayNew(f64 *data, size nd, size *dimensions);
+sArray *fArrayOnes(size nd, size *dimensions);
+void fArrayPrint(sArray *arr);
+f64 fArrayGet(sArray *arr, size *ind);
 
 
 #endif //MAIN_NDARRAY_H
