@@ -15,24 +15,14 @@ struct sArray {
 sArray *fArrayNew(f64 *data, u32 nd, u32 *dimensions) {
   assert(nd > 0);
 
-  sArray *array = malloc(sizeof(sArray));
-  array->data = data;
-  array->ndims = nd;
-  array->shapes = dimensions;
-  array->strides = malloc(sizeof(size) * nd);
-  array->size = 1;
+  sArray *arr = malloc(sizeof(sArray));
+  arr->data = data;
+  arr->ndims = nd;
+  arr->strides = malloc(sizeof(size) * nd);
 
-  for (i32 i = nd - 1; i >= 0; i--) {
-    assert(dimensions[i] > 0);
-    array->size *= dimensions[i];
-    if (i == nd - 1) {
-      array->strides[i] = 1;
-      continue;
-    }
-    array->strides[i] = array->strides[i + 1] * dimensions[i + 1];
-  }
+  fArrayReshape(arr, nd, dimensions);
 
-  return array;
+  return arr;
 }
 
 sArray *fArrayOnes(u32 nd, u32 *dimensions) {
@@ -73,8 +63,18 @@ sArray *fArrayArrange(i32 start, i32 end) {
   return fArrayNew(data, 2, mShape(1, len));
 }
 
-void *fArrayReshape(u32 nd, u32 *dimensions) {
-
+void fArrayReshape(sArray *arr, u32 nd, u32 *dimensions) {
+  arr->size = 1;
+  arr->shapes = dimensions;
+  for (i32 i = nd - 1; i >= 0; i--) {
+    assert(dimensions[i] > 0);
+    arr->size *= dimensions[i];
+    if (i == nd - 1) {
+      arr->strides[i] = 1;
+      continue;
+    }
+    arr->strides[i] = arr->strides[i + 1] * dimensions[i + 1];
+  }
 }
 
 f64 fArrayGet(sArray *arr, u32 *ind) {
@@ -110,5 +110,5 @@ static void print_(sArray *arr, u32 accumulatedIdx, u32 idx) {
 void fArrayPrint(sArray *arr) {
   printf("[");
   print_(arr, 0, 0);
-  printf("]");
+  printf("]\n");
 }
