@@ -19,4 +19,5 @@ target_link_directories(
 
 target_link_libraries(
         ${PROJECT_NAME}
+        pthread
 )
