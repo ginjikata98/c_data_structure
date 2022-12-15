@@ -1,6 +1,5 @@
 #include "rand.h"
 
-
 u32 vmRandU32(u32 min, u32 max) {
   if (max < min) {
     u32 s = min;

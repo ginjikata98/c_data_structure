@@ -86,5 +86,4 @@ typedef size_t size;
 #define mFor(i, len) for (u64 i = 0; i < len; i++)
 #define loop for (;;)
 
-
 #endif //MAIN_MACRO_H

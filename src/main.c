@@ -5,9 +5,9 @@
 
 int main(void) {
 
-  sArray *a = fArrayArrange(0, 12);
+  sArray *a = fArrayArrange(0, 100);
   fArrayPrint(a);
-  fArrayReshape(a, 3, mShape(3, 2, 2));
+  fArrayReshape(a, 3, mShape(2, 25, 2));
   fArrayPrint(a);
 
 

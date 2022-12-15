@@ -108,7 +108,6 @@ static void *vmExecutorWorkerLoop(void *arg) {
   return null;
 }
 
-
 sExecutor *vmExecutorNewFixed(size numThreads) {
   if (numThreads == 0) {
     numThreads = DEFAULT_THREAD;

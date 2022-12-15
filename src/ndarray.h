@@ -15,5 +15,4 @@ void fArrayReshape(sArray *arr, u32 nd, u32 *dimensions);
 void fArrayPrint(sArray *arr);
 f64 fArrayGet(sArray *arr, u32 *ind);
 
-
 #endif //MAIN_NDARRAY_H
