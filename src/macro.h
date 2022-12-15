@@ -88,8 +88,7 @@ typedef uint8_t VmBool;
                             exit(-1);}
 #endif
 
-#define VMFor(i, len) for (VmU32 i = 0; i < len; i++)
-
+#define VMFor(i, len) for (VmU64 i = 0; i < len; i++)
 
 
 #endif //MAIN_MACRO_H
