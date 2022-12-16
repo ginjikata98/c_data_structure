@@ -75,37 +75,37 @@ sArray *fArrayLinspace(f64 start, f64 end, f64 step) {
   return fArrayNew(data, 2, mArr(u32, 1, len));
 }
 
-void fArrayReshape(sArray *arr, u32 nd, const u32 *dims) {
-  assert(arr);
+void fArrayReshape(sArray *self, u32 nd, const u32 *dims) {
+  assert(self);
   assert(dims);
   assert(nd > 0);
 
-  if (arr->nd != nd) {
-    arr->nd = nd;
-    arr->dims = mRealloc(arr->dims, sizeof(u32) * nd);
+  if (self->nd != nd) {
+    self->nd = nd;
+    self->dims = mRealloc(self->dims, sizeof(u32) * nd);
   }
 
   mFor(i, nd) {
-    arr->dims[i] = dims[i];
+    self->dims[i] = dims[i];
   }
 
-  arr->len = 1;
-  for (i32 i = arr->nd - 1; i >= 0; i--) {
+  self->len = 1;
+  for (i32 i = self->nd - 1; i >= 0; i--) {
     assert(dims[i] > 0);
-    arr->len *= dims[i];
-    if (i == arr->nd - 1) {
-      arr->strides[i] = 1;
+    self->len *= dims[i];
+    if (i == self->nd - 1) {
+      self->strides[i] = 1;
       continue;
     }
-    arr->strides[i] = arr->strides[i + 1] * arr->dims[i + 1];
+    self->strides[i] = self->strides[i + 1] * self->dims[i + 1];
   }
 }
 
-f64 fArrayGet(sArray *arr, u32 *ind) {
-  assert(arr);
-  u32 n = arr->nd;
-  u32 *strides = arr->strides;
-  f64 *ptr = arr->data;
+f64 fArrayGet(sArray *self, u32 *ind) {
+  assert(self);
+  u32 n = self->nd;
+  u32 *strides = self->strides;
+  f64 *ptr = self->data;
 
   mFor(i, n) {
     ptr += (*strides++) * (*ind++);
@@ -114,47 +114,47 @@ f64 fArrayGet(sArray *arr, u32 *ind) {
   return *ptr;
 }
 
-u32 fArrayGetIndex(sArray *arr, u32 *ind) {
-  assert(arr);
+u32 fArrayGetIndex(sArray *self, u32 *ind) {
+  assert(self);
   return 0;
 }
 
-u32 *fArrayGetCord(sArray *arr, u32 idx) {
-  assert(arr);
+u32 *fArrayGetCord(sArray *self, u32 idx) {
+  assert(self);
 
   return null;
 }
 
-void fArrayPrint(sArray *arr) {
-  assert(arr);
-  if (!arr->data) { return; }
+void fArrayPrint(sArray *self) {
+  assert(self);
+  if (!self->data) { return; }
   printf("[strides]: [");
-  mFor(i, arr->nd) {
-    printf("%d,", arr->strides[i]);
+  mFor(i, self->nd) {
+    printf("%d,", self->strides[i]);
   }
   printf("], [dims]: [");
-  mFor(i, arr->nd) {
-    printf("%d,", arr->dims[i]);
+  mFor(i, self->nd) {
+    printf("%d,", self->dims[i]);
   }
   printf("], [data]: [");
-  mFor(i, arr->len) {
-    printf("%.4f,", arr->data[i]);
+  mFor(i, self->len) {
+    printf("%.4f,", self->data[i]);
   }
   printf("]\n");
 }
 
-void fArrayFree(sArray *arr) {
-  assert(arr);
-  mFree(arr->data);
-  mFree(arr->dims);
-  mFree(arr->strides);
-  mFree(arr);
+void fArrayFree(sArray *self) {
+  assert(self);
+  mFree(self->data);
+  mFree(self->dims);
+  mFree(self->strides);
+  mFree(self);
 }
 
-sArray *fArrayClone(sArray *arr) {
-  assert(arr);
-  f64 *data = fMemClone(arr->data, arr->len * sizeof(f64));
-  return fArrayNew(data, arr->nd, arr->dims);
+sArray *fArrayClone(sArray *self) {
+  assert(self);
+  f64 *data = fMemClone(self->data, self->len * sizeof(f64));
+  return fArrayNew(data, self->nd, self->dims);
 }
 
 sArray *fArrayChoice(sArray* arr, u32 size);

@@ -4,30 +4,30 @@
 #include "std.h"
 
 typedef struct sArray {
-  f64 *data;
+  u32 len;
   u32 nd;
+  f64 *data;
   u32 *dims;
   u32 *strides;
-  u32 len;
 } sArray;
 
 // Creating and Getting
-f64 fArrayGet(sArray *arr, u32 *ind);
-u32 fArrayGetIndex(sArray *arr, u32 *ind);
-u32 *fArrayGetCord(sArray *arr, u32 idx);
+f64 fArrayGet(sArray *self, u32 *ind);
+u32 fArrayGetIndex(sArray *self, u32 *ind);
+u32 *fArrayGetCord(sArray *self, u32 idx);
 sArray *fArrayNew(f64 *data, u32 nd, u32 *dims);
-void fArrayFree(sArray *arr);
-sArray *fArrayClone(sArray *arr);
+void fArrayFree(sArray *self);
+sArray *fArrayClone(sArray *self);
 sArray *fArrayOnes(u32 nd, u32 *dims);
 sArray *fArrayZeros(u32 nd, u32 *dims);
 sArray *fArrayUniform(u32 nd, u32 *dims);
 sArray *fArrayNormal(u32 nd, u32 *dims);
 sArray *fArrayLinspace(f64 start, f64 end, f64 step);
-void fArrayPrint(sArray *arr);
+void fArrayPrint(sArray *self);
 sArray *fArrayChoice(sArray* arr, u32 size);
 
 // modifying
-void fArrayReshape(sArray *arr, u32 nd, const u32 *dims);
+void fArrayReshape(sArray *self, u32 nd, const u32 *dims);
 sArray *fArrayTranspose(sArray *in, sArray *out);
 
 // reduce
