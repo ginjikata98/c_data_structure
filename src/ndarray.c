@@ -159,6 +159,7 @@ sArray *fArrayClone(sArray *self) {
 
 sArray *fArrayChoice(sArray* arr, u32 size);
 sArray *fArrayTranspose(sArray *in, sArray *out);
+sArray *fArrayShuffle(sArray *in, sArray *out);
 
 // reduce
 f64 fArrayMean(sArray *arr);

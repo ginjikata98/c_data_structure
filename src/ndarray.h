@@ -29,6 +29,7 @@ sArray *fArrayChoice(sArray* arr, u32 size);
 // modifying
 void fArrayReshape(sArray *self, u32 nd, const u32 *dims);
 sArray *fArrayTranspose(sArray *in, sArray *out);
+sArray *fArrayShuffle(sArray *in, sArray *out);
 
 // reduce
 f64 fArrayMean(sArray *arr);
