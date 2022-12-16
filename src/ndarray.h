@@ -3,59 +3,59 @@
 
 #include "std.h"
 
-typedef struct sArray {
+typedef struct sTensor {
   u32 len;
   u32 nd;
   f64 *data;
   u32 *dims;
   u32 *strides;
-} sArray;
+} sTensor;
 
 // Creating and Getting
-f64 fArrayGet(sArray *self, u32 *ind);
-u32 fArrayGetIndex(sArray *self, u32 *ind);
-u32 *fArrayGetCord(sArray *self, u32 idx);
-sArray *fArrayNew(f64 *data, u32 nd, u32 *dims);
-void fArrayFree(sArray *self);
-sArray *fArrayClone(sArray *self);
-sArray *fArrayOnes(u32 nd, u32 *dims);
-sArray *fArrayZeros(u32 nd, u32 *dims);
-sArray *fArrayUniform(u32 nd, u32 *dims);
-sArray *fArrayNormal(u32 nd, u32 *dims);
-sArray *fArrayLinspace(f64 start, f64 end, f64 step);
-void fArrayPrint(sArray *self);
-sArray *fArrayChoice(sArray* arr, u32 size);
+f64 fTensorGet(sTensor *self, u32 *ind);
+u32 fTensorGetIndex(sTensor *self, u32 *ind);
+u32 *fTensorGetCord(sTensor *self, u32 idx);
+sTensor *fTensorNew(f64 *data, u32 nd, u32 *dims);
+void fTensorFree(sTensor *self);
+sTensor *fTensorClone(sTensor *self);
+sTensor *fTensorOnes(u32 nd, u32 *dims);
+sTensor *fTensorZeros(u32 nd, u32 *dims);
+sTensor *fTensorUniform(u32 nd, u32 *dims);
+sTensor *fTensorNormal(u32 nd, u32 *dims);
+sTensor *fTensorLinspace(f64 start, f64 end, f64 step);
+void fTensorPrint(sTensor *self);
+sTensor *fTensorChoice(sTensor* arr, u32 size);
 
 // modifying
-void fArrayReshape(sArray *self, u32 nd, const u32 *dims);
-sArray *fArrayTranspose(sArray *in, sArray *out);
-sArray *fArrayShuffle(sArray *in, sArray *out);
+void fTensorReshape(sTensor *self, u32 nd, const u32 *dims);
+sTensor *fTensorTranspose(sTensor *in, sTensor *out);
+sTensor *fTensorShuffle(sTensor *in, sTensor *out);
 
 // reduce
-f64 fArrayMean(sArray *arr);
-f64 fArraySum(sArray *arr);
-f64 fArrayArgMax(sArray *arr);
-sArray *fArrayMeanAxis(sArray *arr, u32 axis);
-sArray *fArraySumAxis(sArray *arr, u32 axis);
-sArray *fArrayArgMaxAxis(sArray *arr, u32 axis);
+f64 fTensorMean(sTensor *arr);
+f64 fTensorSum(sTensor *arr);
+f64 fTensorArgMax(sTensor *arr);
+sTensor *fTensorMeanAxis(sTensor *arr, u32 axis);
+sTensor *fTensorSumAxis(sTensor *arr, u32 axis);
+sTensor *fTensorArgMaxAxis(sTensor *arr, u32 axis);
 
 // math
-void fArrayDot(sArray *in1, sArray *in2, sArray *out);
-void fArrayAdd(sArray *in1, sArray *in2, sArray *out);
-void fArraySub(sArray *in1, sArray *in2, sArray *out);
-void fArrayMul(sArray *in1, sArray *in2, sArray *out);
-void fArrayDiv(sArray *in1, sArray *in2, sArray *out);
-void fArrayMax(sArray *in1, sArray *in2, sArray *out);
-void fArrayMin(sArray *in1, sArray *in2, sArray *out);
-void fArrayPow(sArray *in1, sArray *in2, sArray *out);
-void fArrayCompare(sArray *in1, sArray *in2, sArray *out);
-void fArrayAddScalar(sArray *in1, f64 in2, sArray *out);
-void fArraySubScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayMulScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayDivScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayMaxScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayMinScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayPowScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayCompareScalar(sArray *in1, f64 in2, sArray *out);
+void fTensorDot(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorAdd(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorSub(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorMul(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorDiv(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorMax(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorMin(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorPow(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorCompare(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorAddScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorSubScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorMulScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorDivScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorMaxScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorMinScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorPowScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorCompareScalar(sTensor *in1, f64 in2, sTensor *out);
 
 #endif //MAIN_NDARRAY_H

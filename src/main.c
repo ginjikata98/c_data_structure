@@ -4,17 +4,17 @@
 #include "ndarray.h"
 
 int main(void) {
-  sArray *a = fArrayNormal(3, mArr(u32, 2, 2, 2));
-  sArray *b = fArrayNormal(3, mArr(u32, 2, 2, 2));
-  sArray *c = fArrayClone(a);
-  fArrayPrint(a);
-  fArrayPrint(c);
+  sTensor *a = fTensorNormal(3, mArr(u32, 2, 2, 2));
+  sTensor *b = fTensorNormal(3, mArr(u32, 2, 2, 2));
+  sTensor *c = fTensorClone(a);
+  fTensorPrint(a);
+  fTensorPrint(c);
 
   printf("\n\n");
 
-  fArraySub(a, b, a);
-  fArrayPrint(a);
-  fArrayPrint(c);
+  fTensorSub(a, b, a);
+  fTensorPrint(a);
+  fTensorPrint(c);
 
   return 0;
 }

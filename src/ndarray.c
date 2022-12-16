@@ -9,20 +9,20 @@ u32 prod(u32 nd, const u32 *dims) {
   return n;
 }
 
-sArray *fArrayNew(f64 *data, u32 nd, u32 *dims) {
+sTensor *fTensorNew(f64 *data, u32 nd, u32 *dims) {
   assert(nd > 0);
 
-  sArray *arr = malloc(sizeof(sArray));
+  sTensor *arr = malloc(sizeof(sTensor));
   arr->data = data;
   arr->strides = mMalloc(arr->strides, sizeof(u32) * nd);
   arr->dims = mMalloc(arr->dims, sizeof(u32) * nd);
   arr->nd = nd;
 
-  fArrayReshape(arr, nd, dims);
+  fTensorReshape(arr, nd, dims);
   return arr;
 }
 
-sArray *fArrayOnes(u32 nd, u32 *dims) {
+sTensor *fTensorOnes(u32 nd, u32 *dims) {
   u32 len = prod(nd, dims);
 
   f64 *data = mMalloc(data, len * sizeof(f64));
@@ -31,37 +31,37 @@ sArray *fArrayOnes(u32 nd, u32 *dims) {
     data[i] = 1;
   }
 
-  return fArrayNew(data, nd, dims);
+  return fTensorNew(data, nd, dims);
 }
 
-sArray *fArrayZeros(u32 nd, u32 *dims) {
+sTensor *fTensorZeros(u32 nd, u32 *dims) {
   u32 len = prod(nd, dims);
   f64 *data = mCalloc(data, len, sizeof(f64));
 
-  return fArrayNew(data, nd, dims);
+  return fTensorNew(data, nd, dims);
 }
 
-sArray *fArrayUniform(u32 nd, u32 *dims) {
+sTensor *fTensorUniform(u32 nd, u32 *dims) {
   u32 len = prod(nd, dims);
   f64 *data = mMalloc(data, len * sizeof(f64));
   mFor(i, len) {
     data[i] = fRandUniform(0, 1);
   }
 
-  return fArrayNew(data, nd, dims);
+  return fTensorNew(data, nd, dims);
 }
 
-sArray *fArrayNormal(u32 nd, u32 *dims) {
+sTensor *fTensorNormal(u32 nd, u32 *dims) {
   u32 len = prod(nd, dims);
   f64 *data = mMalloc(data, len * sizeof(f64));
   mFor(i, len) {
     data[i] = fRandNormal();
   }
 
-  return fArrayNew(data, nd, dims);
+  return fTensorNew(data, nd, dims);
 }
 
-sArray *fArrayLinspace(f64 start, f64 end, f64 step) {
+sTensor *fTensorLinspace(f64 start, f64 end, f64 step) {
   assert(end > start);
   u32 len = (u32) ((end - start) / step);
 
@@ -72,10 +72,10 @@ sArray *fArrayLinspace(f64 start, f64 end, f64 step) {
     v += step;
   }
 
-  return fArrayNew(data, 2, mArr(u32, 1, len));
+  return fTensorNew(data, 2, mArr(u32, 1, len));
 }
 
-void fArrayReshape(sArray *self, u32 nd, const u32 *dims) {
+void fTensorReshape(sTensor *self, u32 nd, const u32 *dims) {
   assert(self);
   assert(dims);
   assert(nd > 0);
@@ -101,7 +101,7 @@ void fArrayReshape(sArray *self, u32 nd, const u32 *dims) {
   }
 }
 
-f64 fArrayGet(sArray *self, u32 *ind) {
+f64 fTensorGet(sTensor *self, u32 *ind) {
   assert(self);
   u32 n = self->nd;
   u32 *strides = self->strides;
@@ -114,18 +114,18 @@ f64 fArrayGet(sArray *self, u32 *ind) {
   return *ptr;
 }
 
-u32 fArrayGetIndex(sArray *self, u32 *ind) {
+u32 fTensorGetIndex(sTensor *self, u32 *ind) {
   assert(self);
   return 0;
 }
 
-u32 *fArrayGetCord(sArray *self, u32 idx) {
+u32 *fTensorGetCord(sTensor *self, u32 idx) {
   assert(self);
 
   return null;
 }
 
-void fArrayPrint(sArray *self) {
+void fTensorPrint(sTensor *self) {
   assert(self);
   if (!self->data) { return; }
   printf("[strides]: [");
@@ -143,7 +143,7 @@ void fArrayPrint(sArray *self) {
   printf("]\n");
 }
 
-void fArrayFree(sArray *self) {
+void fTensorFree(sTensor *self) {
   assert(self);
   mFree(self->data);
   mFree(self->dims);
@@ -151,90 +151,90 @@ void fArrayFree(sArray *self) {
   mFree(self);
 }
 
-sArray *fArrayClone(sArray *self) {
+sTensor *fTensorClone(sTensor *self) {
   assert(self);
   f64 *data = fMemClone(self->data, self->len * sizeof(f64));
-  return fArrayNew(data, self->nd, self->dims);
+  return fTensorNew(data, self->nd, self->dims);
 }
 
-sArray *fArrayChoice(sArray* arr, u32 size);
-sArray *fArrayTranspose(sArray *in, sArray *out);
-sArray *fArrayShuffle(sArray *in, sArray *out);
+sTensor *fTensorChoice(sTensor* arr, u32 size);
+sTensor *fTensorTranspose(sTensor *in, sTensor *out);
+sTensor *fTensorShuffle(sTensor *in, sTensor *out);
 
 // reduce
-f64 fArrayMean(sArray *arr);
-f64 fArraySum(sArray *arr);
-f64 fArrayArgMax(sArray *arr);
-sArray *fArrayMeanAxis(sArray *arr, u32 axis);
-sArray *fArraySumAxis(sArray *arr, u32 axis);
-sArray *fArrayArgMaxAxis(sArray *arr, u32 axis);
+f64 fTensorMean(sTensor *arr);
+f64 fTensorSum(sTensor *arr);
+f64 fTensorArgMax(sTensor *arr);
+sTensor *fTensorMeanAxis(sTensor *arr, u32 axis);
+sTensor *fTensorSumAxis(sTensor *arr, u32 axis);
+sTensor *fTensorArgMaxAxis(sTensor *arr, u32 axis);
 
 // math
-void fArrayDot(sArray *in1, sArray *in2, sArray *out);
+void fTensorDot(sTensor *in1, sTensor *in2, sTensor *out);
 
-static void fAssertEleWiseParams(sArray *in1, sArray *in2, sArray *out) {
+static void fAssertEleWiseParams(sTensor *in1, sTensor *in2, sTensor *out) {
   assert(in1 && in2 && out);
   assert(in1->len == in2->len && in1->nd == in2->nd);
   assert(in1->len == out->len && in1->nd == out->nd);
 }
 
-void fArrayAdd(sArray *in1, sArray *in2, sArray *out) {
+void fTensorAdd(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
   mFor(i, out->len) {
     out->data[i] = in1->data[i] + in2->data[i];
   }
 }
 
-void fArraySub(sArray *in1, sArray *in2, sArray *out) {
+void fTensorSub(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
   mFor(i, out->len) {
     out->data[i] = in1->data[i] - in2->data[i];
   }
 }
 
-void fArrayMul(sArray *in1, sArray *in2, sArray *out) {
+void fTensorMul(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
   mFor(i, out->len) {
     out->data[i] = in1->data[i] * in2->data[i];
   }
 }
 
-void fArrayDiv(sArray *in1, sArray *in2, sArray *out) {
+void fTensorDiv(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
   mFor(i, out->len) {
     out->data[i] = in1->data[i] / in2->data[i];
   }
 }
 
-void fArrayMax(sArray *in1, sArray *in2, sArray *out) {
+void fTensorMax(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
   mFor(i, out->len) {
     out->data[i] = mMax(in1->data[i], in2->data[i]);
   }
 }
 
-void fArrayMin(sArray *in1, sArray *in2, sArray *out) {
+void fTensorMin(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
   mFor(i, out->len) {
     out->data[i] = mMin(in1->data[i], in2->data[i]);
   }
 }
 
-void fArrayPow(sArray *in1, sArray *in2, sArray *out) {
+void fTensorPow(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
   mFor(i, out->len) {
     out->data[i] = pow(in1->data[i], in2->data[i]);
   }
 }
 
-void fArrayAddScalar(sArray *in1, f64 in2, sArray *out);
-void fArraySubScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayMulScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayDivScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayMaxScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayMinScalar(sArray *in1, f64 in2, sArray *out);
-void fArrayPowScalar(sArray *in1, f64 in2, sArray *out);
+void fTensorAddScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorSubScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorMulScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorDivScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorMaxScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorMinScalar(sTensor *in1, f64 in2, sTensor *out);
+void fTensorPowScalar(sTensor *in1, f64 in2, sTensor *out);
 
-void fArrayCompare(sArray *in1, sArray *in2, sArray *out);
-void fArrayCompareScalar(sArray *in1, f64 in2, sArray *out);
+void fTensorCompare(sTensor *in1, sTensor *in2, sTensor *out);
+void fTensorCompareScalar(sTensor *in1, f64 in2, sTensor *out);
 
