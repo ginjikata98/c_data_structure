@@ -143,8 +143,19 @@ void fArrayPrint(sArray *arr) {
   printf("]\n");
 }
 
-sArray *fArrayFree(sArray *arr);
-sArray *fArrayClone(sArray *arr);
+void fArrayFree(sArray *arr) {
+  assert(arr);
+  mFree(arr->data);
+  mFree(arr->dims);
+  mFree(arr->strides);
+  mFree(arr);
+}
+
+sArray *fArrayClone(sArray *arr) {
+  assert(arr);
+  f64 *data = fMemClone(arr->data, arr->len * sizeof(f64));
+  return fArrayNew(data, arr->nd, arr->dims);
+}
 
 
 // reduce

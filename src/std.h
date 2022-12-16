@@ -61,4 +61,10 @@ mVec(f32, VecF32);
 mVec(f64, VecF64);
 mVec(string, VecString);
 
+
+void *fMemClone(void *src, size s);
+
+void fMemCopy(void *src, void*dest, size s);
+
+
 #endif //C_DATA_STRUCTURE_LIBS_H

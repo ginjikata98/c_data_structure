@@ -16,7 +16,7 @@ f64 fArrayGet(sArray *arr, u32 *ind);
 u32 fArrayGetIndex(sArray *arr, u32 *ind);
 u32 *fArrayGetCord(sArray *arr, u32 idx);
 sArray *fArrayNew(f64 *data, u32 nd, u32 *dims);
-sArray *fArrayFree(sArray *arr);
+void fArrayFree(sArray *arr);
 sArray *fArrayClone(sArray *arr);
 sArray *fArrayOnes(u32 nd, u32 *dims);
 sArray *fArrayZeros(u32 nd, u32 *dims);
