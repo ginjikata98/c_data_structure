@@ -3,7 +3,13 @@
 
 #include "std.h"
 
-typedef struct sArray sArray;
+typedef struct sArray {
+  f64 *data;
+  u32 nd;
+  u32 *dims;
+  u32 *strides;
+  u32 len;
+} sArray;
 
 f64 fArrayGet(sArray *arr, u32 *ind);
 u32 fArrayGetIndex(sArray *arr, u32 *ind);

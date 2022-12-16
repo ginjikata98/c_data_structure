@@ -1,15 +1,7 @@
 #include "ndarray.h"
 #include "rand.h"
 
-struct sArray {
-  f64 *data;
-  u32 nd;
-  u32 *dims;
-  u32 *strides;
-  u32 size;
-};
-
-static u32 prod(u32 nd, u32 *dims) {
+u32 prod(u32 nd, const u32 *dims) {
   u32 n = 1;
   mFor(i, nd) {
     n *= dims[i];
@@ -80,10 +72,14 @@ sArray *fArrayArrange(f64 start, f64 end, f64 step) {
     v += step;
   }
 
-  return fArrayNew(data, 2, mArr(u32,1, len));
+  return fArrayNew(data, 2, mArr(u32, 1, len));
 }
 
 void fArrayReshape(sArray *arr, u32 nd, const u32 *dims) {
+  assert(arr);
+  assert(dims);
+  assert(nd > 0);
+
   if (arr->nd != nd) {
     arr->nd = nd;
     arr->dims = mRealloc(arr->dims, sizeof(u32) * nd);
@@ -93,10 +89,10 @@ void fArrayReshape(sArray *arr, u32 nd, const u32 *dims) {
     arr->dims[i] = dims[i];
   }
 
-  arr->size = 1;
+  arr->len = 1;
   for (i32 i = arr->nd - 1; i >= 0; i--) {
     assert(dims[i] > 0);
-    arr->size *= dims[i];
+    arr->len *= dims[i];
     if (i == arr->nd - 1) {
       arr->strides[i] = 1;
       continue;
@@ -106,6 +102,7 @@ void fArrayReshape(sArray *arr, u32 nd, const u32 *dims) {
 }
 
 f64 fArrayGet(sArray *arr, u32 *ind) {
+  assert(arr);
   u32 n = arr->nd;
   u32 *strides = arr->strides;
   f64 *ptr = arr->data;
@@ -118,10 +115,13 @@ f64 fArrayGet(sArray *arr, u32 *ind) {
 }
 
 u32 fArrayGetIndex(sArray *arr, u32 *ind) {
+  assert(arr);
   return 0;
 }
 
 u32 *fArrayGetCord(sArray *arr, u32 idx) {
+  assert(arr);
+
   return null;
 }
 
@@ -135,7 +135,7 @@ void fArrayPrint(sArray *arr) {
     printf("%d,", arr->dims[i]);
   }
   printf("], [data]: [");
-  mFor(i, arr->size) {
+  mFor(i, arr->len) {
     printf("%.4f,", arr->data[i]);
   }
   printf("]\n");
