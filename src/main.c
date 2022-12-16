@@ -4,16 +4,19 @@
 #include "ndarray.h"
 
 int main(void) {
-//  sArray *a = fArrayUniform(3, mArr(u32,2, 2, 2));
   sArray *a = fArrayNormal(3, mArr(u32, 2, 2, 2));
-//  sArray *a = fArrayArrange(0, 12, 0.6);
+  sArray *b = fArrayNormal(3, mArr(u32, 2, 2, 2));
   fArrayPrint(a);
-//  fArrayReshape(a, 2, mArr(u32,1, 8));
-//  fArrayPrint(a);
+  fArrayPrint(b);
+//  sArray *c = fArrayZeros(3, mArr(u32, 2, 2, 2));
 
+  fArrayPow(a, b, a);
+
+  fArrayPrint(a);
 
 //  sArray *a = fArrayOnes(3, mArr(u32,2, 2, 2));
 
+  printf("%f", pow(-0.7253, 1.3724));
 
   return 0;
 }

@@ -126,6 +126,8 @@ u32 *fArrayGetCord(sArray *arr, u32 idx) {
 }
 
 void fArrayPrint(sArray *arr) {
+  assert(arr);
+  if (!arr->data) { return; }
   printf("[strides]: [");
   mFor(i, arr->nd) {
     printf("%d,", arr->strides[i]);
@@ -140,3 +142,71 @@ void fArrayPrint(sArray *arr) {
   }
   printf("]\n");
 }
+
+sArray *fArrayFree(sArray *arr);
+sArray *fArrayClone(sArray *arr);
+
+
+// reduce
+f64 fArrayMean(sArray *arr, u32 axis);
+f64 fArraySum(sArray *arr, u32 axis);
+f64 fArrayArgMax(sArray *arr, u32 axis);
+
+// math
+void fArrayDot(sArray *in1, sArray *in2, sArray *out);
+
+static void fAssertEleWiseParams(sArray *in1, sArray *in2, sArray *out) {
+  assert(in1 && in2 && out);
+  assert(in1->len == in2->len && in1->nd == in2->nd);
+  assert(in1->len == out->len && in1->nd == out->nd);
+}
+
+void fArrayAdd(sArray *in1, sArray *in2, sArray *out) {
+  fAssertEleWiseParams(in1, in2, out);
+  mFor(i, out->len) {
+    out->data[i] = in1->data[i] + in2->data[i];
+  }
+}
+
+void fArraySub(sArray *in1, sArray *in2, sArray *out) {
+  fAssertEleWiseParams(in1, in2, out);
+  mFor(i, out->len) {
+    out->data[i] = in1->data[i] - in2->data[i];
+  }
+}
+
+void fArrayMul(sArray *in1, sArray *in2, sArray *out) {
+  fAssertEleWiseParams(in1, in2, out);
+  mFor(i, out->len) {
+    out->data[i] = in1->data[i] * in2->data[i];
+  }
+}
+
+void fArrayDiv(sArray *in1, sArray *in2, sArray *out) {
+  fAssertEleWiseParams(in1, in2, out);
+  mFor(i, out->len) {
+    out->data[i] = in1->data[i] / in2->data[i];
+  }
+}
+
+void fArrayMax(sArray *in1, sArray *in2, sArray *out) {
+  fAssertEleWiseParams(in1, in2, out);
+  mFor(i, out->len) {
+    out->data[i] = mMax(in1->data[i], in2->data[i]);
+  }
+}
+
+void fArrayMin(sArray *in1, sArray *in2, sArray *out) {
+  fAssertEleWiseParams(in1, in2, out);
+  mFor(i, out->len) {
+    out->data[i] = mMin(in1->data[i], in2->data[i]);
+  }
+}
+
+void fArrayPow(sArray *in1, sArray *in2, sArray *out) {
+  fAssertEleWiseParams(in1, in2, out);
+  mFor(i, out->len) {
+    out->data[i] = pow(in1->data[i], in2->data[i]);
+  }
+}
+
