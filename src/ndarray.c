@@ -1,11 +1,11 @@
 #include "ndarray.h"
 
 struct sArray {
-    f64 *data;
-    u32 ndims;
-    u32 *shapes;
-    u32 *strides;
-    u32 size;
+  f64 *data;
+  u32 ndims;
+  u32 *shapes;
+  u32 *strides;
+  u32 size;
 };
 
 sArray *fArrayNew(f64 *data, u32 nd, u32 *dimensions) {
@@ -13,7 +13,10 @@ sArray *fArrayNew(f64 *data, u32 nd, u32 *dimensions) {
 
   sArray *arr = malloc(sizeof(sArray));
   arr->data = data;
-  arr->strides = malloc(sizeof(size) * nd);
+
+  arr->strides = mMalloc(arr->strides, sizeof(u32) * nd);
+  arr->shapes = mMalloc(arr->shapes, sizeof(u32) * nd);
+  arr->ndims = nd;
 
   fArrayReshape(arr, nd, dimensions);
   return arr;
@@ -57,10 +60,17 @@ sArray *fArrayArrange(i32 start, i32 end) {
   return fArrayNew(data, 2, mShape(1, len));
 }
 
-void fArrayReshape(sArray *arr, u32 nd, u32 *dimensions) {
+void fArrayReshape(sArray *arr, u32 nd, const u32 *dimensions) {
+  if (arr->ndims != nd) {
+    arr->ndims = nd;
+    arr->shapes = mRealloc(arr->shapes, sizeof(u32) * nd);
+  }
+
+  mFor(i, nd) {
+    arr->shapes[i] = dimensions[i];
+  }
+
   arr->size = 1;
-  arr->ndims = nd;
-  arr->shapes = dimensions;
   for (i32 i = arr->ndims - 1; i >= 0; i--) {
     assert(dimensions[i] > 0);
     arr->size *= dimensions[i];
