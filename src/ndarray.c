@@ -69,16 +69,18 @@ sArray *fArrayNormal(u32 nd, u32 *dims) {
   return fArrayNew(data, nd, dims);
 }
 
-sArray *fArrayArrange(i32 start, i32 end) {
+sArray *fArrayArrange(f64 start, f64 end, f64 step) {
   assert(end > start);
-  u32 len = end - start;
+  u32 len = (u32) ((end - start) / step);
 
   f64 *data = malloc(len * sizeof(*data));
-  for (u32 i = start; i < end; ++i) {
-    data[i - start] = i;
+  f64 v = start;
+  for (u32 i = 0; i < len; ++i) {
+    data[i] = v;
+    v += step;
   }
 
-  return fArrayNew(data, 2, mShape(1, len));
+  return fArrayNew(data, 2, mArr(u32,1, len));
 }
 
 void fArrayReshape(sArray *arr, u32 nd, const u32 *dims) {
@@ -113,6 +115,14 @@ f64 fArrayGet(sArray *arr, u32 *ind) {
   }
 
   return *ptr;
+}
+
+u32 fArrayGetIndex(sArray *arr, u32 *ind) {
+  return 0;
+}
+
+u32 *fArrayGetCord(sArray *arr, u32 idx) {
+  return null;
 }
 
 void fArrayPrint(sArray *arr) {

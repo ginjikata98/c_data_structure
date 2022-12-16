@@ -5,16 +5,16 @@
 
 typedef struct sArray sArray;
 
-#define mShape(...) (u32[]) {__VA_ARGS__}
-
+f64 fArrayGet(sArray *arr, u32 *ind);
+u32 fArrayGetIndex(sArray *arr, u32 *ind);
+u32 *fArrayGetCord(sArray *arr, u32 idx);
 sArray *fArrayNew(f64 *data, u32 nd, u32 *dims);
 sArray *fArrayOnes(u32 nd, u32 *dims);
 sArray *fArrayZeros(u32 nd, u32 *dims);
 sArray *fArrayUniform(u32 nd, u32 *dims);
 sArray *fArrayNormal(u32 nd, u32 *dims);
-sArray *fArrayArrange(i32 start, i32 end);
+sArray *fArrayArrange(f64 start, f64 end, f64 step);
 void fArrayReshape(sArray *arr, u32 nd, const u32 *dims);
 void fArrayPrint(sArray *arr);
-f64 fArrayGet(sArray *arr, u32 *ind);
 
 #endif //MAIN_NDARRAY_H
