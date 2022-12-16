@@ -4,10 +4,10 @@
 #include "ndarray.h"
 
 int main(void) {
-
-  sArray *a = fArrayArrange(0, 12);
+//  sArray *a = fArrayUniform(3, mShape(2, 2, 2));
+  sArray *a = fArrayNormal(3, mShape(2, 2, 2));
   fArrayPrint(a);
-  fArrayReshape(a, 3, mShape(3, 2, 2));
+  fArrayReshape(a, 2, mShape(1, 8));
   fArrayPrint(a);
 
 

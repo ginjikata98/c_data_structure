@@ -7,11 +7,13 @@ typedef struct sArray sArray;
 
 #define mShape(...) (u32[]) {__VA_ARGS__}
 
-sArray *fArrayNew(f64 *data, u32 nd, u32 *dimensions);
-sArray *fArrayOnes(u32 nd, u32 *dimensions);
-sArray *fArrayZeros(u32 nd, u32 *dimensions);
+sArray *fArrayNew(f64 *data, u32 nd, u32 *dims);
+sArray *fArrayOnes(u32 nd, u32 *dims);
+sArray *fArrayZeros(u32 nd, u32 *dims);
+sArray *fArrayUniform(u32 nd, u32 *dims);
+sArray *fArrayNormal(u32 nd, u32 *dims);
 sArray *fArrayArrange(i32 start, i32 end);
-void fArrayReshape(sArray *arr, u32 nd, const u32 *dimensions);
+void fArrayReshape(sArray *arr, u32 nd, const u32 *dims);
 void fArrayPrint(sArray *arr);
 f64 fArrayGet(sArray *arr, u32 *ind);
 
