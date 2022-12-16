@@ -2,8 +2,8 @@
 
 struct sArray {
   f64 *data;
-  u32 ndims;
-  u32 *shapes;
+  u32 nd;
+  u32 *dims;
   u32 *strides;
   u32 size;
 };
@@ -15,8 +15,8 @@ sArray *fArrayNew(f64 *data, u32 nd, u32 *dimensions) {
   arr->data = data;
 
   arr->strides = mMalloc(arr->strides, sizeof(u32) * nd);
-  arr->shapes = mMalloc(arr->shapes, sizeof(u32) * nd);
-  arr->ndims = nd;
+  arr->dims = mMalloc(arr->dims, sizeof(u32) * nd);
+  arr->nd = nd;
 
   fArrayReshape(arr, nd, dimensions);
   return arr;
@@ -61,29 +61,29 @@ sArray *fArrayArrange(i32 start, i32 end) {
 }
 
 void fArrayReshape(sArray *arr, u32 nd, const u32 *dimensions) {
-  if (arr->ndims != nd) {
-    arr->ndims = nd;
-    arr->shapes = mRealloc(arr->shapes, sizeof(u32) * nd);
+  if (arr->nd != nd) {
+    arr->nd = nd;
+    arr->dims = mRealloc(arr->dims, sizeof(u32) * nd);
   }
 
   mFor(i, nd) {
-    arr->shapes[i] = dimensions[i];
+    arr->dims[i] = dimensions[i];
   }
 
   arr->size = 1;
-  for (i32 i = arr->ndims - 1; i >= 0; i--) {
+  for (i32 i = arr->nd - 1; i >= 0; i--) {
     assert(dimensions[i] > 0);
     arr->size *= dimensions[i];
-    if (i == arr->ndims - 1) {
+    if (i == arr->nd - 1) {
       arr->strides[i] = 1;
       continue;
     }
-    arr->strides[i] = arr->strides[i + 1] * arr->shapes[i + 1];
+    arr->strides[i] = arr->strides[i + 1] * arr->dims[i + 1];
   }
 }
 
 f64 fArrayGet(sArray *arr, u32 *ind) {
-  u32 n = arr->ndims;
+  u32 n = arr->nd;
   u32 *strides = arr->strides;
   f64 *ptr = arr->data;
 
@@ -95,17 +95,17 @@ f64 fArrayGet(sArray *arr, u32 *ind) {
 }
 
 void fArrayPrint(sArray *arr) {
-  printf("[data]: [");
-  mFor(i, arr->size) {
-    printf("%.4f,", arr->data[i]);
+  printf("[strides]: [");
+  mFor(i, arr->nd) {
+    printf("%d,", arr->strides[i]);
   }
   printf("], [shape]: [");
-  mFor(i, arr->ndims) {
-    printf("%d,", arr->shapes[i]);
+  mFor(i, arr->nd) {
+    printf("%d,", arr->dims[i]);
   }
-  printf("], [strides]: [");
-  mFor(i, arr->ndims) {
-    printf("%d,", arr->strides[i]);
+  printf("], [data]: [");
+  mFor(i, arr->size) {
+    printf("%.4f,", arr->data[i]);
   }
   printf("]\n");
 }
