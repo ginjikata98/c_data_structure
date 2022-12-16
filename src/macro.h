@@ -88,7 +88,7 @@ typedef size_t size;
 
 #define mArr(T, ...) (T[]) {__VA_ARGS__}
 
-#define mMax(a, b) (a) > (b) ? (a) : (b)
-#define mMin(a, b) (a) < (b) ? (a) : (b)
+#define mMax(a, b) ((a) > (b) ? (a) : (b))
+#define mMin(a, b) ((a) < (b) ? (a) : (b))
 
 #endif //MAIN_MACRO_H

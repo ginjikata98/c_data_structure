@@ -61,7 +61,7 @@ sArray *fArrayNormal(u32 nd, u32 *dims) {
   return fArrayNew(data, nd, dims);
 }
 
-sArray *fArrayArrange(f64 start, f64 end, f64 step) {
+sArray *fArrayLinspace(f64 start, f64 end, f64 step) {
   assert(end > start);
   u32 len = (u32) ((end - start) / step);
 
@@ -157,11 +157,16 @@ sArray *fArrayClone(sArray *arr) {
   return fArrayNew(data, arr->nd, arr->dims);
 }
 
+sArray *fArrayChoice(sArray* arr, u32 size);
+sArray *fArrayTranspose(sArray *in, sArray *out);
 
 // reduce
-f64 fArrayMean(sArray *arr, u32 axis);
-f64 fArraySum(sArray *arr, u32 axis);
-f64 fArrayArgMax(sArray *arr, u32 axis);
+f64 fArrayMean(sArray *arr);
+f64 fArraySum(sArray *arr);
+f64 fArrayArgMax(sArray *arr);
+sArray *fArrayMeanAxis(sArray *arr, u32 axis);
+sArray *fArraySumAxis(sArray *arr, u32 axis);
+sArray *fArrayArgMaxAxis(sArray *arr, u32 axis);
 
 // math
 void fArrayDot(sArray *in1, sArray *in2, sArray *out);
@@ -220,4 +225,15 @@ void fArrayPow(sArray *in1, sArray *in2, sArray *out) {
     out->data[i] = pow(in1->data[i], in2->data[i]);
   }
 }
+
+void fArrayAddScalar(sArray *in1, f64 in2, sArray *out);
+void fArraySubScalar(sArray *in1, f64 in2, sArray *out);
+void fArrayMulScalar(sArray *in1, f64 in2, sArray *out);
+void fArrayDivScalar(sArray *in1, f64 in2, sArray *out);
+void fArrayMaxScalar(sArray *in1, f64 in2, sArray *out);
+void fArrayMinScalar(sArray *in1, f64 in2, sArray *out);
+void fArrayPowScalar(sArray *in1, f64 in2, sArray *out);
+
+void fArrayCompare(sArray *in1, sArray *in2, sArray *out);
+void fArrayCompareScalar(sArray *in1, f64 in2, sArray *out);
 
