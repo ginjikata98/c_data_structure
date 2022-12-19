@@ -9,6 +9,6 @@
 
 u32 fRandU32(u32 min, u32 max);
 f64 fRandNormal();
-f64 fRandUniform(f64 min, f64 max);
+f64 fRandUniform();
 
 #endif //MAIN_RAND_H
