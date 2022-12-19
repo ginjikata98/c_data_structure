@@ -21,10 +21,10 @@ f64 fRandNormal() {
 
   haveSpare = 1;
 
-  rand1 = rand() / ((f64) RAND_MAX);
+  rand1 = arc4random() / ((f64) UINT32_MAX);
   if (rand1 < 1e-100) { rand1 = 1e-100; }
   rand1 = -2 * log(rand1);
-  rand2 = (rand() / ((f64) RAND_MAX)) * mPi * 2;
+  rand2 = (arc4random() / ((f64) UINT32_MAX)) * mPi * 2;
 
   return sqrt(rand1) * cos(rand2);
 }

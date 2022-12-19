@@ -30,8 +30,8 @@ sBandit *fBanditInit(u32 k, f64 epsilon, f64 lr, f64 trueReward) {
 
 void fBanditReset(sBandit *self) {
   mFor(i, self->k) {
-    self->qTrue[i] = fRandUniform() + self->trueReward;
-    self->qEstimation[i] = fRandUniform();
+    self->qTrue[i] = fRandNormal() + self->trueReward;
+    self->qEstimation[i] = 0;
     self->actionCount[i] = 0;
   }
 
@@ -55,12 +55,9 @@ u32 fBanditAct(sBandit *self) {
 }
 
 f64 fBanditStep(sBandit *self, u32 action) {
-
-  f64 reward = fRandUniform() + self->qTrue[action];
+  f64 reward = fRandNormal() + self->qTrue[action];
   self->actionCount[action]++;
-
   self->qEstimation[action] += self->lr * (reward - self->qEstimation[action]);
-
   return reward;
 }
 
@@ -72,7 +69,6 @@ void simulate(u32 runs, u32 times, sBandit **bandits, u32 nBandits) {
     mFor(r, runs) {
       f64 totalRunReward = 0.;
       u32 bestRunActionCount = 0;
-
       fBanditReset(bandits[i]);
 
       mFor(t, times) {
