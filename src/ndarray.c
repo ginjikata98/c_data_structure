@@ -3,7 +3,7 @@
 
 u32 prod(u32 nd, const u32 *dims) {
   u32 n = 1;
-  mFor(i, nd) {
+  mLoopUp(i, nd) {
     n *= dims[i];
   }
   return n;
@@ -27,7 +27,7 @@ sTensor *fTensorOnes(u32 nd, u32 *dims) {
 
   f64 *data = mMalloc(data, len * sizeof(f64));
 
-  mFor(i, len) {
+  mLoopUp(i, len) {
     data[i] = 1;
   }
 
@@ -44,7 +44,7 @@ sTensor *fTensorZeros(u32 nd, u32 *dims) {
 sTensor *fTensorUniform(u32 nd, u32 *dims) {
   u32 len = prod(nd, dims);
   f64 *data = mMalloc(data, len * sizeof(f64));
-  mFor(i, len) {
+  mLoopUp(i, len) {
     data[i] = fRandUniform();
   }
 
@@ -54,7 +54,7 @@ sTensor *fTensorUniform(u32 nd, u32 *dims) {
 sTensor *fTensorNormal(u32 nd, u32 *dims) {
   u32 len = prod(nd, dims);
   f64 *data = mMalloc(data, len * sizeof(f64));
-  mFor(i, len) {
+  mLoopUp(i, len) {
     data[i] = fRandNormal();
   }
 
@@ -85,7 +85,7 @@ void fTensorReshape(sTensor *self, u32 nd, const u32 *dims) {
     self->dims = mRealloc(self->dims, sizeof(u32) * nd);
   }
 
-  mFor(i, nd) {
+  mLoopUp(i, nd) {
     self->dims[i] = dims[i];
   }
 
@@ -107,7 +107,7 @@ f64 fTensorGet(sTensor *self, u32 *ind) {
   u32 *strides = self->strides;
   f64 *ptr = self->data;
 
-  mFor(i, n) {
+  mLoopUp(i, n) {
     ptr += (*strides++) * (*ind++);
   }
 
@@ -129,15 +129,15 @@ void fTensorPrint(sTensor *self) {
   assert(self);
   if (!self->data) { return; }
   printf("[strides]: [");
-  mFor(i, self->nd) {
+  mLoopUp(i, self->nd) {
     printf("%d,", self->strides[i]);
   }
   printf("], [dims]: [");
-  mFor(i, self->nd) {
+  mLoopUp(i, self->nd) {
     printf("%d,", self->dims[i]);
   }
   printf("], [data]: [");
-  mFor(i, self->len) {
+  mLoopUp(i, self->len) {
     printf("%.4f,", self->data[i]);
   }
   printf("]\n");
@@ -180,49 +180,49 @@ static void fAssertEleWiseParams(sTensor *in1, sTensor *in2, sTensor *out) {
 
 void fTensorAdd(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
-  mFor(i, out->len) {
+  mLoopUp(i, out->len) {
     out->data[i] = in1->data[i] + in2->data[i];
   }
 }
 
 void fTensorSub(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
-  mFor(i, out->len) {
+  mLoopUp(i, out->len) {
     out->data[i] = in1->data[i] - in2->data[i];
   }
 }
 
 void fTensorMul(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
-  mFor(i, out->len) {
+  mLoopUp(i, out->len) {
     out->data[i] = in1->data[i] * in2->data[i];
   }
 }
 
 void fTensorDiv(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
-  mFor(i, out->len) {
+  mLoopUp(i, out->len) {
     out->data[i] = in1->data[i] / in2->data[i];
   }
 }
 
 void fTensorMax(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
-  mFor(i, out->len) {
+  mLoopUp(i, out->len) {
     out->data[i] = mMax(in1->data[i], in2->data[i]);
   }
 }
 
 void fTensorMin(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
-  mFor(i, out->len) {
+  mLoopUp(i, out->len) {
     out->data[i] = mMin(in1->data[i], in2->data[i]);
   }
 }
 
 void fTensorPow(sTensor *in1, sTensor *in2, sTensor *out) {
   fAssertEleWiseParams(in1, in2, out);
-  mFor(i, out->len) {
+  mLoopUp(i, out->len) {
     out->data[i] = pow(in1->data[i], in2->data[i]);
   }
 }

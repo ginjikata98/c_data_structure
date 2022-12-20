@@ -125,7 +125,7 @@ sExecutor *vmExecutorNewFixed(size numThreads) {
   executor->running = true;
 
   sThread thread;
-  mFor(i, numThreads) {
+  mLoopUp(i, numThreads) {
     pthread_create(&thread, null, vmExecutorWorkerLoop, executor);
     pthread_detach(thread);
   }

@@ -23,7 +23,7 @@ sBandit *fBanditInit(u32 k, f64 epsilon, f64 lr) {
 }
 
 void fBanditReset(sBandit *self) {
-  mFor(i, self->k) {
+  mLoopUp(i, self->k) {
     self->qTrue[i] = fRandNormal();
   }
   memset(self->qEstimation, 0, self->k * sizeof(f64));
@@ -36,7 +36,7 @@ u32 fBanditAct(sBandit *self) {
 
   u32 maxAction = 0;
   f64 maxQ = self->qEstimation[0];
-  mFor(i, self->k) {
+  mLoopUp(i, self->k) {
     if (self->qEstimation[i] > maxQ) {
       maxQ = self->qEstimation[i];
       maxAction = i;
@@ -53,16 +53,16 @@ f64 fBanditStep(sBandit *self, u32 action) {
 }
 
 void simulate(u32 runs, u32 times, sBandit **bandits, u32 nBandits) {
-  mFor(i, nBandits) {
+  mLoopUp(i, nBandits) {
     f64 *banditRewards = mCalloc(banditRewards, runs, sizeof(f64));
     u32 *banditBestActionCount = mCalloc(banditBestActionCount, runs, sizeof(u32));
 
-    mFor(r, runs) {
+    mLoopUp(r, runs) {
       f64 totalRunReward = 0.;
       u32 bestRunActionCount = 0;
       fBanditReset(bandits[i]);
 
-      mFor(t, times) {
+      mLoopUp(t, times) {
         u32 action = fBanditAct(bandits[i]);
         f64 reward = fBanditStep(bandits[i], action);
         totalRunReward += reward;
@@ -84,7 +84,7 @@ void trainBandit(void) {
   u32 k = 10;
   f64 lr = 0.1;
   f64 epsilons[3] = {0., 0.1, 0.01};
-  mFor(i, nBandits) {
+  mLoopUp(i, nBandits) {
     bandits[i] = fBanditInit(k, epsilons[i], lr);
   }
   simulate(runs, times, bandits, nBandits);
