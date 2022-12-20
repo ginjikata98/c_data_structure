@@ -1,7 +1,4 @@
-
-
 #include "../macro.h"
-
 
 #define cGridSize 5
 #define cNumAction 4
@@ -52,8 +49,6 @@ sTransition step(sState s, u32 a) {
 }
 
 f64 max(f64 *arr, u32 n) {
-  assert(n > 0);
-  if (n == 1) { return arr[0]; }
   f64 max = arr[0];
   mLoopUp(i, n) {
     if (arr[i] > max) {
@@ -102,7 +97,7 @@ int main(void) {
     if (diff(newValues, values, cGridSize * cGridSize) < 1e-4) {
       mLoopUp(x, cGridSize) {
         mLoopUp(y, cGridSize) {
-          printf("[%.2f] ", values[x * cGridSize + y]);
+          printf("[%.2f]\t", values[x * cGridSize + y]);
         }
         printf("\n");
       }
