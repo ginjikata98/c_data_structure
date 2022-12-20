@@ -58,31 +58,11 @@ f64 max(f64 *arr, u32 n) {
   return max;
 }
 
-
-f64 diff(f64 *arr1, f64 *arr2, u32 n) {
-  f64 res = 0;
-  mLoopUp(i, n) {
-    res += arr1[i] - arr2[i];
-  }
-
-  res /= n;
-  res = res > 0 ? res : -res;
-  return res;
-}
-
-void copy(f64 *arr1, f64 *arr2, u32 n) {
-  mLoopUp(i, n) {
-    arr1[i] = arr2[i];
-  }
-}
-
-
 int main(void) {
   f64 values[cGridSize * cGridSize] = {0};
   f64 actionValueCache[cNumAction] = {0};
 
-  while (true) {
-    f64 newValues[cGridSize * cGridSize] = {0};
+  mLoopUp(i, 20) {
     mLoopUp(x, cGridSize) {
       mLoopUp(y, cGridSize) {
         mLoopUp(a, cNumAction) {
@@ -91,18 +71,15 @@ int main(void) {
           sState s_tp1 = transition.state;
           actionValueCache[a] = transition.reward + cDiscount * values[s_tp1.x * cGridSize + s_tp1.y];
         }
-        newValues[x * cGridSize + y] = max(actionValueCache, cNumAction);
+        values[x * cGridSize + y] = max(actionValueCache, cNumAction);
       }
     }
-    if (diff(newValues, values, cGridSize * cGridSize) < 1e-4) {
-      mLoopUp(x, cGridSize) {
-        mLoopUp(y, cGridSize) {
-          printf("[%.2f]\t", values[x * cGridSize + y]);
-        }
-        printf("\n");
-      }
-      break;
+  }
+
+  mLoopUp(x, cGridSize) {
+    mLoopUp(y, cGridSize) {
+      printf("[%.2f]\t", values[x * cGridSize + y]);
     }
-    copy(values, newValues, cGridSize * cGridSize);
+    printf("\n");
   }
 }
