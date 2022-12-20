@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.23)
 project(main C)
 
-file(GLOB SOURCE_FILES src/*.c src/*.h)
+file(GLOB SOURCE_FILES src/*.c src/*.h src/rl/*.c)
 
 set(CMAKE_C_STANDARD 99)
 
