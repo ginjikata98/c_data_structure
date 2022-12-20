@@ -9,7 +9,6 @@ typedef struct sBandit {
   f64 *qTrue;
   f64 *qEstimation;
   u32 k;
-  u32 bestAction;
 } sBandit;
 
 sBandit *fBanditInit(u32 k, f64 epsilon, f64 lr) {
@@ -24,14 +23,8 @@ sBandit *fBanditInit(u32 k, f64 epsilon, f64 lr) {
 }
 
 void fBanditReset(sBandit *self) {
-  f64 maxQ = self->qTrue[0];
-  self->bestAction = 0;
   mFor(i, self->k) {
     self->qTrue[i] = fRandNormal();
-    if (self->qTrue[i] > maxQ) {
-      maxQ = self->qTrue[i];
-      self->bestAction = i;
-    }
   }
   memset(self->qEstimation, 0, self->k * sizeof(f64));
 }
@@ -73,38 +66,42 @@ void simulate(u32 runs, u32 times, sBandit **bandits, u32 nBandits) {
         u32 action = fBanditAct(bandits[i]);
         f64 reward = fBanditStep(bandits[i], action);
         totalRunReward += reward;
-        if (action == bandits[i]->bestAction) {
-          bestRunActionCount++;
-        }
       }
 
       banditRewards[r] = totalRunReward / times;
       banditBestActionCount[r] = bestRunActionCount;
     }
-
   }
 }
 
-int main(void) {
-  srand(time(null));
-
-  clock_t t;
-  t = clock();
+void trainBandit(void) {
+  srand((u32) time(null));
 
   sBandit **bandits = mMalloc(bandits, 1 * sizeof(sBandit *));
   u32 nBandits = 3;
   u32 runs = 2000;
   u32 times = 1000;
+  u32 k = 10;
+  f64 lr = 0.1;
   f64 epsilons[3] = {0., 0.1, 0.01};
   mFor(i, nBandits) {
-    bandits[i] = fBanditInit(10, epsilons[i], 0.1);
+    bandits[i] = fBanditInit(k, epsilons[i], lr);
   }
   simulate(runs, times, bandits, nBandits);
+}
 
+f64 track(void (*fn)(void)) {
+  clock_t t;
+  t = clock();
+  fn();
   t = clock() - t;
-  double time_taken = ((double) t) / CLOCKS_PER_SEC;
+  return ((f64) t) / CLOCKS_PER_SEC;
+}
+
+int main(void) {
+  f64 time_taken = track(trainBandit);
   printf("took %f seconds to execute \n", time_taken);
-  printf("it/s: %.2f \n", (f64) (runs * nBandits) / time_taken);
+  printf("it/s: %.2f \n", (f64) (2000 * 3) / time_taken);
 
   return 0;
 }
