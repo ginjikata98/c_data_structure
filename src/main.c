@@ -24,7 +24,8 @@ sBandit *fBanditInit(u32 k, f64 epsilon, f64 lr) {
 }
 
 void fBanditReset(sBandit *self) {
-  f64 maxQ = -100;
+  f64 maxQ = self->qTrue[0];
+  self->bestAction = 0;
   mFor(i, self->k) {
     self->qTrue[i] = fRandNormal();
     if (self->qTrue[i] > maxQ) {
@@ -41,7 +42,7 @@ u32 fBanditAct(sBandit *self) {
   }
 
   u32 maxAction = 0;
-  f64 maxQ = -100;
+  f64 maxQ = self->qEstimation[0];
   mFor(i, self->k) {
     if (self->qEstimation[i] > maxQ) {
       maxQ = self->qEstimation[i];
