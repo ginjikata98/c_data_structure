@@ -45,7 +45,7 @@ sTensor *fTensorUniform(u32 nd, u32 *dims) {
   u32 len = prod(nd, dims);
   f64 *data = mMalloc(data, len * sizeof(f64));
   mFor(i, len) {
-    data[i] = fRandUniform(0, 1);
+    data[i] = fRandUniform();
   }
 
   return fTensorNew(data, nd, dims);

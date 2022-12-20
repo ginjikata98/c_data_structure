@@ -84,6 +84,7 @@ typedef size_t size;
 #endif
 
 #define mFor(i, len) for (u64 i = 0; i < len; i++)
+#define mLoopBack(i, len) for (i64 i = len - 1; i >=; i--)
 #define loop for (;;)
 
 #define mArr(T, ...) (T[]) {__VA_ARGS__}

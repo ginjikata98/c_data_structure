@@ -1,40 +1,38 @@
 #define DEBUG
 
 #include "std.h"
-#include "ndarray.h"
 #include "rand.h"
 
 typedef struct sBandit {
   f64 epsilon;
   f64 lr;
-  f64 trueReward;
   f64 *qTrue;
   f64 *qEstimation;
-  u32 *actionCount;
   u32 k;
   u32 bestAction;
 } sBandit;
 
-sBandit *fBanditInit(u32 k, f64 epsilon, f64 lr, f64 trueReward) {
+sBandit *fBanditInit(u32 k, f64 epsilon, f64 lr) {
   sBandit *bandit = calloc(1, sizeof(sBandit));
   bandit->epsilon = epsilon;
   bandit->lr = lr;
   bandit->k = k;
-  bandit->trueReward = trueReward;
-  bandit->actionCount = mCalloc(bandit->actionCount, k, sizeof(u32));
-  bandit->qTrue = mMalloc(bandit->qTrue, k * sizeof(f64));
   bandit->qEstimation = mCalloc(bandit->qEstimation, k, sizeof(f64));
+  bandit->qTrue = mMalloc(bandit->qTrue, k * sizeof(f64));
 
   return bandit;
 }
 
 void fBanditReset(sBandit *self) {
+  f64 maxQ = -100;
   mFor(i, self->k) {
-    self->qTrue[i] = fRandNormal() + self->trueReward;
-    self->qEstimation[i] = 0;
-    self->actionCount[i] = 0;
+    self->qTrue[i] = fRandNormal();
+    if (self->qTrue[i] > maxQ) {
+      maxQ = self->qTrue[i];
+      self->bestAction = i;
+    }
   }
-
+  memset(self->qEstimation, 0, self->k * sizeof(f64));
 }
 
 u32 fBanditAct(sBandit *self) {
@@ -56,7 +54,6 @@ u32 fBanditAct(sBandit *self) {
 
 f64 fBanditStep(sBandit *self, u32 action) {
   f64 reward = fRandNormal() + self->qTrue[action];
-  self->actionCount[action]++;
   self->qEstimation[action] += self->lr * (reward - self->qEstimation[action]);
   return reward;
 }
@@ -99,7 +96,7 @@ int main(void) {
   u32 times = 1000;
   f64 epsilons[3] = {0., 0.1, 0.01};
   mFor(i, nBandits) {
-    bandits[i] = fBanditInit(10, epsilons[i], 0.1, 0);
+    bandits[i] = fBanditInit(10, epsilons[i], 0.1);
   }
   simulate(runs, times, bandits, nBandits);
 
