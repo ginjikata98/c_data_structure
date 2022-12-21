@@ -58,28 +58,28 @@ f64 max(f64 *arr, u32 n) {
   return max;
 }
 
-int main(void) {
-  f64 values[cGridSize * cGridSize] = {0};
-  f64 actionValueCache[cNumAction] = {0};
-
-  mLoopUp(i, 20) {
-    mLoopUp(x, cGridSize) {
-      mLoopUp(y, cGridSize) {
-        mLoopUp(a, cNumAction) {
-          sState s = {x, y};
-          sTransition transition = step(s, a);
-          sState s_tp1 = transition.state;
-          actionValueCache[a] = transition.reward + cDiscount * values[s_tp1.x * cGridSize + s_tp1.y];
-        }
-        values[x * cGridSize + y] = max(actionValueCache, cNumAction);
-      }
-    }
-  }
-
-  mLoopUp(x, cGridSize) {
-    mLoopUp(y, cGridSize) {
-      printf("[%.2f]\t", values[x * cGridSize + y]);
-    }
-    printf("\n");
-  }
-}
+//int main(void) {
+//  f64 values[cGridSize * cGridSize] = {0};
+//  f64 actionValueCache[cNumAction] = {0};
+//
+//  mLoopUp(i, 20) {
+//    mLoopUp(x, cGridSize) {
+//      mLoopUp(y, cGridSize) {
+//        mLoopUp(a, cNumAction) {
+//          sState s = {x, y};
+//          sTransition transition = step(s, a);
+//          sState s_tp1 = transition.state;
+//          actionValueCache[a] = transition.reward + cDiscount * values[s_tp1.x * cGridSize + s_tp1.y];
+//        }
+//        values[x * cGridSize + y] = max(actionValueCache, cNumAction);
+//      }
+//    }
+//  }
+//
+//  mLoopUp(x, cGridSize) {
+//    mLoopUp(y, cGridSize) {
+//      printf("[%.2f]\t", values[x * cGridSize + y]);
+//    }
+//    printf("\n");
+//  }
+//}
