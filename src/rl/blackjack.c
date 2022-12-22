@@ -1,5 +1,5 @@
-#include "../macro.h"
-#include "../rand.h"
+#include "../lib/macro.h"
+#include "../lib/rand.h"
 
 
 #define cActionHit  1

@@ -1,7 +1,7 @@
 
 
 
-#include "../macro.h"
+#include "../lib/macro.h"
 
 #define cGoal 100
 #define cHeadProb 0.4

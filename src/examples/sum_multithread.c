@@ -1,9 +1,9 @@
 #define DEBUG
 
-#include "../std.h"
-#include "../ndarray.h"
-#include "../rand.h"
-#include "../executor.h"
+#include "../lib/std.h"
+#include "../lib/ndarray.h"
+#include "../lib/rand.h"
+#include "../lib/executor.h"
 
 static const size numThreads = 8;
 static const size numItems = 10;

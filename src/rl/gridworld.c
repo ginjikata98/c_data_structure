@@ -1,4 +1,4 @@
-#include "../macro.h"
+#include "../lib/macro.h"
 
 #define cGridSize 5
 #define cNumAction 4

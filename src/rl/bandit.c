@@ -1,7 +1,7 @@
 #define DEBUG
 
-#include "../std.h"
-#include "../rand.h"
+#include "../lib/std.h"
+#include "../lib/rand.h"
 
 typedef struct sBandit {
   f64 epsilon;
