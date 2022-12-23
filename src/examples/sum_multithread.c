@@ -18,24 +18,24 @@ void task(void *arg) {
 
   printf("tid=%p, old=%d, val=%d\n", pthread_self(), old, *val);
 }
-//
-//int main(void) {
-//  sExecutor *executor = vmExecutorNewFixed(numThreads);
-//  u32 *vals = mCalloc(vals, numItems, sizeof(*vals));
-//
-//  for (i32 i = 0; i < numItems; ++i) {
-//    vals[i] = i;
-//    vmExecutorRun(executor, task, vals + i);
-//  }
-//
-//  vmExecutorWait(executor);
-//
-//  for (i32 i = 0; i < numItems; ++i) {
-//    printf("after %d\n", vals[i]);
-//  }
-//
-//  printf("freeing\n");
-//  mFree(vals);
-//  vmExecutorFree(executor);
-//  return 0;
-//}
+
+int sum_multithread(void) {
+  sExecutor *executor = vmExecutorNewFixed(numThreads);
+  u32 *vals = mCalloc(vals, numItems, sizeof(*vals));
+
+  for (i32 i = 0; i < numItems; ++i) {
+    vals[i] = i;
+    vmExecutorRun(executor, task, vals + i);
+  }
+
+  vmExecutorWait(executor);
+
+  for (i32 i = 0; i < numItems; ++i) {
+    printf("after %d\n", vals[i]);
+  }
+
+  printf("freeing\n");
+  mFree(vals);
+  vmExecutorFree(executor);
+  return 0;
+}

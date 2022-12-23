@@ -4,30 +4,30 @@
 #include "std.h"
 
 typedef struct sTensor {
-  u32 len;
-  u32 nd;
+  i32 len;
+  i32 nd;
   f64 *data;
-  u32 *dims;
-  u32 *strides;
+  i32 *dims;
+  i32 *strides;
 } sTensor;
 
 // Creating and Getting
-f64 fTensorGet(sTensor *self, u32 *ind);
-u32 fTensorGetIndex(sTensor *self, u32 *ind);
-u32 *fTensorGetCord(sTensor *self, u32 idx);
-sTensor *fTensorNew(f64 *data, u32 nd, u32 *dims);
+f64 fTensorGet(sTensor *self, i32 *ind);
+i32 fTensorGetIndex(sTensor *self, i32 *ind);
+i32 *fTensorGetCord(sTensor *self, i32 idx);
+sTensor *fTensorNew(f64 *data, i32 nd, i32 *dims);
 void fTensorFree(sTensor *self);
 sTensor *fTensorClone(sTensor *self);
-sTensor *fTensorOnes(u32 nd, u32 *dims);
-sTensor *fTensorZeros(u32 nd, u32 *dims);
-sTensor *fTensorUniform(u32 nd, u32 *dims);
-sTensor *fTensorNormal(u32 nd, u32 *dims);
+sTensor *fTensorOnes(i32 nd, i32 *dims);
+sTensor *fTensorZeros(i32 nd, i32 *dims);
+sTensor *fTensorUniform(i32 nd, i32 *dims);
+sTensor *fTensorNormal(i32 nd, i32 *dims);
 sTensor *fTensorLinspace(f64 start, f64 end, f64 step);
 void fTensorPrint(sTensor *self);
-sTensor *fTensorChoice(sTensor* arr, u32 size);
+sTensor *fTensorChoice(sTensor* arr, i32 size);
 
 // modifying
-void fTensorReshape(sTensor *self, u32 nd, const u32 *dims);
+void fTensorReshape(sTensor *self, i32 nd, const i32 *dims);
 sTensor *fTensorTranspose(sTensor *in, sTensor *out);
 sTensor *fTensorShuffle(sTensor *in, sTensor *out);
 
@@ -35,9 +35,9 @@ sTensor *fTensorShuffle(sTensor *in, sTensor *out);
 f64 fTensorMean(sTensor *arr);
 f64 fTensorSum(sTensor *arr);
 f64 fTensorArgMax(sTensor *arr);
-sTensor *fTensorMeanAxis(sTensor *arr, u32 axis);
-sTensor *fTensorSumAxis(sTensor *arr, u32 axis);
-sTensor *fTensorArgMaxAxis(sTensor *arr, u32 axis);
+sTensor *fTensorMeanAxis(sTensor *arr, i32 axis);
+sTensor *fTensorSumAxis(sTensor *arr, i32 axis);
+sTensor *fTensorArgMaxAxis(sTensor *arr, i32 axis);
 
 // math
 void fTensorDot(sTensor *in1, sTensor *in2, sTensor *out);

@@ -59,15 +59,15 @@ void fPlay(i32 playerPolicy[22], i32 dealerPolicy[22]) {
 }
 
 
-//i32 main(void) {
-//  i32 actions[2] = {cActionStay, cActionHit};
-//
-//  i32 dealerPolicy[22] = {0};
-//  for (i32 i = 12; i < 20; ++i) {
-//    dealerPolicy[i] = cActionHit;
-//  }
-//  dealerPolicy[20] = cActionStay;
-//  dealerPolicy[21] = cActionStay;
-//
-//
-//}
+i32 blackjack(void) {
+  i32 actions[2] = {cActionStay, cActionHit};
+
+  i32 dealerPolicy[22] = {0};
+  for (i32 i = 12; i < 20; ++i) {
+    dealerPolicy[i] = cActionHit;
+  }
+  dealerPolicy[20] = cActionStay;
+  dealerPolicy[21] = cActionStay;
+
+
+}

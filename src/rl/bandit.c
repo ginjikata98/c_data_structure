@@ -91,9 +91,9 @@ void trainBandit(void) {
 }
 
 
-//int main(void) {
-//  f64 time_taken = track(trainBandit);
-//  printf("took %f seconds to execute \n", time_taken);
-//  printf("it/s: %.2f \n", (f64) (2000 * 3) / time_taken);
-//  return 0;
-//}
+int bandit(void) {
+  f64 time_taken = track(trainBandit);
+  printf("took %f seconds to execute \n", time_taken);
+  printf("it/s: %.2f \n", (f64) (2000 * 3) / time_taken);
+  return 0;
+}
