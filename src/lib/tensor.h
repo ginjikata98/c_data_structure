@@ -12,11 +12,11 @@ typedef struct sTensor {
 } sTensor;
 
 // Creating and Getting
+sTensor *fTensorNew(f64 *data, i32 nd, i32 *dims);
+void fTensorFree(sTensor *self);
 f64 fTensorGet(sTensor *self, i32 *ind);
 i32 fTensorGetIndex(sTensor *self, i32 *ind);
 i32 *fTensorGetCord(sTensor *self, i32 idx);
-sTensor *fTensorNew(f64 *data, i32 nd, i32 *dims);
-void fTensorFree(sTensor *self);
 sTensor *fTensorClone(sTensor *self);
 sTensor *fTensorOnes(i32 nd, i32 *dims);
 sTensor *fTensorZeros(i32 nd, i32 *dims);

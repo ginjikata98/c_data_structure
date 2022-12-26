@@ -1,4 +1,4 @@
-#include "ndarray.h"
+#include "tensor.h"
 #include "rand.h"
 
 i32 prod(i32 nd, const i32 *dims) {
@@ -36,7 +36,7 @@ sTensor *fTensorOnes(i32 nd, i32 *dims) {
 
 sTensor *fTensorZeros(i32 nd, i32 *dims) {
   i32 len = prod(nd, dims);
-  f64 *data = mCalloc(data, len, sizeof(f64));
+  f64 *data = ai_calloc(data, len, sizeof(f64));
 
   return fTensorNew(data, nd, dims);
 }

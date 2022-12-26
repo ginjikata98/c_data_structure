@@ -54,7 +54,7 @@ typedef size_t size;
 #define mFree(p) mFree_(p)
 
 #define mCalloc_(v, l, s) calloc(l, s); assert(v != null)
-#define mCalloc(v, l, s) mCalloc_(v, l, s)
+#define ai_calloc(v, l, s) mCalloc_(v, l, s)
 
 #define mPi 3.151592654
 #define mBit(x)          (1<<(x))

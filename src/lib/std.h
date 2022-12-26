@@ -19,7 +19,7 @@ mStructName(name) *mPaste(mFnName(name), New) (size cap) {\
 mStructName(name) *a = mMalloc(a, sizeof(mStructName(name)));\
 a->capacity = cap > 0 ? cap : 16;\
 a->size = 0;\
-a->items = mCalloc(a->items, a->capacity, sizeof(T));\
+a->items = ai_calloc(a->items, a->capacity, sizeof(T));\
 return a;\
 }                                                                                              \
 void mPaste(mFnName(name), Free) (mStructName(name) *v) {                                                         \

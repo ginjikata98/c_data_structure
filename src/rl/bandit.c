@@ -16,7 +16,7 @@ sBandit *fBanditInit(u32 k, f64 epsilon, f64 lr) {
   bandit->epsilon = epsilon;
   bandit->lr = lr;
   bandit->k = k;
-  bandit->qEstimation = mCalloc(bandit->qEstimation, k, sizeof(f64));
+  bandit->qEstimation = ai_calloc(bandit->qEstimation, k, sizeof(f64));
   bandit->qTrue = mMalloc(bandit->qTrue, k * sizeof(f64));
 
   return bandit;
@@ -54,8 +54,8 @@ f64 fBanditStep(sBandit *self, u32 action) {
 
 void simulate(u32 runs, u32 times, sBandit **bandits, u32 nBandits) {
   mLoopUp(i, nBandits) {
-    f64 *banditRewards = mCalloc(banditRewards, runs, sizeof(f64));
-    u32 *banditBestActionCount = mCalloc(banditBestActionCount, runs, sizeof(u32));
+    f64 *banditRewards = ai_calloc(banditRewards, runs, sizeof(f64));
+    u32 *banditBestActionCount = ai_calloc(banditBestActionCount, runs, sizeof(u32));
 
     mLoopUp(r, runs) {
       f64 totalRunReward = 0.;

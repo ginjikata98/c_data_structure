@@ -3,54 +3,61 @@
 
 #include "../lib/std.h"
 
-struct sModule;
-typedef struct sModule sModule;
-
-struct sNetwork;
-typedef struct sNetwork sNetwork;
-
 typedef enum {
   emModuleTypeLinear, emModuleTypeSoftmax, emModuleTypeDropout,
 
-
   emModuleTypeMaxSize,
-} eModuleType;
+} ai_module_type;
 
 typedef enum {
   emModuleActivationRelu, emModuleActivationSigmoid, emModuleActivationTanh,
 
   emModuleActivationMaxSize,
-} eModuleActivation;
+} ai_module_activation;
 
-
-struct sModule {
+typedef struct ai_module {
   string name;
-  eModuleType type;
-  eModuleActivation activation;
-  void (*forward)(struct sModule, struct sNetwork);
-  void (*backward)(struct sModule, struct sNetwork);
-  void (*update)(struct sModule);
-  void *config;
-};
+  ai_module_type type;
+  ai_module_activation activation;
+  void (*forward)(struct ai_module*);
+  void (*backward)(struct ai_module*);
+  void (*update)(struct ai_module*);
+  void *data;
+} ai_module;
 
-struct sNetwork {
-  string name;
-  i32 numModules;
-  sModule *modules;
+typedef ai_module ai_module_linear;
 
-  f32 *input;
-  f32 *truth;
+typedef struct {
+  i32 batch;
+  i32 n_inputs;
+  i32 n_outputs;
+  f32 *weights;
+  f32 *biases;
+  f32 *output;
   f32 *delta;
-};
+  f32 *weight_updates;
+  f32 *bias_updates;
+  f32 *input;
+} ai_module_linear_config;
 
+typedef struct ai_nn_api {
+  ai_module_linear *(*Linear)(i32 batch,
+                              i32 n_inputs,
+                              i32 n_outputs,
+                              ai_module_activation,
+                              bool batchNormalize,
+                              string name);
+
+} ai_nn_api;
+
+ai_nn_api ai_import_nn();
 
 float dot_cpu(int N, float *X, int INCX, float *Y, int INCY);
 void axpy_cpu(int N, float ALPHA, float *X, int INCX, float *Y, int INCY);
 void copy_cpu(int N, float *X, int INCX, float *Y, int INCY);
 void scal_cpu(int N, float ALPHA, float *X, int INCX);
-void fill_cpu(int N, float ALPHA, float * X, int INCX);
+void fill_cpu(int N, float ALPHA, float *X, int INCX);
 void normalize_cpu(float *x, float *mean, float *variance, int batch, int filters, int spatial);
 void softmax(float *input, int n, float temp, int stride, float *output);
-
 
 #endif //MAIN_NN_H
