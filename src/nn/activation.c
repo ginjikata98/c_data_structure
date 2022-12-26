@@ -10,10 +10,10 @@ f32 fModuleActivationRelu(f32 x) {
 
 f32 activate(f32 x, ai_module_activation a) {
   switch (a) {
-    case emModuleActivationRelu:return fModuleActivationRelu(x);
-    case emModuleActivationSigmoid:break;
-    case emModuleActivationTanh:break;
-    case emModuleActivationMaxSize:break;
+    case ai_module_activation_relu:return fModuleActivationRelu(x);
+    case ai_module_activation_sigmoid:break;
+    case ai_module_activation_tanh:break;
+    case ai_module_activation_maxsize:break;
     default:return 0;
   }
 }

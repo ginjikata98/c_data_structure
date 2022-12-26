@@ -1,7 +1,3 @@
-//
-// Created by Tony Vu on 26/12/2022.
-//
-
 #include "nn.h"
 #include "gemm.h"
 #include "activation.h"
@@ -18,25 +14,27 @@ void add_bias(float *output, float *biases, int batch, int n, int size) {
   }
 }
 
-static void ai_module_linear_forward(ai_module_linear *module) {
-  ai_module_linear_config *data = module->data;
+void *ai_module_linear_forward(ai_module *ai_module, void *input) {
+  ai_module_linear *module = (ai_module_linear *) ai_module;
+  assert(input && module);
+  module->input = input;
+  fill_cpu(module->n_outputs * module->batch, 0, module->output, 0);
 
-  fill_cpu(data->n_outputs * data->batch, 0, data->output, 0);
-
-  i32 m = data->batch;
-  i32 k = data->n_inputs;
-  i32 n = data->n_outputs;
-  f32 *a = data->input;
-  f32 *b = data->weights;
-  f32 *c = data->output;
+  i32 m = module->batch;
+  i32 k = module->n_inputs;
+  i32 n = module->n_outputs;
+  f32 *a = module->input;
+  f32 *b = module->weights;
+  f32 *c = module->output;
 
   gemm(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
 //  if (l.batch_normalize) {
 //    forward_batchnorm_layer(l, net);
 //  } else {
-  add_bias(data->output, data->biases, data->batch, data->n_outputs, 1);
+  add_bias(module->output, module->biases, module->batch, module->n_outputs, 1);
 //  }
-  activate_array(data->output, data->n_outputs * data->batch, module->activation);
+  activate_array(module->output, module->n_outputs * module->batch, module->base->activation);
+  return module->output;
 }
 
 static void ai_module_linear_backward(ai_module_linear *module) {
@@ -47,6 +45,14 @@ static void ai_module_linear_update(ai_module_linear *module) {
 
 }
 
+ai_module *ai_module_new(string name, ai_module_type t, ai_module_activation a) {
+  ai_module *m = ai_calloc(m, 1, sizeof(ai_module));
+  m->name = name;
+  m->type = t;
+  m->activation = a;
+  return m;
+}
+
 ai_module_linear *ai_module_linear_new(i32 batch,
                                        i32 n_inputs,
                                        i32 n_outputs,
@@ -54,42 +60,37 @@ ai_module_linear *ai_module_linear_new(i32 batch,
                                        bool batchNormalize,
                                        string name) {
   ai_module_linear *m = ai_calloc(m, 1, sizeof(ai_module_linear));
-  m->type = emModuleTypeLinear;
-  m->name = name;
-  m->activation = activation;
+  m->base = ai_module_new(name, ai_module_type_linear, activation);
 
-  m->forward = ai_module_linear_forward;
-  m->backward = ai_module_linear_backward;
-  m->update = ai_module_linear_update;
+  m->base->forward = ai_module_linear_forward;
+//  m->base->backward = ai_module_linear_backward;
+//  m->base->update = ai_module_linear_update;
 
-  ai_module_linear_config *c = ai_calloc(c, 1, sizeof(ai_module_linear_config));
-  c->batch = batch;
-  c->n_inputs = n_inputs;
-  c->n_outputs = n_outputs;
+  m->batch = batch;
+  m->n_inputs = n_inputs;
+  m->n_outputs = n_outputs;
 
-  c->weights = ai_calloc(c->weights, n_outputs * n_inputs, sizeof(f32));
-  c->biases = ai_calloc(c->biases, n_outputs, sizeof(f32));
+  m->weights = ai_calloc(m->weights, n_outputs * n_inputs, sizeof(f32));
+  m->biases = ai_calloc(m->biases, n_outputs, sizeof(f32));
 
-  c->weight_updates = ai_calloc(c->weight_updates, n_outputs * n_inputs, sizeof(f32));
-  c->bias_updates = ai_calloc(c->bias_updates, n_outputs, sizeof(f32));
+  m->weight_updates = ai_calloc(m->weight_updates, n_outputs * n_inputs, sizeof(f32));
+  m->bias_updates = ai_calloc(m->bias_updates, n_outputs, sizeof(f32));
 
-  c->input = ai_calloc(c->input, n_inputs, sizeof(f32));
-  c->output = ai_calloc(c->output, batch * n_outputs, sizeof(f32));
-  c->delta = ai_calloc(c->delta, batch * n_outputs, sizeof(f32));
+  m->input = null;
+  m->output = ai_calloc(m->output, batch * n_outputs, sizeof(f32));
+  m->delta = ai_calloc(m->delta, batch * n_outputs, sizeof(f32));
 
-  f32 scale = sqrt(2. / n_inputs);
+  f32 scale = (f32) sqrt(2. / n_inputs);
   for (i32 i = 0; i < n_outputs * n_inputs; ++i) {
-    c->weights[i] = scale * fRandUniform(-1, 1);
+    m->weights[i] = scale * (f32) fRandUniform();
   }
-
-  m->data = c;
 
   return m;
 }
 
 ai_nn_api ai_import_nn() {
   ai_nn_api nn = {0};
-  nn.Linear = ai_module_linear_new;
+  nn.linear = ai_module_linear_new;
   return nn;
 }
 
