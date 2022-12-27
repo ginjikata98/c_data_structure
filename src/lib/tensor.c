@@ -45,7 +45,7 @@
 //  i32 len = prod(nd, dims);
 //  f64 *data = ai_m_malloc(data, len * sizeof(f64));
 //  mLoopUp(i, len) {
-//    data[i] = fRandUniform();
+//    data[i] = ai_random_uniform();
 //  }
 //
 //  return fTensorNew(data, nd, dims);
@@ -55,7 +55,7 @@
 //  i32 len = prod(nd, dims);
 //  f64 *data = ai_m_malloc(data, len * sizeof(f64));
 //  mLoopUp(i, len) {
-//    data[i] = fRandNormal();
+//    data[i] = ai_random_normal();
 //  }
 //
 //  return fTensorNew(data, nd, dims);

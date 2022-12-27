@@ -7,7 +7,7 @@ void *fMemClone(void *src, size s) {
   return p;
 }
 
-void fMemCopy(void *src, void*dest, size s) {
+void fMemCopy(void *src, void *dest, size s) {
   assert(src && dest);
   memmove(dest, src, s);
 }

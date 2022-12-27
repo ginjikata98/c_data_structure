@@ -24,7 +24,7 @@ sTensor *fTensorUniform(i32 nd, i32 *dims);
 sTensor *fTensorNormal(i32 nd, i32 *dims);
 sTensor *fTensorLinspace(f64 start, f64 end, f64 step);
 void fTensorPrint(sTensor *self);
-sTensor *fTensorChoice(sTensor* arr, i32 size);
+sTensor *fTensorChoice(sTensor *arr, i32 size);
 
 // modifying
 void fTensorReshape(sTensor *self, i32 nd, const i32 *dims);

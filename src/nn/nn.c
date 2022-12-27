@@ -1,6 +1,7 @@
 #include "nn.h"
-#include "gemm.h"
+#include "math/gemm.h"
 #include "activation.h"
+#include "math/blas.h"
 #include "../lib/rand.h"
 
 void add_bias(float *output, float *biases, int batch, int n, int size) {
@@ -18,7 +19,7 @@ void *ai_module_linear_forward(ai_module *ai_module, void *input) {
   ai_module_linear *module = (ai_module_linear *) ai_module;
   assert(input && module);
   module->input = input;
-  fill_cpu(module->n_outputs * module->batch, 0, module->output, 0);
+  ai_blas_fill_cpu(module->n_outputs * module->batch, 0, module->output, 0);
 
   i32 m = module->batch;
   i32 k = module->n_inputs;
@@ -27,13 +28,9 @@ void *ai_module_linear_forward(ai_module *ai_module, void *input) {
   f32 *b = module->weights;
   f32 *c = module->output;
 
-  gemm(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
-//  if (l.batch_normalize) {
-//    forward_batchnorm_layer(l, net);
-//  } else {
+  ai_gemm(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
   add_bias(module->output, module->biases, module->batch, module->n_outputs, 1);
-//  }
-  activate_array(module->output, module->n_outputs * module->batch, module->base.activation);
+  activate_array(module->output, module->n_outputs * module->batch, module->activation);
   return module->output;
 }
 
@@ -45,17 +42,9 @@ static void ai_module_linear_update(ai_module_linear *module) {
 
 }
 
-static ai_module ai_module_new(ai_module_type t, ai_module_activation a) {
-  ai_module m = {0};
-  m.type = t;
-  m.activation = a;
-  return m;
-}
 
 ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, ai_module_activation activation) {
   ai_module_linear *m = ai_m_calloc(m, 1, sizeof(ai_module_linear));
-  m->base = ai_module_new(ai_module_type_linear, activation);
-
   m->base.forward = ai_module_linear_forward;
 //  m->base->backward = ai_module_linear_backward;
 //  m->base->update = ai_module_linear_update;
@@ -76,7 +65,7 @@ ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, a
 
   f32 scale = (f32) sqrt(2. / n_inputs);
   for (i32 i = 0; i < n_outputs * n_inputs; ++i) {
-    m->weights[i] = scale * (f32) fRandUniform();
+    m->weights[i] = scale * (f32) ai_random_uniform();
   }
 
   return m;

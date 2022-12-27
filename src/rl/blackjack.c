@@ -7,7 +7,7 @@
 
 
 i32 fGetCard() {
-  i32 card = fRandU32(1, 14);
+  i32 card = ai_random_randint(1, 14);
   return ai_m_min(card, 10);
 }
 

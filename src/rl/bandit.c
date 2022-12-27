@@ -24,14 +24,14 @@
 //
 //void fBanditReset(sBandit *self) {
 //  mLoopUp(i, self->k) {
-//    self->qTrue[i] = fRandNormal();
+//    self->qTrue[i] = ai_random_normal();
 //  }
 //  memset(self->qEstimation, 0, self->k * sizeof(f64));
 //}
 //
 //u32 fBanditAct(sBandit *self) {
-//  if (fRandUniform() < self->epsilon) {
-//    return fRandU32(0, self->k);
+//  if (ai_random_uniform() < self->epsilon) {
+//    return ai_random_randint(0, self->k);
 //  }
 //
 //  u32 maxAction = 0;
@@ -47,7 +47,7 @@
 //}
 //
 //f64 fBanditStep(sBandit *self, u32 action) {
-//  f64 reward = fRandNormal() + self->qTrue[action];
+//  f64 reward = ai_random_normal() + self->qTrue[action];
 //  self->qEstimation[action] += self->lr * (reward - self->qEstimation[action]);
 //  return reward;
 //}

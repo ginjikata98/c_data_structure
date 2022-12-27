@@ -7,8 +7,8 @@
 
 #include "std.h"
 
-u32 fRandU32(u32 min, u32 max);
-f64 fRandNormal();
-f64 fRandUniform();
+u32 ai_random_randint(u32 min, u32 max);
+f64 ai_random_normal();
+f64 ai_random_uniform();
 
 #endif //MAIN_RAND_H

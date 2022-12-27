@@ -43,25 +43,34 @@ const char *SDS_NOINIT = "SDS_NOINIT";
 
 static inline int sdsHdrSize(char type) {
   switch (type & SDS_TYPE_MASK) {
-    case SDS_TYPE_5:return sizeof(struct sdshdr5);
-    case SDS_TYPE_8:return sizeof(struct sdshdr8);
-    case SDS_TYPE_16:return sizeof(struct sdshdr16);
-    case SDS_TYPE_32:return sizeof(struct sdshdr32);
-    case SDS_TYPE_64:return sizeof(struct sdshdr64);
+    case SDS_TYPE_5:
+      return sizeof(struct sdshdr5);
+    case SDS_TYPE_8:
+      return sizeof(struct sdshdr8);
+    case SDS_TYPE_16:
+      return sizeof(struct sdshdr16);
+    case SDS_TYPE_32:
+      return sizeof(struct sdshdr32);
+    case SDS_TYPE_64:
+      return sizeof(struct sdshdr64);
   }
   return 0;
 }
 
 static inline char sdsReqType(size_t string_size) {
-  if (string_size < 1 << 5)
+  if (string_size < 1 << 5) {
     return SDS_TYPE_5;
-  if (string_size < 1 << 8)
+  }
+  if (string_size < 1 << 8) {
     return SDS_TYPE_8;
-  if (string_size < 1 << 16)
+  }
+  if (string_size < 1 << 16) {
     return SDS_TYPE_16;
+  }
 #if (LONG_MAX == LLONG_MAX)
-  if (string_size < 1ll << 32)
+  if (string_size < 1ll << 32) {
     return SDS_TYPE_32;
+  }
   return SDS_TYPE_64;
 #else
   return SDS_TYPE_32;
@@ -87,15 +96,15 @@ sds sdsnewlen(const void *init, size_t initlen) {
   char type = sdsReqType(initlen);
   /* Empty strings are usually created in order to append. Use type 8
    * since type 5 is not good at this. */
-  if (type == SDS_TYPE_5 && initlen == 0) type = SDS_TYPE_8;
+  if (type == SDS_TYPE_5 && initlen == 0) { type = SDS_TYPE_8; }
   int hdrlen = sdsHdrSize(type);
   unsigned char *fp; /* flags pointer. */
 
   sh = s_malloc(hdrlen + initlen + 1);
-  if (sh == NULL) return NULL;
-  if (init == SDS_NOINIT)
+  if (sh == NULL) { return NULL; }
+  if (init == SDS_NOINIT) {
     init = NULL;
-  else if (!init)
+  } else if (!init)
     memset(sh, 0, hdrlen + initlen + 1);
   s = (char *) sh + hdrlen;
   fp = ((unsigned char *) s) - 1;
@@ -158,7 +167,7 @@ sds sdsdup(const sds s) {
 
 /* Free an sds string. No operation is performed if 's' is NULL. */
 void sdsfree(sds s) {
-  if (s == NULL) return;
+  if (s == NULL) { return; }
   s_free((char *) s - sdsHdrSize(s[-1]));
 }
 
@@ -204,34 +213,35 @@ sds sdsMakeRoomFor(sds s, size_t addlen) {
   int hdrlen;
 
   /* Return ASAP if there is enough space left. */
-  if (avail >= addlen) return s;
+  if (avail >= addlen) { return s; }
 
   len = sdslen(s);
   sh = (char *) s - sdsHdrSize(oldtype);
   reqlen = newlen = (len + addlen);
-  if (newlen < SDS_MAX_PREALLOC)
+  if (newlen < SDS_MAX_PREALLOC) {
     newlen *= 2;
-  else
+  } else {
     newlen += SDS_MAX_PREALLOC;
+  }
 
   type = sdsReqType(newlen);
 
   /* Don't use type 5: the user is appending to the string and type 5 is
    * not able to remember empty space, so sdsMakeRoomFor() must be called
    * at every appending operation. */
-  if (type == SDS_TYPE_5) type = SDS_TYPE_8;
+  if (type == SDS_TYPE_5) { type = SDS_TYPE_8; }
 
   hdrlen = sdsHdrSize(type);
   assert(hdrlen + newlen + 1 > reqlen); /* Catch size_t overflow */
   if (oldtype == type) {
     newsh = s_realloc(sh, hdrlen + newlen + 1);
-    if (newsh == NULL) return NULL;
+    if (newsh == NULL) { return NULL; }
     s = (char *) newsh + hdrlen;
   } else {
     /* Since the header size changes, need to move the string forward,
      * and can't use realloc */
     newsh = s_malloc(hdrlen + newlen + 1);
-    if (newsh == NULL) return NULL;
+    if (newsh == NULL) { return NULL; }
     memcpy((char *) newsh + hdrlen, s, len + 1);
     s_free(sh);
     s = (char *) newsh + hdrlen;
@@ -257,7 +267,7 @@ sds sdsRemoveFreeSpace(sds s) {
   sh = (char *) s - oldhdrlen;
 
   /* Return ASAP if there is no space left. */
-  if (avail == 0) return s;
+  if (avail == 0) { return s; }
 
   /* Check what would be the minimum SDS header that is just good enough to
    * fit this string. */
@@ -270,11 +280,11 @@ sds sdsRemoveFreeSpace(sds s) {
    * reallocate the string to use the different header type. */
   if (oldtype == type || type > SDS_TYPE_8) {
     newsh = s_realloc(sh, oldhdrlen + len + 1);
-    if (newsh == NULL) return NULL;
+    if (newsh == NULL) { return NULL; }
     s = (char *) newsh + oldhdrlen;
   } else {
     newsh = s_malloc(hdrlen + len + 1);
-    if (newsh == NULL) return NULL;
+    if (newsh == NULL) { return NULL; }
     memcpy((char *) newsh + hdrlen, s, len + 1);
     s_free(sh);
     s = (char *) newsh + hdrlen;
@@ -363,7 +373,8 @@ void sdsIncrLen(sds s, ssize_t incr) {
       len = (sh->len += incr);
       break;
     }
-    default: len = 0; /* Just to avoid compilation warnings. */
+    default:
+      len = 0; /* Just to avoid compilation warnings. */
   }
   s[len] = '\0';
 }
@@ -376,9 +387,9 @@ void sdsIncrLen(sds s, ssize_t incr) {
 sds sdsgrowzero(sds s, size_t len) {
   size_t curlen = sdslen(s);
 
-  if (len <= curlen) return s;
+  if (len <= curlen) { return s; }
   s = sdsMakeRoomFor(s, len - curlen);
-  if (s == NULL) return NULL;
+  if (s == NULL) { return NULL; }
 
   /* Make sure added region doesn't contain garbage */
   memset(s + curlen, 0, (len - curlen + 1)); /* also set trailing \0 byte */
@@ -395,7 +406,7 @@ sds sdscatlen(sds s, const void *t, size_t len) {
   size_t curlen = sdslen(s);
 
   s = sdsMakeRoomFor(s, len);
-  if (s == NULL) return NULL;
+  if (s == NULL) { return NULL; }
   memcpy(s + curlen, t, len);
   sdssetlen(s, curlen + len);
   s[curlen + len] = '\0';
@@ -423,7 +434,7 @@ sds sdscatsds(sds s, const sds t) {
 sds sdscpylen(sds s, const char *t, size_t len) {
   if (sdsalloc(s) < len) {
     s = sdsMakeRoomFor(s, len - sdslen(s));
-    if (s == NULL) return NULL;
+    if (s == NULL) { return NULL; }
   }
   memcpy(s, t, len);
   s[len] = '\0';
@@ -444,6 +455,7 @@ sds sdscpy(sds s, const char *t) {
  * The function returns the length of the null-terminated string
  * representation stored at 's'. */
 #define SDS_LLSTR_SIZE 21
+
 int sdsll2str(char *s, long long value) {
   char *p, aux;
   unsigned long long v;
@@ -468,7 +480,7 @@ int sdsll2str(char *s, long long value) {
     *p++ = '0' + (v % 10);
     v /= 10;
   } while (v);
-  if (value < 0) *p++ = '-';
+  if (value < 0) { *p++ = '-'; }
 
   /* Compute length and add null term. */
   l = p - s;
@@ -537,7 +549,7 @@ sds sdscatvprintf(sds s, const char *fmt, va_list ap) {
    * If not possible we revert to heap allocation. */
   if (buflen > sizeof(staticbuf)) {
     buf = s_malloc(buflen);
-    if (buf == NULL) return NULL;
+    if (buf == NULL) { return NULL; }
   } else {
     buflen = sizeof(staticbuf);
   }
@@ -556,7 +568,7 @@ sds sdscatvprintf(sds s, const char *fmt, va_list ap) {
       if (buf != staticbuf) s_free(buf);
       buflen = ((size_t) bufstrlen) + 1;
       buf = s_malloc(buflen);
-      if (buf == NULL) return NULL;
+      if (buf == NULL) { return NULL; }
       continue;
     }
     break;
@@ -634,12 +646,14 @@ sds sdscatfmt(sds s, char const *fmt, ...) {
     }
 
     switch (*f) {
-      case '%':next = *(f + 1);
-        if (next == '\0') break;
+      case '%':
+        next = *(f + 1);
+        if (next == '\0') { break; }
         f++;
         switch (next) {
           case 's':
-          case 'S':str = va_arg(ap, char*);
+          case 'S':
+            str = va_arg(ap, char*);
             l = (next == 's') ? strlen(str) : sdslen(str);
             if (sdsavail(s) < l) {
               s = sdsMakeRoomFor(s, l);
@@ -650,10 +664,11 @@ sds sdscatfmt(sds s, char const *fmt, ...) {
             break;
           case 'i':
           case 'I':
-            if (next == 'i')
+            if (next == 'i') {
               num = va_arg(ap, int);
-            else
+            } else {
               num = va_arg(ap, long long);
+            }
             {
               char buf[SDS_LLSTR_SIZE];
               l = sdsll2str(buf, num);
@@ -667,10 +682,11 @@ sds sdscatfmt(sds s, char const *fmt, ...) {
             break;
           case 'u':
           case 'U':
-            if (next == 'u')
+            if (next == 'u') {
               unum = va_arg(ap, unsigned int);
-            else
+            } else {
               unum = va_arg(ap, unsigned long long);
+            }
             {
               char buf[SDS_LLSTR_SIZE];
               l = sdsull2str(buf, unum);
@@ -688,7 +704,8 @@ sds sdscatfmt(sds s, char const *fmt, ...) {
             break;
         }
         break;
-      default:s[i++] = *f;
+      default:
+        s[i++] = *f;
         sdsinclen(s, 1);
         break;
     }
@@ -749,14 +766,14 @@ sds sdstrim(sds s, const char *cset) {
 void sdsrange(sds s, ssize_t start, ssize_t end) {
   size_t newlen, len = sdslen(s);
 
-  if (len == 0) return;
+  if (len == 0) { return; }
   if (start < 0) {
     start = len + start;
-    if (start < 0) start = 0;
+    if (start < 0) { start = 0; }
   }
   if (end < 0) {
     end = len + end;
-    if (end < 0) end = 0;
+    if (end < 0) { end = 0; }
   }
   newlen = (start > end) ? 0 : (end - start) + 1;
   if (newlen != 0) {
@@ -805,7 +822,7 @@ int sdscmp(const sds s1, const sds s2) {
   l2 = sdslen(s2);
   minlen = (l1 < l2) ? l1 : l2;
   cmp = memcmp(s1, s2, minlen);
-  if (cmp == 0) return l1 > l2 ? 1 : (l1 < l2 ? -1 : 0);
+  if (cmp == 0) { return l1 > l2 ? 1 : (l1 < l2 ? -1 : 0); }
   return cmp;
 }
 
@@ -836,7 +853,7 @@ sds *sdssplitlen(const char *s, ssize_t len, const char *sep, int seplen, int *c
   }
 
   tokens = s_malloc(sizeof(sds) * slots);
-  if (tokens == NULL) return NULL;
+  if (tokens == NULL) { return NULL; }
 
   for (j = 0; j < (len - (seplen - 1)); j++) {
     /* make sure there is room for the next element and the final one */
@@ -845,13 +862,13 @@ sds *sdssplitlen(const char *s, ssize_t len, const char *sep, int seplen, int *c
 
       slots *= 2;
       newtokens = s_realloc(tokens, sizeof(sds) * slots);
-      if (newtokens == NULL) goto cleanup;
+      if (newtokens == NULL) { goto cleanup; }
       tokens = newtokens;
     }
     /* search the separator */
     if ((seplen == 1 && *(s + j) == sep[0]) || (memcmp(s + j, sep, seplen) == 0)) {
       tokens[elements] = sdsnewlen(s + start, j - start);
-      if (tokens[elements] == NULL) goto cleanup;
+      if (tokens[elements] == NULL) { goto cleanup; }
       elements++;
       start = j + seplen;
       j = j + seplen - 1; /* skip the separator */
@@ -859,7 +876,7 @@ sds *sdssplitlen(const char *s, ssize_t len, const char *sep, int seplen, int *c
   }
   /* Add the final element. We are sure there is room in the tokens array. */
   tokens[elements] = sdsnewlen(s + start, len - start);
-  if (tokens[elements] == NULL) goto cleanup;
+  if (tokens[elements] == NULL) { goto cleanup; }
   elements++;
   *count = elements;
   return tokens;
@@ -876,7 +893,7 @@ sds *sdssplitlen(const char *s, ssize_t len, const char *sep, int seplen, int *c
 
 /* Free the result returned by sdssplitlen(), or do nothing if 'tokens' is NULL. */
 void sdsfreesplitres(sds *tokens, int count) {
-  if (!tokens) return;
+  if (!tokens) { return; }
   while (count--)
     sdsfree(tokens[count]);
   s_free(tokens);
@@ -893,23 +910,30 @@ sds sdscatrepr(sds s, const char *p, size_t len) {
   while (len--) {
     switch (*p) {
       case '\\':
-      case '"':s = sdscatprintf(s, "\\%c", *p);
+      case '"':
+        s = sdscatprintf(s, "\\%c", *p);
         break;
-      case '\n': s = sdscatlen(s, "\\n", 2);
+      case '\n':
+        s = sdscatlen(s, "\\n", 2);
         break;
-      case '\r': s = sdscatlen(s, "\\r", 2);
+      case '\r':
+        s = sdscatlen(s, "\\r", 2);
         break;
-      case '\t': s = sdscatlen(s, "\\t", 2);
+      case '\t':
+        s = sdscatlen(s, "\\t", 2);
         break;
-      case '\a': s = sdscatlen(s, "\\a", 2);
+      case '\a':
+        s = sdscatlen(s, "\\a", 2);
         break;
-      case '\b': s = sdscatlen(s, "\\b", 2);
+      case '\b':
+        s = sdscatlen(s, "\\b", 2);
         break;
       default:
-        if (isprint(*p))
+        if (isprint(*p)) {
           s = sdscatprintf(s, "%c", *p);
-        else
+        } else {
           s = sdscatprintf(s, "\\x%02x", (unsigned char) *p);
+        }
         break;
     }
     p++;
@@ -920,37 +944,53 @@ sds sdscatrepr(sds s, const char *p, size_t len) {
 /* Helper function for sdssplitargs() that returns non zero if 'c'
  * is a valid hex digit. */
 int is_hex_digit(char c) {
-  return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') ||
-      (c >= 'A' && c <= 'F');
+  return (c >= '0' && c <= '9') || (c >= 'a' && c <= 'f') || (c >= 'A' && c <= 'F');
 }
 
 /* Helper function for sdssplitargs() that converts a hex digit into an
  * integer from 0 to 15 */
 int hex_digit_to_int(char c) {
   switch (c) {
-    case '0': return 0;
-    case '1': return 1;
-    case '2': return 2;
-    case '3': return 3;
-    case '4': return 4;
-    case '5': return 5;
-    case '6': return 6;
-    case '7': return 7;
-    case '8': return 8;
-    case '9': return 9;
+    case '0':
+      return 0;
+    case '1':
+      return 1;
+    case '2':
+      return 2;
+    case '3':
+      return 3;
+    case '4':
+      return 4;
+    case '5':
+      return 5;
+    case '6':
+      return 6;
+    case '7':
+      return 7;
+    case '8':
+      return 8;
+    case '9':
+      return 9;
     case 'a':
-    case 'A': return 10;
+    case 'A':
+      return 10;
     case 'b':
-    case 'B': return 11;
+    case 'B':
+      return 11;
     case 'c':
-    case 'C': return 12;
+    case 'C':
+      return 12;
     case 'd':
-    case 'D': return 13;
+    case 'D':
+      return 13;
     case 'e':
-    case 'E': return 14;
+    case 'E':
+      return 14;
     case 'f':
-    case 'F': return 15;
-    default: return 0;
+    case 'F':
+      return 15;
+    default:
+      return 0;
   }
 }
 
@@ -988,16 +1028,13 @@ sds *sdssplitargs(const char *line, int *argc) {
       int insq = 0; /* set to 1 if we are in 'single quotes' */
       int done = 0;
 
-      if (current == NULL) current = sdsempty();
+      if (current == NULL) { current = sdsempty(); }
       while (!done) {
         if (inq) {
-          if (*p == '\\' && *(p + 1) == 'x' &&
-              is_hex_digit(*(p + 2)) &&
-              is_hex_digit(*(p + 3))) {
+          if (*p == '\\' && *(p + 1) == 'x' && is_hex_digit(*(p + 2)) && is_hex_digit(*(p + 3))) {
             unsigned char byte;
 
-            byte = (hex_digit_to_int(*(p + 2)) * 16) +
-                hex_digit_to_int(*(p + 3));
+            byte = (hex_digit_to_int(*(p + 2)) * 16) + hex_digit_to_int(*(p + 3));
             current = sdscatlen(current, (char *) &byte, 1);
             p += 3;
           } else if (*p == '\\' && *(p + 1)) {
@@ -1005,24 +1042,30 @@ sds *sdssplitargs(const char *line, int *argc) {
 
             p++;
             switch (*p) {
-              case 'n': c = '\n';
+              case 'n':
+                c = '\n';
                 break;
-              case 'r': c = '\r';
+              case 'r':
+                c = '\r';
                 break;
-              case 't': c = '\t';
+              case 't':
+                c = '\t';
                 break;
-              case 'b': c = '\b';
+              case 'b':
+                c = '\b';
                 break;
-              case 'a': c = '\a';
+              case 'a':
+                c = '\a';
                 break;
-              default: c = *p;
+              default:
+                c = *p;
                 break;
             }
             current = sdscatlen(current, &c, 1);
           } else if (*p == '"') {
             /* closing quote must be followed by a space or
              * nothing at all. */
-            if (*(p + 1) && !isspace(*(p + 1))) goto err;
+            if (*(p + 1) && !isspace(*(p + 1))) { goto err; }
             done = 1;
           } else if (!*p) {
             /* unterminated quotes */
@@ -1037,7 +1080,7 @@ sds *sdssplitargs(const char *line, int *argc) {
           } else if (*p == '\'') {
             /* closing quote must be followed by a space or
              * nothing at all. */
-            if (*(p + 1) && !isspace(*(p + 1))) goto err;
+            if (*(p + 1) && !isspace(*(p + 1))) { goto err; }
             done = 1;
           } else if (!*p) {
             /* unterminated quotes */
@@ -1051,17 +1094,21 @@ sds *sdssplitargs(const char *line, int *argc) {
             case '\n':
             case '\r':
             case '\t':
-            case '\0':done = 1;
+            case '\0':
+              done = 1;
               break;
-            case '"':inq = 1;
+            case '"':
+              inq = 1;
               break;
-            case '\'':insq = 1;
+            case '\'':
+              insq = 1;
               break;
-            default:current = sdscatlen(current, p, 1);
+            default:
+              current = sdscatlen(current, p, 1);
               break;
           }
         }
-        if (*p) p++;
+        if (*p) { p++; }
       }
       /* add the token to the vector */
       vector = s_realloc(vector, ((*argc) + 1) * sizeof(char *));
@@ -1070,7 +1117,7 @@ sds *sdssplitargs(const char *line, int *argc) {
       current = NULL;
     } else {
       /* Even on empty input string return something not NULL. */
-      if (vector == NULL) vector = s_malloc(sizeof(void *));
+      if (vector == NULL) { vector = s_malloc(sizeof(void *)); }
       return vector;
     }
   }
@@ -1079,7 +1126,7 @@ sds *sdssplitargs(const char *line, int *argc) {
   while ((*argc)--)
     sdsfree(vector[*argc]);
   s_free(vector);
-  if (current) sdsfree(current);
+  if (current) { sdsfree(current); }
   *argc = 0;
   return NULL;
 }
@@ -1115,7 +1162,7 @@ sds sdsjoin(char **argv, int argc, char *sep) {
 
   for (j = 0; j < argc; j++) {
     join = sdscat(join, argv[j]);
-    if (j != argc - 1) join = sdscat(join, sep);
+    if (j != argc - 1) { join = sdscat(join, sep); }
   }
   return join;
 }
@@ -1127,7 +1174,7 @@ sds sdsjoinsds(sds *argv, int argc, const char *sep, size_t seplen) {
 
   for (j = 0; j < argc; j++) {
     join = sdscatsds(join, argv[j]);
-    if (j != argc - 1) join = sdscatlen(join, sep, seplen);
+    if (j != argc - 1) { join = sdscatlen(join, sep, seplen); }
   }
   return join;
 }
@@ -1138,7 +1185,9 @@ sds sdsjoinsds(sds *argv, int argc, const char *sep, size_t seplen) {
  * the programs SDS is linked to, if they want to touch the SDS internals
  * even if they use a different allocator. */
 void *sds_malloc(size_t size) { return s_malloc(size); }
+
 void *sds_realloc(void *ptr, size_t size) { return s_realloc(ptr, size); }
+
 void sds_free(void *ptr) { s_free(ptr); }
 
 #if defined(SDS_TEST_MAIN)

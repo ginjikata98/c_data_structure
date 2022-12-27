@@ -175,7 +175,7 @@ void scal_cpu(int N, float ALPHA, float *X, int INCX) {
   for (i = 0; i < N; ++i) X[i * INCX] *= ALPHA;
 }
 
-void fill_cpu(int N, float ALPHA, float *X, int INCX) {
+void ai_blas_fill_cpu(int N, float ALPHA, float *X, int INCX) {
   int i;
   for (i = 0; i < N; ++i) X[i * INCX] = ALPHA;
 }
@@ -278,7 +278,7 @@ float dot_cpu(int N, float *X, int INCX, float *Y, int INCY) {
   return dot;
 }
 
-void softmax(float *input, int n, float temp, int stride, float *output) {
+void ai_blas_softmax(float *input, int n, float temp, int stride, float *output) {
   int i;
   float sum = 0;
   float largest = -FLT_MAX;
@@ -301,8 +301,8 @@ void softmax_cpu(float *input, int n, int batch, int batch_offset, int groups, i
   int g, b;
   for (b = 0; b < batch; ++b) {
     for (g = 0; g < groups; ++g) {
-      softmax(input + b * batch_offset + g * group_offset, n, temp, stride,
-              output + b * batch_offset + g * group_offset);
+      ai_blas_softmax(input + b * batch_offset + g * group_offset, n, temp, stride,
+                      output + b * batch_offset + g * group_offset);
     }
   }
 }

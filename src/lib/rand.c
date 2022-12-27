@@ -1,6 +1,6 @@
 #include "rand.h"
 
-u32 fRandU32(u32 min, u32 max) {
+u32 ai_random_randint(u32 min, u32 max) {
   if (max < min) {
     u32 s = min;
     min = max;
@@ -10,7 +10,7 @@ u32 fRandU32(u32 min, u32 max) {
   return r;
 }
 
-f64 fRandNormal() {
+f64 ai_random_normal() {
   static u32 haveSpare = 0;
   static f64 rand1, rand2;
 
@@ -29,6 +29,6 @@ f64 fRandNormal() {
   return sqrt(rand1) * cos(rand2);
 }
 
-f64 fRandUniform() {
+f64 ai_random_uniform() {
   return ((f64) arc4random_uniform(UINT32_MAX) / UINT32_MAX);
 }
