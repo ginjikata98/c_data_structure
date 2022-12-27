@@ -11,10 +11,7 @@ void dummy_(ai_value *v) {
 
 void ai_value_add_deriv(ai_value *self);
 void ai_value_mul_deriv(ai_value *self);
-void ai_value_sub_deriv(ai_value *self);
-void ai_value_div_deriv(ai_value *self);
 void ai_value_pow_deriv(ai_value *self);
-void ai_value_neg_deriv(ai_value *self);
 void ai_value_relu_deriv(ai_value *self);
 
 static u64 ai_value_gen_id() {
@@ -62,11 +59,46 @@ void ai_value_mul_deriv(ai_value *self) {
   self->children[1]->grad += self->grad * self->children[0]->data;
 }
 
-ai_value *ai_value_sub(ai_value *self, ai_value *other);
-ai_value *ai_value_div(ai_value *self, ai_value *other);
-ai_value *ai_value_pow(ai_value *self, f32 other);
-ai_value *ai_value_neg(ai_value *self);
-ai_value *ai_value_relu(ai_value *self);
+ai_value *ai_value_sub(ai_value *self, ai_value *other) {
+  return ai_value_add(self, ai_value_neg(other));
+}
+
+ai_value *ai_value_div(ai_value *self, ai_value *other) {
+  return ai_value_mul(self, ai_value_pow(other, -1));
+}
+
+ai_value *ai_value_pow(ai_value *self, f32 other) {
+  assert(self && other);
+  ai_value *out = ai_value_new(powf(self->data, other));
+  out->children[0] = self;
+  out->children[1] = ai_value_new(other);
+  out->backward = ai_value_pow_deriv;
+  return out;
+}
+
+void ai_value_pow_deriv(ai_value *self) {
+  assert(self && self->children[0] && self->children[1]);
+  f32 op1 = self->children[0]->data;
+  f32 op2 = self->children[1]->data;
+  self->children[0]->grad += self->grad * op2 * powf(op1, op2 - 1);
+}
+
+ai_value *ai_value_neg(ai_value *self) {
+  return ai_value_mul(self, ai_value_new(-1));
+}
+
+ai_value *ai_value_relu(ai_value *self) {
+  assert(self);
+  ai_value *out = ai_value_new(self->data > 0 ? self->data : 0);
+  out->children[0] = self;
+  out->backward = ai_value_relu_deriv;
+  return out;
+}
+
+void ai_value_relu_deriv(ai_value *self) {
+  assert(self && self->children[0]);
+  self->children[0]->grad += self->grad * (f32) (self->data > 0);
+}
 
 void ai_value_backward(ai_value *self);
 
