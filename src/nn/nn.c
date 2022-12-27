@@ -8,7 +8,7 @@
 void *ai_module_linear_forward_(ai_module *ai_module, void *input) {
   ai_module_linear *module = (ai_module_linear *) ai_module;
   assert(input && module);
-  module->input = input;
+  module->input = (f32 *) input;
   ai_blas_fill_cpu(module->n_outputs * module->batch, 0, module->output, 0);
 
   i32 m = module->batch;
@@ -21,7 +21,7 @@ void *ai_module_linear_forward_(ai_module *ai_module, void *input) {
   ai_gemm(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
   ai_blas_add_bias(module->output, module->biases, module->batch, module->n_outputs, 1);
   activate_array(module->output, module->n_outputs * module->batch, module->activation);
-  return module->output;
+  return (void *) module->output;
 }
 
 static void ai_module_linear_backward_(ai_module_linear *module) {
