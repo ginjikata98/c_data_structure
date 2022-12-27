@@ -36,7 +36,7 @@
 //
 //sTensor *fTensorZeros(i32 nd, i32 *dims) {
 //  i32 len = prod(nd, dims);
-//  f64 *data = ai_calloc(data, len, sizeof(f64));
+//  f64 *data = ai_m_calloc(data, len, sizeof(f64));
 //
 //  return fTensorNew(data, nd, dims);
 //}

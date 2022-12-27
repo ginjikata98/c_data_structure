@@ -21,7 +21,7 @@ void task(void *arg) {
 
 int sum_multithread(void) {
   sExecutor *executor = vmExecutorNewFixed(numThreads);
-  u32 *vals = ai_calloc(vals, numItems, sizeof(*vals));
+  u32 *vals = ai_m_calloc(vals, numItems, sizeof(*vals));
 
   for (i32 i = 0; i < numItems; ++i) {
     vals[i] = i;

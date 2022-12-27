@@ -44,8 +44,8 @@ typedef size_t size;
 #define ai_m_free_(p) if (p != null) { free(p); p = null; }
 #define ai_m_free(p) ai_m_free_(p)
 
-#define ai_calloc_(v, l, s) calloc(l, s); assert(v != null)
-#define ai_calloc(v, l, s) ai_calloc_(v, l, s)
+#define ai_m_calloc_(v, l, s) calloc(l, s); assert(v != null)
+#define ai_m_calloc(v, l, s) ai_m_calloc_(v, l, s)
 
 #define ai_m_str_(s)             #s
 #define ai_m_str(s)              ai_m_str_(s)

@@ -53,7 +53,7 @@ static ai_module ai_module_new(ai_module_type t, ai_module_activation a) {
 }
 
 ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, ai_module_activation activation) {
-  ai_module_linear *m = ai_calloc(m, 1, sizeof(ai_module_linear));
+  ai_module_linear *m = ai_m_calloc(m, 1, sizeof(ai_module_linear));
   m->base = ai_module_new(ai_module_type_linear, activation);
 
   m->base.forward = ai_module_linear_forward;
@@ -64,15 +64,15 @@ ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, a
   m->n_inputs = n_inputs;
   m->n_outputs = n_outputs;
 
-  m->weights = ai_calloc(m->weights, n_outputs * n_inputs, sizeof(f32));
-  m->biases = ai_calloc(m->biases, n_outputs, sizeof(f32));
+  m->weights = ai_m_calloc(m->weights, n_outputs * n_inputs, sizeof(f32));
+  m->biases = ai_m_calloc(m->biases, n_outputs, sizeof(f32));
 
-  m->weight_updates = ai_calloc(m->weight_updates, n_outputs * n_inputs, sizeof(f32));
-  m->bias_updates = ai_calloc(m->bias_updates, n_outputs, sizeof(f32));
+  m->weight_updates = ai_m_calloc(m->weight_updates, n_outputs * n_inputs, sizeof(f32));
+  m->bias_updates = ai_m_calloc(m->bias_updates, n_outputs, sizeof(f32));
 
   m->input = null;
-  m->output = ai_calloc(m->output, batch * n_outputs, sizeof(f32));
-  m->delta = ai_calloc(m->delta, batch * n_outputs, sizeof(f32));
+  m->output = ai_m_calloc(m->output, batch * n_outputs, sizeof(f32));
+  m->delta = ai_m_calloc(m->delta, batch * n_outputs, sizeof(f32));
 
   f32 scale = (f32) sqrt(2. / n_inputs);
   for (i32 i = 0; i < n_outputs * n_inputs; ++i) {

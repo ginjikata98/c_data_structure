@@ -1,0 +1,4 @@
+#ifndef MAIN_SRC_CORE_OBJECT_H_
+#define MAIN_SRC_CORE_OBJECT_H_
+
+#endif //MAIN_SRC_CORE_OBJECT_H_
