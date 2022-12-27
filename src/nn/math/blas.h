@@ -55,6 +55,7 @@ void scal_cpu(i32 N, f32 ALPHA, f32 *X, i32 INCX);
 void ai_blas_fill_cpu(i32 N, f32 ALPHA, f32 *X, i32 INCX);
 void normalize_cpu(f32 *x, f32 *mean, f32 *variance, i32 batch, i32 filters, i32 spatial);
 void ai_blas_softmax(f32 *input, i32 n, f32 temp, i32 stride, f32 *output);
+void ai_blas_add_bias(float *output, float *biases, int batch, int n, int size);
 
 #ifdef GPU
 #include "cuda.h"

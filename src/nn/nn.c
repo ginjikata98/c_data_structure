@@ -4,18 +4,7 @@
 #include "math/blas.h"
 #include "../lib/rand.h"
 
-void add_bias(float *output, float *biases, int batch, int n, int size) {
-  int i, j, b;
-  for (b = 0; b < batch; ++b) {
-    for (i = 0; i < n; ++i) {
-      for (j = 0; j < size; ++j) {
-        output[(b * n + i) * size + j] += biases[i];
-      }
-    }
-  }
-}
-
-void *ai_module_linear_forward(ai_module *ai_module, void *input) {
+void *ai_module_linear_forward_(ai_module *ai_module, void *input) {
   ai_module_linear *module = (ai_module_linear *) ai_module;
   assert(input && module);
   module->input = input;
@@ -29,30 +18,24 @@ void *ai_module_linear_forward(ai_module *ai_module, void *input) {
   f32 *c = module->output;
 
   ai_gemm(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
-  add_bias(module->output, module->biases, module->batch, module->n_outputs, 1);
+  ai_blas_add_bias(module->output, module->biases, module->batch, module->n_outputs, 1);
   activate_array(module->output, module->n_outputs * module->batch, module->activation);
   return module->output;
 }
 
-static void ai_module_linear_backward(ai_module_linear *module) {
+static void ai_module_linear_backward_(ai_module_linear *module) {
 
 }
 
-static void ai_module_linear_update(ai_module_linear *module) {
+static void ai_module_linear_update_(ai_module_linear *module) {
 
 }
-
-static string str(void *obj) {
-  return "sdfsdfsd";
-}
-
 
 ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, ai_module_activation activation) {
   ai_module_linear *m = ai_m_calloc(m, 1, sizeof(ai_module_linear));
-  m->base.forward = ai_module_linear_forward;
-  m->base.base.str = str;
-//  m->base->backward = ai_module_linear_backward;
-//  m->base->update = ai_module_linear_update;
+  m->base.forward = ai_module_linear_forward_;
+//  m->base->backward = ai_module_linear_backward_;
+//  m->base->update = ai_module_linear_update_;
 
   m->batch = batch;
   m->n_inputs = n_inputs;

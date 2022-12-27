@@ -17,11 +17,10 @@ typedef enum {
 } ai_module_activation;
 
 typedef struct ai_module {
-  ai_object base;
   void *(*forward)(struct ai_module *, void *input);
   void *(*backward)(struct ai_module *);
   void *(*update)(struct ai_module *);
-  void *(*str)(struct ai_module *);
+  string (*str)(struct ai_module *);
 } ai_module;
 
 typedef struct ai_module_linear {
@@ -38,11 +37,11 @@ typedef struct ai_module_linear {
   i32 n_inputs;
   i32 n_outputs;
   ai_module_activation activation;
+  ai_module_type type;
 } ai_module_linear;
 
 typedef struct ai_nn_api {
   ai_module_linear *(*linear)(i32 batch, i32 n_in, i32 n_out, ai_module_activation);
-
 } ai_nn_api;
 
 ai_module_linear *ai_module_linear_new(i32 batch, i32 n_in, i32 n_out, ai_module_activation);

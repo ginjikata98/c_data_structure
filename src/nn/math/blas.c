@@ -324,3 +324,15 @@ void upsample_cpu(float *in, int w, int h, int c, int batch, int stride, int for
 }
 
 
+void ai_blas_add_bias(float *output, float *biases, int batch, int n, int size) {
+  int i, j, b;
+  for (b = 0; b < batch; ++b) {
+    for (i = 0; i < n; ++i) {
+      for (j = 0; j < size; ++j) {
+        output[(b * n + i) * size + j] += biases[i];
+      }
+    }
+  }
+}
+
+

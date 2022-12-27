@@ -21,6 +21,7 @@ f32 activate(f32 x, ai_module_activation a) {
     default:
       return 0;
   }
+  return 0;
 }
 
 void activate_array(f32 *x, const i32 n, const ai_module_activation a) {
