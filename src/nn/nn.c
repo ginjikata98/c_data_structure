@@ -9,7 +9,7 @@ void *ai_module_linear_forward_(ai_module *ai_module, void *input) {
   ai_module_linear *module = (ai_module_linear *) ai_module;
   assert(input && module);
   module->input = (f32 *) input;
-  ai_blas_fill_cpu(module->n_outputs * module->batch, 0, module->output, 0);
+  ai_blas_fill_cpu(module->n_outputs * module->batch, 0, module->output, 1);
 
   i32 m = module->batch;
   i32 k = module->n_inputs;
@@ -43,7 +43,7 @@ static string ai_module_linear_gen_name_() {
 static string ai_module_linear_str_(ai_module *ai_module) {
   ai_module_linear *module = (ai_module_linear *) ai_module;
   sds s = sdsempty();
-  s = sdscatprintf(s, "%s\t%dx%dx%d", module->name, module->batch, module->n_inputs, module->n_outputs);
+  s = sdscatprintf(s, "%s\t%d %dx%d", module->name, module->batch, module->n_inputs, module->n_outputs);
   return s;
 }
 
