@@ -42,10 +42,15 @@ static void ai_module_linear_update(ai_module_linear *module) {
 
 }
 
+static string str(void *obj) {
+  return "sdfsdfsd";
+}
+
 
 ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, ai_module_activation activation) {
   ai_module_linear *m = ai_m_calloc(m, 1, sizeof(ai_module_linear));
   m->base.forward = ai_module_linear_forward;
+  m->base.base.str = str;
 //  m->base->backward = ai_module_linear_backward;
 //  m->base->update = ai_module_linear_update;
 

@@ -2,6 +2,7 @@
 #define MAIN_NN_H
 
 #include "../lib/std.h"
+#include "../core/object.h"
 
 typedef enum {
   ai_module_type_linear, ai_module_type_softmax, ai_module_type_dropout,
@@ -16,6 +17,7 @@ typedef enum {
 } ai_module_activation;
 
 typedef struct ai_module {
+  ai_object base;
   void *(*forward)(struct ai_module *, void *input);
   void *(*backward)(struct ai_module *);
   void *(*update)(struct ai_module *);
