@@ -20,16 +20,15 @@ typedef enum {
 } ai_module_activation;
 
 typedef struct ai_module {
-  string name;
-  ai_module_type type;
-  ai_module_activation activation;
   void *(*forward)(struct ai_module *, void *input);
   void *(*backward)(struct ai_module *);
   void *(*update)(struct ai_module *);
+  ai_module_type type;
+  ai_module_activation activation;
 } ai_module;
 
 typedef struct ai_module_linear {
-  ai_module *base;
+  ai_module base;
   i32 batch;
   i32 n_inputs;
   i32 n_outputs;
@@ -43,13 +42,15 @@ typedef struct ai_module_linear {
 } ai_module_linear;
 
 typedef struct ai_nn_api {
-  ai_module_linear *(*linear)(i32 batch, i32 n_in, i32 n_out, ai_module_activation, bool batch_normalize, string name);
+  ai_module_linear *(*linear)(i32 batch, i32 n_in, i32 n_out, ai_module_activation);
 
 } ai_nn_api;
 
-ai_module *ai_module_new(string name, ai_module_type, ai_module_activation);
+ai_module_linear *ai_module_linear_new(i32 batch, i32 n_in, i32 n_out, ai_module_activation);
 
-ai_nn_api ai_import_nn();
+#define ai_import_nn(alias) ai_nn_api alias = {\
+.linear = ai_module_linear_new\
+}\
 
 f32 dot_cpu(i32 N, f32 *X, i32 INCX, f32 *Y, i32 INCY);
 void axpy_cpu(i32 N, f32 ALPHA, f32 *X, i32 INCX, f32 *Y, i32 INCY);

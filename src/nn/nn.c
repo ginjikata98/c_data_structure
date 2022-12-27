@@ -33,7 +33,7 @@ void *ai_module_linear_forward(ai_module *ai_module, void *input) {
 //  } else {
   add_bias(module->output, module->biases, module->batch, module->n_outputs, 1);
 //  }
-  activate_array(module->output, module->n_outputs * module->batch, module->base->activation);
+  activate_array(module->output, module->n_outputs * module->batch, module->base.activation);
   return module->output;
 }
 
@@ -45,24 +45,18 @@ static void ai_module_linear_update(ai_module_linear *module) {
 
 }
 
-ai_module *ai_module_new(string name, ai_module_type t, ai_module_activation a) {
-  ai_module *m = ai_calloc(m, 1, sizeof(ai_module));
-  m->name = name;
-  m->type = t;
-  m->activation = a;
+static ai_module ai_module_new(ai_module_type t, ai_module_activation a) {
+  ai_module m = {0};
+  m.type = t;
+  m.activation = a;
   return m;
 }
 
-ai_module_linear *ai_module_linear_new(i32 batch,
-                                       i32 n_inputs,
-                                       i32 n_outputs,
-                                       ai_module_activation activation,
-                                       bool batchNormalize,
-                                       string name) {
+ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, ai_module_activation activation) {
   ai_module_linear *m = ai_calloc(m, 1, sizeof(ai_module_linear));
-  m->base = ai_module_new(name, ai_module_type_linear, activation);
+  m->base = ai_module_new(ai_module_type_linear, activation);
 
-  m->base->forward = ai_module_linear_forward;
+  m->base.forward = ai_module_linear_forward;
 //  m->base->backward = ai_module_linear_backward;
 //  m->base->update = ai_module_linear_update;
 
@@ -86,11 +80,5 @@ ai_module_linear *ai_module_linear_new(i32 batch,
   }
 
   return m;
-}
-
-ai_nn_api ai_import_nn() {
-  ai_nn_api nn = {0};
-  nn.linear = ai_module_linear_new;
-  return nn;
 }
 
