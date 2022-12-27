@@ -13,7 +13,7 @@ struct ai_value {
   u64 id;
   f32 data;
   f32 grad;
-  ai_value *children;
+  ai_value **children;
   void (*backward)(ai_value *self);
 };
 
