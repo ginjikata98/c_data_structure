@@ -3,6 +3,7 @@
 #include "activation.h"
 #include "math/blas.h"
 #include "../lib/rand.h"
+#include "../lib/sds.h"
 
 void *ai_module_linear_forward_(ai_module *ai_module, void *input) {
   ai_module_linear *module = (ai_module_linear *) ai_module;
@@ -31,9 +32,27 @@ static void ai_module_linear_update_(ai_module_linear *module) {
 
 }
 
+static string ai_module_linear_gen_name_() {
+  static i32 id = 0;
+  sds s;
+  s = sdsnew("Linear/");
+  s = sdscatprintf(s, "%d", id++);
+  return s;
+}
+
+static string ai_module_linear_str_(ai_module *ai_module) {
+  ai_module_linear *module = (ai_module_linear *) ai_module;
+  sds s = sdsempty();
+  s = sdscatprintf(s, "%s\t%dx%dx%d", module->name, module->batch, module->n_inputs, module->n_outputs);
+  return s;
+}
+
 ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, ai_module_activation activation) {
   ai_module_linear *m = ai_m_calloc(m, 1, sizeof(ai_module_linear));
+  m->name = ai_module_linear_gen_name_();
+
   m->base.forward = ai_module_linear_forward_;
+  m->base.str = ai_module_linear_str_;
 //  m->base->backward = ai_module_linear_backward_;
 //  m->base->update = ai_module_linear_update_;
 
