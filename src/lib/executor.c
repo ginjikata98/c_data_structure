@@ -25,7 +25,7 @@ static sWork *vmWorkNew(sRunnable runnable, void *arg) {
     return null;
   }
 
-  work = mMalloc(work, sizeof(*work));
+  work = ai_m_malloc(work, sizeof(*work));
   work->runnable = runnable;
   work->arg = arg;
   work->next = null;
@@ -33,7 +33,7 @@ static sWork *vmWorkNew(sRunnable runnable, void *arg) {
 }
 
 static void vmWorkFree(sWork *work) {
-  mFree(work);
+  ai_m_free(work);
 }
 
 static sWork *vmExecutorGetWork(sExecutor *executor) {
@@ -125,7 +125,7 @@ sExecutor *vmExecutorNewFixed(size numThreads) {
   executor->running = true;
 
   sThread thread;
-  mLoopUp(i, numThreads) {
+  for(i32 i=0;i< numThreads;i++) {
     pthread_create(&thread, null, vmExecutorWorkerLoop, executor);
     pthread_detach(thread);
   }
@@ -158,7 +158,7 @@ void vmExecutorFree(sExecutor *executor) {
   pthread_cond_destroy(&(executor->workerLoopSignal));
   pthread_cond_destroy(&(executor->waitLoopSignal));
 
-  mFree(executor);
+  ai_m_free(executor);
 }
 
 bool vmExecutorRun(sExecutor *executor, sRunnable runnable, void *arg) {

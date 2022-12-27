@@ -1,4 +1,4 @@
-#include "../lib/macro.h"
+#include "../core/types.h"
 #include "../lib/rand.h"
 
 
@@ -8,7 +8,7 @@
 
 i32 fGetCard() {
   i32 card = fRandU32(1, 14);
-  return mMin(card, 10);
+  return ai_m_min(card, 10);
 }
 
 i32 fGetCardValue(i32 card) {

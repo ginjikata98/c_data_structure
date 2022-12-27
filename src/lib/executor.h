@@ -1,7 +1,7 @@
 #ifndef MAIN_EXECUTOR_H
 #define MAIN_EXECUTOR_H
 
-#include "macro.h"
+#include "../core/types.h"
 #include "pthread.h"
 #define DEFAULT_THREAD 8
 

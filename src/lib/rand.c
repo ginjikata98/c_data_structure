@@ -24,7 +24,7 @@ f64 fRandNormal() {
   rand1 = arc4random() / ((f64) UINT32_MAX);
   if (rand1 < 1e-100) { rand1 = 1e-100; }
   rand1 = -2 * log(rand1);
-  rand2 = (arc4random() / ((f64) UINT32_MAX)) * mPi * 2;
+  rand2 = (arc4random() / ((f64) UINT32_MAX)) * 3.141592654 * 2;
 
   return sqrt(rand1) * cos(rand2);
 }

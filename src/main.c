@@ -1,4 +1,4 @@
-#include "lib/macro.h"
+#include "core/types.h"
 #include "nn/nn.h"
 
 #define DEBUG
@@ -8,7 +8,7 @@ ai_import_nn(nn);
 int main(void) {
   ai_module_linear *m = nn.linear(1, 2, 1, ai_module_activation_relu);
 
-  f32 *z = m->base.forward(m, mArr(f32, 1, 2));
+  f32 *z = m->base.forward(m, ai_m_vec(f32, 1, 2));
 
   printf("%f\n", *z);
 

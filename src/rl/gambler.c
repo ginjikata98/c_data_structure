@@ -1,7 +1,7 @@
 
 
 
-#include "../lib/macro.h"
+#include "../core/types.h"
 
 #define cGoal 100
 #define cHeadProb 0.4
@@ -13,17 +13,17 @@ int gambler(void) {
   // value interation
   for (int i = 0; i < 100; ++i) {
     for (i32 state = 1; state < cGoal; ++state) {
-      i32 maxAction = mMin(state, cGoal - state) + 1;
+      i32 maxAction = ai_m_min(state, cGoal - state) + 1;
       for (i32 a = 1; a < maxAction; ++a) {
         f64 actionValue = cHeadProb * stateValues[state + a] + (1 - cHeadProb) * stateValues[state - a];
-        stateValues[state] = mMax(actionValue, stateValues[state]);
+        stateValues[state] = ai_m_max(actionValue, stateValues[state]);
       }
     }
   }
 
   i32 policy[cGoal + 1] = {0};
   for (i32 state = 1; state < cGoal; ++state) {
-    i32 maxAction = mMin(state, cGoal - state) + 1;
+    i32 maxAction = ai_m_min(state, cGoal - state) + 1;
     f64 maxValue = stateValues[0];
     i32 bestAction = 0;
     for (i32 a = 1; a < maxAction; ++a) {

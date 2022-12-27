@@ -35,7 +35,7 @@ int sum_multithread(void) {
   }
 
   printf("freeing\n");
-  mFree(vals);
+  ai_m_free(vals);
   vmExecutorFree(executor);
   return 0;
 }
