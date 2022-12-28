@@ -6,6 +6,7 @@
 
 ai_m_import_nn(nn);
 ai_m_import_value(v);
+ai_m_import_vec(vec);
 
 f32 fn(f32 x) {
   return 2 * x + 3;
@@ -13,20 +14,20 @@ f32 fn(f32 x) {
 
 
 int main(void) {
-
-  ai_vec *a = ai_vec_empty(10, sizeof(f32));
+  ai_vec *a = vec.empty(10, sizeof(f32));
 
   for (f32 i = 0; i < 10; ++i) {
-    ai_vec_push(a, ai_m_to_byte(i));
+    vec.push(a, &i);
   }
 
-  for (i32 i = 0; i < 10; ++i) {
-    printf("%f\n", *ai_m_from_byte(ai_vec_get(a, i), f32));
+  vec.pop(a);
+  vec.pop_at(a, 6);
+
+  for (i32 i = 0; i < ai_vec_size(a); ++i) {
+    printf("%f\n", *ai_m_from_byte(vec.get(a, i), f32));
   }
 
-
-
-
+  printf("%lld", vec.size(a));
 
 
 //  ai_value *a = v.from(5);
