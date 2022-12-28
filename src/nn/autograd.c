@@ -1,7 +1,3 @@
-//
-// Created by Tony Vu on 28/12/2022.
-//
-
 #include "autograd.h"
 #include "../core/sds/sds.h"
 
@@ -100,7 +96,9 @@ void ai_value_relu_deriv(ai_value *self) {
   self->children[0]->grad += self->grad * (f32) (self->data > 0);
 }
 
-void ai_value_backward(ai_value *self);
+void ai_value_backward(ai_value *self) {
+
+}
 
 string ai_value_str(ai_value *self) {
   string s = sdsempty();

@@ -4,22 +4,24 @@
 #include "nn/autograd.h"
 
 ai_m_import_nn(nn);
+ai_m_import_value(v);
 
 f32 fn(f32 x) {
   return 2 * x + 3;
 }
 
 int main(void) {
+  ai_value *a = v.from(5);
+  ai_value *b = v.from(6);
+  ai_value *c = v.pow(v.add(a, b), 2);
 
-  ai_value *a = ai_value_new(5);
-  ai_value *b = ai_value_new(6);
-  ai_value *c = ai_value_mul(a, b);
-  c->grad=1;
   c->backward(c);
+//  c->grad = 1;
+//  v.backward(c);
 
-  printf("%s\n", ai_value_str(a));
-  printf("%s\n", ai_value_str(b));
-  printf("%s\n", ai_value_str(c));
+  printf("%s\n", v.str(a));
+  printf("%s\n", v.str(b));
+  printf("%s\n", v.str(c));
 
 
 
