@@ -1,7 +1,7 @@
 #ifndef MAIN_NN_H
 #define MAIN_NN_H
 
-#include "../lib/std.h"
+#include "../core/std.h"
 #include "../core/object.h"
 
 typedef enum {

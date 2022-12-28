@@ -1,6 +1,6 @@
 #define DEBUG
 
-#include "../lib/std.h"
+#include "../core/std.h"
 #include <time.h>
 
 

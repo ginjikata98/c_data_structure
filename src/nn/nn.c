@@ -3,7 +3,7 @@
 #include "activation.h"
 #include "math/blas.h"
 #include "../lib/rand.h"
-#include "../lib/sds.h"
+#include "../core/sds/sds.h"
 
 void *ai_module_linear_forward_(ai_module *ai_module, void *input) {
   ai_module_linear *module = (ai_module_linear *) ai_module;

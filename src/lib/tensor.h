@@ -1,7 +1,7 @@
 #ifndef MAIN_NDARRAY_H
 #define MAIN_NDARRAY_H
 
-#include "std.h"
+#include "../core/std.h"
 
 typedef struct sTensor {
   i32 len;

@@ -3,7 +3,7 @@
 //
 
 #include "autograd.h"
-#include "../lib/sds.h"
+#include "../core/sds/sds.h"
 
 void dummy_(ai_value *v) {
 
