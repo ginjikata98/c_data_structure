@@ -31,7 +31,7 @@ typedef double f64;
 
 typedef u8 byte;
 
-typedef char *string;
+typedef char* string;
 
 typedef size_t size;
 

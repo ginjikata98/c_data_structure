@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <math.h>
 
-void ai_gemm_bin(int M, int N, int K, float ALPHA, char *A, int lda, float *B, int ldb, float *C, int ldc) {
+void ai_gemm_bin(int M, int N, int K, float ALPHA, char* A, int lda, float* B, int ldb, float* C, int ldc) {
   int i, j, k;
   for (i = 0; i < M; ++i) {
     for (k = 0; k < K; ++k) {
@@ -24,9 +24,9 @@ void ai_gemm_bin(int M, int N, int K, float ALPHA, char *A, int lda, float *B, i
   }
 }
 
-float *ai_blas_random_matrix(int rows, int cols) {
+float* ai_blas_random_matrix(int rows, int cols) {
   int i;
-  float *m = calloc(rows * cols, sizeof(float));
+  float* m = calloc(rows * cols, sizeof(float));
   for (i = 0; i < rows * cols; ++i) {
     m[i] = (float) rand() / RAND_MAX;
   }
@@ -34,16 +34,16 @@ float *ai_blas_random_matrix(int rows, int cols) {
 }
 
 void time_random_matrix(int TA, int TB, int m, int k, int n) {
-  float *a;
+  float* a;
   if (!TA) { a = ai_blas_random_matrix(m, k); }
   else { a = ai_blas_random_matrix(k, m); }
   int lda = (!TA) ? k : m;
-  float *b;
+  float* b;
   if (!TB) { b = ai_blas_random_matrix(k, n); }
   else { b = ai_blas_random_matrix(n, k); }
   int ldb = (!TB) ? n : k;
 
-  float *c = ai_blas_random_matrix(m, n);
+  float* c = ai_blas_random_matrix(m, n);
   int i;
   clock_t start = clock(), end;
   for (i = 0; i < 10; ++i) {
@@ -59,12 +59,12 @@ void time_random_matrix(int TA, int TB, int m, int k, int n) {
 
 
 void
-ai_gemm(int TA, int TB, int M, int N, int K, float ALPHA, float *A, int lda, float *B, int ldb, float BETA, float *C,
+ai_gemm(int TA, int TB, int M, int N, int K, float ALPHA, float* A, int lda, float* B, int ldb, float BETA, float* C,
         int ldc) {
   ai_gemm_cpu(TA, TB, M, N, K, ALPHA, A, lda, B, ldb, BETA, C, ldc);
 }
 
-void gemm_nn(int M, int N, int K, float ALPHA, float *A, int lda, float *B, int ldb, float *C, int ldc) {
+void gemm_nn(int M, int N, int K, float ALPHA, float* A, int lda, float* B, int ldb, float* C, int ldc) {
   int i, j, k;
 #pragma omp parallel for
   for (i = 0; i < M; ++i) {
@@ -77,7 +77,7 @@ void gemm_nn(int M, int N, int K, float ALPHA, float *A, int lda, float *B, int 
   }
 }
 
-void gemm_nt(int M, int N, int K, float ALPHA, float *A, int lda, float *B, int ldb, float *C, int ldc) {
+void gemm_nt(int M, int N, int K, float ALPHA, float* A, int lda, float* B, int ldb, float* C, int ldc) {
   int i, j, k;
 #pragma omp parallel for
   for (i = 0; i < M; ++i) {
@@ -91,7 +91,7 @@ void gemm_nt(int M, int N, int K, float ALPHA, float *A, int lda, float *B, int 
   }
 }
 
-void gemm_tn(int M, int N, int K, float ALPHA, float *A, int lda, float *B, int ldb, float *C, int ldc) {
+void gemm_tn(int M, int N, int K, float ALPHA, float* A, int lda, float* B, int ldb, float* C, int ldc) {
   int i, j, k;
 #pragma omp parallel for
   for (i = 0; i < M; ++i) {
@@ -104,7 +104,7 @@ void gemm_tn(int M, int N, int K, float ALPHA, float *A, int lda, float *B, int 
   }
 }
 
-void gemm_tt(int M, int N, int K, float ALPHA, float *A, int lda, float *B, int ldb, float *C, int ldc) {
+void gemm_tt(int M, int N, int K, float ALPHA, float* A, int lda, float* B, int ldb, float* C, int ldc) {
   int i, j, k;
 #pragma omp parallel for
   for (i = 0; i < M; ++i) {
@@ -119,9 +119,9 @@ void gemm_tt(int M, int N, int K, float ALPHA, float *A, int lda, float *B, int 
 }
 
 
-void ai_gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, float *A, int lda, float *B, int ldb, float BETA,
-                 float *C, int ldc) {
-  printf("cpu: %d %d %d %d %d %f %d %d %f %d\n",TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
+void ai_gemm_cpu(int TA, int TB, int M, int N, int K, float ALPHA, float* A, int lda, float* B, int ldb, float BETA,
+                 float* C, int ldc) {
+  printf("cpu: %d %d %d %d %d %f %d %d %f %d\n", TA, TB, M, N, K, ALPHA, lda, ldb, BETA, ldc);
   int i, j;
   for (i = 0; i < M; ++i) {
     for (j = 0; j < N; ++j) {

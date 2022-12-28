@@ -8,7 +8,7 @@
 #include "types.h"
 
 typedef struct ai_string_ai {
-  string (*empty)();
+  string (* empty)();
 } ai_string_ai;
 
 string ai_string_empty();

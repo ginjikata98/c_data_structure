@@ -8,8 +8,8 @@
 static const size numThreads = 8;
 static const size numItems = 10;
 
-void task(void *arg) {
-  i32 *val = arg;
+void task(void* arg) {
+  i32* val = arg;
   i32 old = *val;
 
   for (int i = 0; i < 1e9; ++i) {
@@ -20,8 +20,8 @@ void task(void *arg) {
 }
 
 int sum_multithread(void) {
-  sExecutor *executor = vmExecutorNewFixed(numThreads);
-  u32 *vals = ai_m_calloc(vals, numItems, sizeof(*vals));
+  sExecutor* executor = vmExecutorNewFixed(numThreads);
+  u32* vals = ai_m_calloc(vals, numItems, sizeof(*vals));
 
   for (i32 i = 0; i < numItems; ++i) {
     vals[i] = i;

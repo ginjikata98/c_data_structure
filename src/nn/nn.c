@@ -5,30 +5,30 @@
 #include "../lib/rand.h"
 #include "../core/sds/sds.h"
 
-void *ai_module_linear_forward_(ai_module *ai_module, void *input) {
-  ai_module_linear *module = (ai_module_linear *) ai_module;
+void* ai_module_linear_forward_(ai_module* ai_module, void* input) {
+  ai_module_linear* module = (ai_module_linear*) ai_module;
   assert(input && module);
-  module->input = (f32 *) input;
+  module->input = (f32*) input;
   ai_blas_fill_cpu(module->n_outputs * module->batch, 0, module->output, 1);
 
   i32 m = module->batch;
   i32 k = module->n_inputs;
   i32 n = module->n_outputs;
-  f32 *a = module->input;
-  f32 *b = module->weights;
-  f32 *c = module->output;
+  f32* a = module->input;
+  f32* b = module->weights;
+  f32* c = module->output;
 
   ai_gemm(0, 1, m, n, k, 1, a, k, b, k, 1, c, n);
   ai_blas_add_bias(module->output, module->biases, module->batch, module->n_outputs, 1);
   activate_array(module->output, module->n_outputs * module->batch, module->activation);
-  return (void *) module->output;
+  return (void*) module->output;
 }
 
-static void ai_module_linear_backward_(ai_module_linear *module) {
+static void ai_module_linear_backward_(ai_module_linear* module) {
 
 }
 
-static void ai_module_linear_update_(ai_module_linear *module) {
+static void ai_module_linear_update_(ai_module_linear* module) {
 
 }
 
@@ -40,15 +40,15 @@ static string ai_module_linear_gen_name_() {
   return s;
 }
 
-static string ai_module_linear_str_(ai_module *ai_module) {
-  ai_module_linear *module = (ai_module_linear *) ai_module;
+static string ai_module_linear_str_(ai_module* ai_module) {
+  ai_module_linear* module = (ai_module_linear*) ai_module;
   sds s = sdsempty();
   s = sdscatprintf(s, "%s\t%d %dx%d", module->name, module->batch, module->n_inputs, module->n_outputs);
   return s;
 }
 
-ai_module_linear *ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, ai_module_activation activation) {
-  ai_module_linear *m = ai_m_calloc(m, 1, sizeof(ai_module_linear));
+ai_module_linear* ai_module_linear_new(i32 batch, i32 n_inputs, i32 n_outputs, ai_module_activation activation) {
+  ai_module_linear* m = ai_m_calloc(m, 1, sizeof(ai_module_linear));
   m->name = ai_module_linear_gen_name_();
 
   m->base.forward = ai_module_linear_forward_;

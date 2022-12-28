@@ -24,7 +24,7 @@ f32 activate(f32 x, ai_module_activation a) {
   return 0;
 }
 
-void activate_array(f32 *x, const i32 n, const ai_module_activation a) {
+void activate_array(f32* x, const i32 n, const ai_module_activation a) {
   int i;
   for (i = 0; i < n; ++i) {
     x[i] = activate(x[i], a);

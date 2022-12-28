@@ -13,6 +13,6 @@ f32 fModuleActivationRelu(f32 x);
 
 f32 activate(f32 x, ai_module_activation a);
 
-void activate_array(f32 *x, const i32 n, const ai_module_activation a);
+void activate_array(f32* x, const i32 n, const ai_module_activation a);
 
 #endif //MAIN_ACTIVATION_H

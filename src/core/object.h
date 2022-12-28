@@ -8,8 +8,8 @@
 #include "types.h"
 
 typedef struct ai_object {
-  string (*str)(void *);
-  i64 (*hash)(void *);
+  string (* str)(void*);
+  i64 (* hash)(void*);
 } ai_object;
 
 #endif //MAIN_OBJECT_H

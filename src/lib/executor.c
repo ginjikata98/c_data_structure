@@ -2,14 +2,14 @@
 
 struct sWork {
   sRunnable runnable;
-  void *arg;
-  struct sWork *next;
+  void* arg;
+  struct sWork* next;
 };
 typedef struct sWork sWork;
 
 struct sExecutor {
-  sWork *workFirst;
-  sWork *workLast;
+  sWork* workFirst;
+  sWork* workLast;
   sMutex lock;
   sCondition workerLoopSignal;
   sCondition waitLoopSignal;
@@ -18,8 +18,8 @@ struct sExecutor {
   bool running;
 };
 
-static sWork *vmWorkNew(sRunnable runnable, void *arg) {
-  sWork *work;
+static sWork* vmWorkNew(sRunnable runnable, void* arg) {
+  sWork* work;
 
   if (runnable == null) {
     return null;
@@ -32,16 +32,16 @@ static sWork *vmWorkNew(sRunnable runnable, void *arg) {
   return work;
 }
 
-static void vmWorkFree(sWork *work) {
+static void vmWorkFree(sWork* work) {
   ai_m_free(work);
 }
 
-static sWork *vmExecutorGetWork(sExecutor *executor) {
+static sWork* vmExecutorGetWork(sExecutor* executor) {
   if (executor == null) {
     return null;
   }
 
-  sWork *work = executor->workFirst;
+  sWork* work = executor->workFirst;
   if (work == null) {
     return null;
   }
@@ -56,24 +56,24 @@ static sWork *vmExecutorGetWork(sExecutor *executor) {
   return work;
 }
 
-static void vmExecutorLock(sExecutor *executor) {
+static void vmExecutorLock(sExecutor* executor) {
   pthread_mutex_lock(&(executor->lock));
 }
 
-static void vmExecutorUnlock(sExecutor *executor) {
+static void vmExecutorUnlock(sExecutor* executor) {
   pthread_mutex_unlock(&(executor->lock));
 }
 
-static void vmExecutorNotifyWorkerLoop(sExecutor *executor) {
+static void vmExecutorNotifyWorkerLoop(sExecutor* executor) {
   pthread_cond_broadcast(&(executor->workerLoopSignal));
 }
 
-static void vmExecutorNotifyWaitLoop(sExecutor *executor) {
+static void vmExecutorNotifyWaitLoop(sExecutor* executor) {
   pthread_cond_signal(&(executor->waitLoopSignal));
 }
 
-static void *vmExecutorWorkerLoop(void *arg) {
-  sExecutor *executor = arg;
+static void* vmExecutorWorkerLoop(void* arg) {
+  sExecutor* executor = arg;
 
   while (true) {
     vmExecutorLock(executor);
@@ -86,7 +86,7 @@ static void *vmExecutorWorkerLoop(void *arg) {
       break;
     }
 
-    sWork *work = vmExecutorGetWork(executor);
+    sWork* work = vmExecutorGetWork(executor);
     vmExecutorUnlock(executor);
 
     if (work != null) {
@@ -108,12 +108,12 @@ static void *vmExecutorWorkerLoop(void *arg) {
   return null;
 }
 
-sExecutor *vmExecutorNewFixed(size numThreads) {
+sExecutor* vmExecutorNewFixed(size numThreads) {
   if (numThreads == 0) {
     numThreads = DEFAULT_THREAD;
   }
 
-  sExecutor *executor = calloc(1, sizeof(*executor));
+  sExecutor* executor = calloc(1, sizeof(*executor));
   executor->threadCount = numThreads;
 
   pthread_mutex_init(&(executor->lock), null);
@@ -133,13 +133,13 @@ sExecutor *vmExecutorNewFixed(size numThreads) {
   return executor;
 }
 
-void vmExecutorFree(sExecutor *executor) {
+void vmExecutorFree(sExecutor* executor) {
   if (executor == null) {
     return;
   }
 
-  sWork *work;
-  sWork *work2;
+  sWork* work;
+  sWork* work2;
 
   vmExecutorLock(executor);
   work = executor->workFirst;
@@ -161,12 +161,12 @@ void vmExecutorFree(sExecutor *executor) {
   ai_m_free(executor);
 }
 
-bool vmExecutorRun(sExecutor *executor, sRunnable runnable, void *arg) {
+bool vmExecutorRun(sExecutor* executor, sRunnable runnable, void* arg) {
   if (executor == null) {
     return false;
   }
 
-  sWork *work = vmWorkNew(runnable, arg);
+  sWork* work = vmWorkNew(runnable, arg);
   if (work == null) {
     return false;
   }
@@ -187,7 +187,7 @@ bool vmExecutorRun(sExecutor *executor, sRunnable runnable, void *arg) {
   return true;
 }
 
-void vmExecutorWait(sExecutor *executor) {
+void vmExecutorWait(sExecutor* executor) {
   if (executor == null) {
     return;
   }

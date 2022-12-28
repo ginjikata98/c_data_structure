@@ -2,11 +2,12 @@
 #include "nn/nn.h"
 #include "lib/rand.h"
 #include "nn/autograd.h"
-#include "core/vec.h"
+#include "core/std.h"
 
 ai_m_import_nn(nn);
 ai_m_import_value(v);
-ai_m_import_vec(vec);
+
+ai_m_import_std(std);
 
 f32 fn(f32 x) {
   return 2 * x + 3;
@@ -14,20 +15,20 @@ f32 fn(f32 x) {
 
 
 int main(void) {
-  ai_vec *a = vec.empty(10, sizeof(f32));
+  ai_vec* a = std.vec.empty(10, sizeof(f32));
 
   for (f32 i = 0; i < 10; ++i) {
-    vec.push_f32(a, ai_random_randint(1, 100));
+    std.vec.push_f32(a, ai_random_randint(1, 100));
   }
 
-  vec.pop(a);
-  vec.pop_at(a, 6);
+  std.vec.pop(a);
+  std.vec.pop_at(a, 6);
 
   for (i32 i = 0; i < ai_vec_size(a); ++i) {
-    printf("%f\n", vec.get_f32(a, i));
+    printf("%f\n", std.vec.get_f32(a, i));
   }
 
-  printf("%lld", vec.size(a));
+  printf("%lld", std.vec.size(a));
 
 
 //  ai_value *a = v.from(5);
