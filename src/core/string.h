@@ -6,15 +6,14 @@
 #define MAIN_SRC_STRING_H_
 
 #include "types.h"
+#include "sds/sds.h"
 
 typedef struct ai_string_ai {
   string (* empty)();
 } ai_string_ai;
 
-string ai_string_empty();
 
 
 #define ai_m_import_string(alias)
-
 
 #endif //MAIN_SRC_STRING_H_

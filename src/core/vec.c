@@ -73,3 +73,10 @@ void ai_vec_push_i32(ai_vec* v, i32 value) {
 i32 ai_vec_get_i32(ai_vec* v, i64 idx) {
   return *ai_m_from_byte(ai_vec_get(v, idx), i32);
 }
+
+void ai_vec_pop_swap(ai_vec* v, i64 idx) {
+  assert(v && v->idx > 0 && idx >= 0 && idx * v->ele_size < v->idx);
+  idx *= v->ele_size;
+  v->idx -= v->ele_size;
+  memcpy(v->buf + idx, v->buf + v->idx, v->ele_size);
+}
