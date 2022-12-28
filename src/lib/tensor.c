@@ -23,11 +23,11 @@
 //}
 //
 //sTensor *fTensorOnes(i32 nd, i32 *dims) {
-//  i32 len = prod(nd, dims);
+//  i32 idx = prod(nd, dims);
 //
-//  f64 *data = ai_m_malloc(data, len * sizeof(f64));
+//  f64 *data = ai_m_malloc(data, idx * sizeof(f64));
 //
-//  mLoopUp(i, len) {
+//  mLoopUp(i, idx) {
 //    data[i] = 1;
 //  }
 //
@@ -35,16 +35,16 @@
 //}
 //
 //sTensor *fTensorZeros(i32 nd, i32 *dims) {
-//  i32 len = prod(nd, dims);
-//  f64 *data = ai_m_calloc(data, len, sizeof(f64));
+//  i32 idx = prod(nd, dims);
+//  f64 *data = ai_m_calloc(data, idx, sizeof(f64));
 //
 //  return fTensorNew(data, nd, dims);
 //}
 //
 //sTensor *fTensorUniform(i32 nd, i32 *dims) {
-//  i32 len = prod(nd, dims);
-//  f64 *data = ai_m_malloc(data, len * sizeof(f64));
-//  mLoopUp(i, len) {
+//  i32 idx = prod(nd, dims);
+//  f64 *data = ai_m_malloc(data, idx * sizeof(f64));
+//  mLoopUp(i, idx) {
 //    data[i] = ai_random_uniform();
 //  }
 //
@@ -52,9 +52,9 @@
 //}
 //
 //sTensor *fTensorNormal(i32 nd, i32 *dims) {
-//  i32 len = prod(nd, dims);
-//  f64 *data = ai_m_malloc(data, len * sizeof(f64));
-//  mLoopUp(i, len) {
+//  i32 idx = prod(nd, dims);
+//  f64 *data = ai_m_malloc(data, idx * sizeof(f64));
+//  mLoopUp(i, idx) {
 //    data[i] = ai_random_normal();
 //  }
 //
@@ -63,16 +63,16 @@
 //
 //sTensor *fTensorLinspace(f64 start, f64 end, f64 step) {
 //  assert(end > start);
-//  i32 len = (i32) ((end - start) / step);
+//  i32 idx = (i32) ((end - start) / step);
 //
-//  f64 *data = malloc(len * sizeof(*data));
+//  f64 *data = malloc(idx * sizeof(*data));
 //  f64 v = start;
-//  for (i32 i = 0; i < len; ++i) {
+//  for (i32 i = 0; i < idx; ++i) {
 //    data[i] = v;
 //    v += step;
 //  }
 //
-//  return fTensorNew(data, 2, ai_m_vec(i32, 1, len));
+//  return fTensorNew(data, 2, ai_m_vec(i32, 1, idx));
 //}
 //
 //void fTensorReshape(sTensor *self, i32 nd, const i32 *dims) {
@@ -89,10 +89,10 @@
 //    self->dims[i] = dims[i];
 //  }
 //
-//  self->len = 1;
+//  self->idx = 1;
 //  for (i32 i = self->nd - 1; i >= 0; i--) {
 //    assert(dims[i] > 0);
-//    self->len *= dims[i];
+//    self->idx *= dims[i];
 //    if (i == self->nd - 1) {
 //      self->strides[i] = 1;
 //      continue;
@@ -137,7 +137,7 @@
 //    printf("%d,", self->dims[i]);
 //  }
 //  printf("], [data]: [");
-//  mLoopUp(i, self->len) {
+//  mLoopUp(i, self->idx) {
 //    printf("%.4f,", self->data[i]);
 //  }
 //  printf("]\n");
@@ -153,7 +153,7 @@
 //
 //sTensor *fTensorClone(sTensor *self) {
 //  assert(self);
-//  f64 *data = fMemClone(self->data, self->len * sizeof(f64));
+//  f64 *data = fMemClone(self->data, self->idx * sizeof(f64));
 //  return fTensorNew(data, self->nd, self->dims);
 //}
 //
@@ -174,55 +174,55 @@
 //
 //static void fAssertEleWiseParams(sTensor *in1, sTensor *in2, sTensor *out) {
 //  assert(in1 && in2 && out);
-//  assert(in1->len == in2->len && in1->nd == in2->nd);
-//  assert(in1->len == out->len && in1->nd == out->nd);
+//  assert(in1->idx == in2->idx && in1->nd == in2->nd);
+//  assert(in1->idx == out->idx && in1->nd == out->nd);
 //}
 //
 //void fTensorAdd(sTensor *in1, sTensor *in2, sTensor *out) {
 //  fAssertEleWiseParams(in1, in2, out);
-//  mLoopUp(i, out->len) {
+//  mLoopUp(i, out->idx) {
 //    out->data[i] = in1->data[i] + in2->data[i];
 //  }
 //}
 //
 //void fTensorSub(sTensor *in1, sTensor *in2, sTensor *out) {
 //  fAssertEleWiseParams(in1, in2, out);
-//  mLoopUp(i, out->len) {
+//  mLoopUp(i, out->idx) {
 //    out->data[i] = in1->data[i] - in2->data[i];
 //  }
 //}
 //
 //void fTensorMul(sTensor *in1, sTensor *in2, sTensor *out) {
 //  fAssertEleWiseParams(in1, in2, out);
-//  mLoopUp(i, out->len) {
+//  mLoopUp(i, out->idx) {
 //    out->data[i] = in1->data[i] * in2->data[i];
 //  }
 //}
 //
 //void fTensorDiv(sTensor *in1, sTensor *in2, sTensor *out) {
 //  fAssertEleWiseParams(in1, in2, out);
-//  mLoopUp(i, out->len) {
+//  mLoopUp(i, out->idx) {
 //    out->data[i] = in1->data[i] / in2->data[i];
 //  }
 //}
 //
 //void fTensorMax(sTensor *in1, sTensor *in2, sTensor *out) {
 //  fAssertEleWiseParams(in1, in2, out);
-//  mLoopUp(i, out->len) {
+//  mLoopUp(i, out->idx) {
 //    out->data[i] = ai_m_max(in1->data[i], in2->data[i]);
 //  }
 //}
 //
 //void fTensorMin(sTensor *in1, sTensor *in2, sTensor *out) {
 //  fAssertEleWiseParams(in1, in2, out);
-//  mLoopUp(i, out->len) {
+//  mLoopUp(i, out->idx) {
 //    out->data[i] = ai_m_min(in1->data[i], in2->data[i]);
 //  }
 //}
 //
 //void fTensorPow(sTensor *in1, sTensor *in2, sTensor *out) {
 //  fAssertEleWiseParams(in1, in2, out);
-//  mLoopUp(i, out->len) {
+//  mLoopUp(i, out->idx) {
 //    out->data[i] = pow(in1->data[i], in2->data[i]);
 //  }
 //}

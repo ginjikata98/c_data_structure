@@ -397,7 +397,7 @@ sds sdsgrowzero(sds s, size_t len) {
   return s;
 }
 
-/* Append the specified binary-safe string pointed by 't' of 'len' bytes to the
+/* Append the specified binary-safe string pointed by 't' of 'idx' bytes to the
  * end of the specified sds string 's'.
  *
  * After the call, the passed sds string is no longer valid and all the
@@ -430,7 +430,7 @@ sds sdscatsds(sds s, const sds t) {
 }
 
 /* Destructively modify the sds string 's' to hold the specified binary
- * safe string pointed by 't' of length 'len' bytes. */
+ * safe string pointed by 't' of length 'idx' bytes. */
 sds sdscpylen(sds s, const char *t, size_t len) {
   if (sdsalloc(s) < len) {
     s = sdsMakeRoomFor(s, len - sdslen(s));
@@ -1343,7 +1343,7 @@ int sdsTest(void) {
             sdsfree(x);
             sdsfree(y);
             x = sdsnew("0");
-            test_cond("sdsnew() free/len buffers", sdslen(x) == 1 && sdsavail(x) == 0);
+            test_cond("sdsnew() free/idx buffers", sdslen(x) == 1 && sdsavail(x) == 0);
 
             /* Run the test a few times in order to hit the first two
              * SDS header types. */
@@ -1352,7 +1352,7 @@ int sdsTest(void) {
                 x = sdsMakeRoomFor(x,step);
                 int type = x[-1]&SDS_TYPE_MASK;
 
-                test_cond("sdsMakeRoomFor() len", sdslen(x) == oldlen);
+                test_cond("sdsMakeRoomFor() idx", sdslen(x) == oldlen);
                 if (type != SDS_TYPE_5) {
                     test_cond("sdsMakeRoomFor() free", sdsavail(x) >= step);
                 }

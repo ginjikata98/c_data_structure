@@ -2,6 +2,7 @@
 #include "nn/nn.h"
 #include "lib/rand.h"
 #include "nn/autograd.h"
+#include "core/vec.h"
 
 ai_m_import_nn(nn);
 ai_m_import_value(v);
@@ -10,18 +11,35 @@ f32 fn(f32 x) {
   return 2 * x + 3;
 }
 
+
 int main(void) {
-  ai_value *a = v.from(5);
-  ai_value *b = v.from(6);
-  ai_value *c = v.pow(v.add(a, b), 2);
 
-  c->backward(c);
-//  c->grad = 1;
-//  v.backward(c);
+  ai_vec *a = ai_vec_empty(10, sizeof(f32));
 
-  printf("%s\n", v.str(a));
-  printf("%s\n", v.str(b));
-  printf("%s\n", v.str(c));
+  for (f32 i = 0; i < 10; ++i) {
+    ai_vec_push(a, ai_m_to_byte(i));
+  }
+
+  for (i32 i = 0; i < 10; ++i) {
+    printf("%f\n", *ai_m_from_byte(ai_vec_get(a, i), f32));
+  }
+
+
+
+
+
+
+//  ai_value *a = v.from(5);
+//  ai_value *b = v.from(6);
+//  ai_value *c = v.pow(v.add(a, b), 2);
+//
+//  c->backward(c);
+////  c->grad = 1;
+////  v.backward(c);
+//
+//  printf("%s\n", v.str(a));
+//  printf("%s\n", v.str(b));
+//  printf("%s\n", v.str(c));
 
 
 

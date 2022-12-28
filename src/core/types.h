@@ -29,7 +29,7 @@ typedef int64_t i64;
 typedef float f32;
 typedef double f64;
 
-typedef uint8_t byte;
+typedef u8 byte;
 
 typedef char *string;
 
@@ -62,5 +62,9 @@ typedef size_t size;
 
 #define ai_m_max(a, b) ((a) > (b) ? (a) : (b))
 #define ai_m_min(a, b) ((a) < (b) ? (a) : (b))
+
+#define ai_m_to_byte(a) ((byte*)&(a))
+#define ai_m_pointer_to_byte(a) ((byte*)(a))
+#define ai_m_from_byte(a, T) ( (T*) (a) )
 
 #endif //MAIN_MACRO_H
