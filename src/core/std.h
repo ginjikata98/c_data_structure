@@ -9,7 +9,7 @@ typedef struct {
   ai_string_ai string;
   ai_vec_api vec;
 
-  u64 (* hash)(void* input);
+  u64 (* hash)(void* input, i32);
 
 } ai_std_api;
 

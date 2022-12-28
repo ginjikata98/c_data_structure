@@ -67,7 +67,7 @@ typedef size_t size;
 #define ai_m_pointer_to_byte(a) ((byte*)(a))
 #define ai_m_from_byte(a, T) ( (T*) (a) )
 
-u64 ai_std_hash(void* input);
+u64 ai_std_hash(void* input, i32 len);
 
 
 #endif //MAIN_MACRO_H
