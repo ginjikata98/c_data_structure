@@ -50,3 +50,26 @@ void ai_vec_pop_at(ai_vec *v, i64 idx) {
   memmove(v->buf + idx, v->buf + idx + v->ele_size, v->idx - v->ele_size);
   v->idx -= v->ele_size;
 }
+
+void *ai_vec_to_arr(ai_vec *v) {
+  assert(v && v->idx);
+  return v->buf;
+}
+
+void ai_vec_push_f32(ai_vec *v, f32 value) {
+  assert(v->ele_size == sizeof(f32));
+  ai_vec_push(v, &value);
+}
+
+f32 ai_vec_get_f32(ai_vec *v, i64 idx) {
+  return *ai_m_from_byte(ai_vec_get(v, idx), f32);
+}
+
+void ai_vec_push_i32(ai_vec *v, i32 value) {
+  assert(v->ele_size == sizeof(i32));
+  ai_vec_push(v, &value);
+}
+
+i32 ai_vec_get_i32(ai_vec *v, i64 idx) {
+  return *ai_m_from_byte(ai_vec_get(v, idx), i32);
+}

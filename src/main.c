@@ -17,14 +17,14 @@ int main(void) {
   ai_vec *a = vec.empty(10, sizeof(f32));
 
   for (f32 i = 0; i < 10; ++i) {
-    vec.push(a, &i);
+    vec.push_f32(a, ai_random_randint(1, 100));
   }
 
   vec.pop(a);
   vec.pop_at(a, 6);
 
   for (i32 i = 0; i < ai_vec_size(a); ++i) {
-    printf("%f\n", *ai_m_from_byte(vec.get(a, i), f32));
+    printf("%f\n", vec.get_f32(a, i));
   }
 
   printf("%lld", vec.size(a));
