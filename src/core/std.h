@@ -4,10 +4,12 @@
 #include "types.h"
 #include "string.h"
 #include "vec.h"
+#include "map.h"
 
 typedef struct {
   ai_string_ai string;
   ai_vec_api vec;
+  ai_map_api map;
 
   u64 (* hash)(void* input, i32);
 
@@ -20,6 +22,7 @@ f64 track(void (* fn)(void));
 
 #define ai_m_std_module {\
     .vec = ai_m_vec_module,\
+    .map = ai_m_ap_module,\
     .hash = ai_std_hash,\
 }\
 

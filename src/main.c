@@ -13,21 +13,28 @@ f32 fn(f32 x) {
   return 2 * x + 3;
 }
 
+i32 f32_compare(const void* a, const void* b) {
+  assert(a && b);
+  return (i32) (*((f32*) a) - *((f32*) a));
+}
 
 int main(void) {
-  ai_vec* a = std.vec.empty(4, sizeof(f32));
+  ai_map* m = std.map.new(sizeof(f32), sizeof(f32), 100, f32_compare, free);
 
-  for (f32 i = 0; i < 4; ++i) {
-    std.vec.push_f32(a, i);
+  for (f32 i = 0; i < 100; ++i) {
+    f32* vv = ai_m_malloc(vv, sizeof(f32));
+    *vv = i;
+
+    std.map.set(m, vv, vv);
   }
 
-  std.vec.pop_swap(a, 1);
+  f32 key = 10;
+  f32 value = *ai_m_from_byte(std.map.get(m, &key), f32);
+  printf("%f\n", value);
 
-  for (i32 i = 0; i < ai_vec_size(a); ++i) {
-    printf("%f\n", std.vec.get_f32(a, i));
-  }
+  printf("%lld", std.map.size(m));
 
-  printf("%lld", std.vec.size(a));
+
 
 
 //  ai_value *a = v.from(5);

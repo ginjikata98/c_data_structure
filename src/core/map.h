@@ -9,11 +9,11 @@
 
 typedef struct ai_map ai_map;
 
-typedef i32(* ai_map_element_compare)(const void* a, const void* b, void* udata);
+typedef i32(* ai_map_element_compare)(const void* a, const void* b);
 typedef void (* ai_map_element_free)(void* item);
 
 typedef struct ai_map_api {
-  ai_map* (* new)(size ele_size, i64 cap, ai_map_element_compare, ai_map_element_free);
+  ai_map* (* new)(size key_size, size val_size, i64 bucket_size, ai_map_element_compare, ai_map_element_free);
   void (* free)(ai_map*);
   void (* clear)(ai_map*);
   i64 (* size)(ai_map*);
@@ -22,7 +22,7 @@ typedef struct ai_map_api {
   void (* delete)(ai_map*, void* key);
 } ai_map_api;
 
-ai_map* ai_map_new(size ele_size, i64 cap, ai_map_element_compare, ai_map_element_free);
+ai_map* ai_map_new(size key_size, size val_size, i64 bucket_size, ai_map_element_compare, ai_map_element_free);
 void ai_map_free(ai_map*);
 void ai_map_clear(ai_map*);
 i64 ai_map_size(ai_map*);
